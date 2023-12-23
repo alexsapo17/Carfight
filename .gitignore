@@ -55,6 +55,12 @@ ExportedObj/
 # Unity3D generated file on crash reports
 sysinfo.txt
 
+
+/Assets/PACKAGE/CartoonTracksPack1/Track1/Textures/road_normal.png
+/Assets/PACKAGE/Road System/Demo/Scenes/ExampleSystem/LightingData.asset
+/Assets/PACKAGE/CartoonTracksPack1/Track1/Textures/road.psd
+/Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_6_0.bundle
+
 # Builds
 *.apk
 *.aab
