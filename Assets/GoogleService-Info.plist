@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyCKLPZ6KZRaVFDu1w09pdXi4YB_bDzztyI</string>
+	<string>AIzaSyCBvS6JSUkAlT2Yz1VhQJAOREXK-b6jrmo</string>
 	<key>GCM_SENDER_ID</key>
-	<string>336471796444</string>
+	<string>864531663573</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.DefaultCompany.CarFight</string>
+	<string>com.AlexSaporito.CarFight</string>
 	<key>PROJECT_ID</key>
-	<string>carfight-61f11</string>
+	<string>carfight-c990a</string>
 	<key>STORAGE_BUCKET</key>
-	<string>carfight-61f11.appspot.com</string>
+	<string>carfight-c990a.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:336471796444:ios:63aeee4462443f03456219</string>
+	<string>1:864531663573:ios:eee271b5063160fec6305c</string>
+	<key>DATABASE_URL</key>
+	<string>https://carfight-c990a-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>

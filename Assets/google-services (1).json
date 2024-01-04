@@ -8,22 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:864531663573:ios:eee271b5063160fec6305c",
+        "mobilesdk_app_id": "1:864531663573:android:4be094caa289975bc6305c",
         "android_client_info": {
           "package_name": "com.AlexSaporito.CarFight"
         }
       },
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCBvS6JSUkAlT2Yz1VhQJAOREXK-b6jrmo"
+          "current_key": "AIzaSyAypYz5hnmzxw1D7r54vkFLjJce7ptGS7w"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 0
-        },
         "appinvite_service": {
-          "status": 1
+          "other_platform_oauth_client": []
         }
       }
     }
