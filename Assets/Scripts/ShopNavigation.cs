@@ -4,6 +4,7 @@ using TMPro;
 using Firebase.Database;
 using Firebase.Auth;
 using Firebase.Extensions;
+using UnityEngine.UI;
 
 public class ShopNavigation : MonoBehaviour
 {
@@ -12,14 +13,13 @@ public class ShopNavigation : MonoBehaviour
     public GameObject skillPanel; // Pannello per le abilità
     public GameObject customPanel; // Pannello personalizzazione
     public GameObject[] carButtons;
-    public TextMeshProUGUI coinsText;
-
+public Text coinsText;
     void Start()
     {
         UpdateCoinsUI();
     }
 
-    private void UpdateCoinsUI()
+   private void UpdateCoinsUI()
     {
         CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
         if (currencyManager != null && coinsText != null)

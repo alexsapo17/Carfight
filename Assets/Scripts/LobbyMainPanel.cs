@@ -84,20 +84,21 @@ private void UpdateCurrencyUI()
     CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
     if (currencyManager != null)
     {
-        // Trova il componente TextMeshProUGUI
-        TextMeshProUGUI coinTextComponent = GameObject.Find("CoinsText").GetComponent<TextMeshProUGUI>();
+        // Trova il componente Text UI standard
+        Text coinTextComponent = GameObject.Find("CoinsText").GetComponent<Text>();
 
         // Assicurati che il componente sia stato trovato
-        if(coinTextComponent != null) 
+        if (coinTextComponent != null)
         {
             currencyManager.coinsText = coinTextComponent;
             currencyManager.UpdateCoinsUI();
         }
-        else 
+        else
         {
-            Debug.LogError("Componente TextMeshProUGUI per le monete non trovato.");
+            Debug.LogError("Componente Text UI per le monete non trovato.");
         }
     }
+
     else
     {
     Debug.LogError("CurrencyManager non trovato nella scena.");

@@ -6,13 +6,12 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using System.Collections.Generic;
 using System.Linq;
-
+using UnityEngine.UI;
 
 public class CurrencyManager : MonoBehaviour
 {
     private int playerCoins;
-    public TextMeshProUGUI coinsText; 
-       
+public Text coinsText;       
     private DatabaseReference databaseReference;
     public static CurrencyManager Instance;
 
