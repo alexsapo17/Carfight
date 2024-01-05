@@ -914,7 +914,7 @@ MonoBehaviour:
   - {fileID: 1121117854}
   - {fileID: 931973306}
   - {fileID: 1424815053}
-  coinsText: {fileID: 0}
+  coinsText: {fileID: 1274399870}
 --- !u!4 &249828530
 Transform:
   m_ObjectHideFlags: 0
