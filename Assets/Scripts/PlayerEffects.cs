@@ -12,7 +12,10 @@ public class PlayerEffects : MonoBehaviourPun
     private Material outlineMaterial;
     private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
     private int originalAccelerationMultiplier;
-
+public GameObject collisionEffectPrefab;
+    public GameObject controlDisableEffectPrefab;
+    public GameObject sizeMassIncreaseEffectPrefab;
+    public GameObject invisibilityEffectPrefab;
         void Start()
     {
         // Crea un materiale per l'outline
@@ -32,6 +35,7 @@ public class PlayerEffects : MonoBehaviourPun
 
             // Applica l'effetto
             ApplySizeMassIncrease(sizeMultiplier, massMultiplier);
+            Instantiate(sizeMassIncreaseEffectPrefab, transform.position, Quaternion.identity);
 
             // Avvia il timer per la durata dell'effetto
             StartCoroutine(ResetSizeMassAfterDelay(duration));
@@ -47,7 +51,18 @@ public class PlayerEffects : MonoBehaviourPun
             rb.mass *= massMultiplier;
         }
     }
+    // Metodo da chiamare alla collisione
+    void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            // Ottieni il punto di collisione
+            Vector3 contactPoint = collision.contacts[0].point;
 
+            // Attiva l'effetto FX nel punto di collisione
+            Instantiate(collisionEffectPrefab, contactPoint, Quaternion.identity);
+        }
+    }
     IEnumerator ResetSizeMassAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -67,6 +82,7 @@ public class PlayerEffects : MonoBehaviourPun
         {
             effectActive = true;
             SetInvisibility(true);
+            Instantiate(invisibilityEffectPrefab, transform.position, Quaternion.identity);
 
             // Avvia il timer per la durata dell'effetto
             StartCoroutine(ResetInvisibilityAfterDelay(duration));
@@ -168,6 +184,8 @@ private IEnumerator DisableControlsForDuration(float duration)
     // Disabilita i controlli
     var controller = GetComponent<PrometeoCarController>();
     if (controller != null) controller.DisableControls();
+            Instantiate(controlDisableEffectPrefab, transform.position, Quaternion.identity);
+
 
     yield return new WaitForSeconds(duration);
 

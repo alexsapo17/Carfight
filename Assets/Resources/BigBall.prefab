@@ -52,6 +52,30 @@ PrefabInstance:
       propertyPath: m_Name
       value: BigBall
       objectReference: {fileID: 0}
+    - target: {fileID: 3023687425404871703, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023687425404871703, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3023687425404871703, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4808939048647211015, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4808939048647211015, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4808939048647211015, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 3534197644277056197, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
@@ -144,4 +168,4 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Radius: 1.01
-  m_Center: {x: -4.24, y: -0, z: -4.86}
+  m_Center: {x: 0, y: -0, z: 0}

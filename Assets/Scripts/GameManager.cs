@@ -20,9 +20,9 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Transform[] startLineSpawnPoints;
     public float startRaceTimer = 5.0f; // Timer per l'inizio della gara
     public GameObject resultsPanel; // Pannello per i risultati
-    public TMP_Text resultsText;
+    public Text resultsText;
     public Button returnToLobbyButton; // Pulsante per tornare alla lobby
-    public TMP_Text countdownText;
+    public Text countdownText;
     public GameObject brickWallPrefab; // Prefab del muro di mattoni
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
 

@@ -22,7 +22,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -69.95474
+      value: -70.17
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
       propertyPath: m_LocalPosition.y
@@ -91,6 +91,18 @@ PrefabInstance:
     - target: {fileID: 8658686167424603977, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
       propertyPath: m_LocalScale.z
       value: 0.6549089
+      objectReference: {fileID: 0}
+    - target: {fileID: 8658686167424603977, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.03200636
+      objectReference: {fileID: 0}
+    - target: {fileID: 8658686167424603977, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8658686167424603977, guid: 3c5bbe4012af3124bab2138a2791d767, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
@@ -167,5 +179,5 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.09
+  m_Center: {x: 0.033, y: 0, z: 0}
