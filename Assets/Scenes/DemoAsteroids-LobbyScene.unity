@@ -1751,7 +1751,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startPosition: {fileID: 235257600}
   endPosition: {fileID: 2037277792}
-  timeToMove: 5
+  timeToMove: 10
 --- !u!1 &559824083
 GameObject:
   m_ObjectHideFlags: 0

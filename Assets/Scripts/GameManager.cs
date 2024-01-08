@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Text countdownText;
     public GameObject brickWallPrefab; // Prefab del muro di mattoni
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
-
+public Camera mainCamera;
 
 
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
@@ -220,10 +220,25 @@ void Start()
 
             // Disabilita i controlli del giocatore eliminato
             var playerController = player.GetComponent<PrometeoCarController>();
-            if (playerController != null)
+        if (playerController != null)
+        {
+            playerController.DisableControls();
+
+            // Disattiva la telecamera del player eliminato
+            Camera playerCamera = player.GetComponentInChildren<Camera>();
+            if (playerCamera != null)
             {
-                playerController.DisableControls();
+                playerCamera.gameObject.SetActive(false);
             }
+
+            // Se il giocatore eliminato è il giocatore locale, attiva la Main Camera
+            if (player.GetComponent<PhotonView>().IsMine)
+            {
+                mainCamera.gameObject.SetActive(true); // Attiva la telecamera principale
+                resultsPanel.SetActive(true); // Mostra il pannello dei risultati
+                // Qui puoi anche attivare un qualsiasi altro UI o effetto desiderato
+            }
+        }
 
             int totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
             int position = instantiatedCars.Count - eliminatedPlayers.Count + 1;

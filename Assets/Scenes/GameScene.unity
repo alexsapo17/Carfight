@@ -299,6 +299,7 @@ MonoBehaviour:
   brickWallPrefab: {fileID: 7976881899898220016, guid: 91e161b65e380e94c973b84ec8b703ce, type: 3}
   brickWallSpawnPoints:
   - {fileID: 316324212}
+  mainCamera: {fileID: 0}
   rewardTiers:
   - playerCount: 1
     rewards: 4d010000
@@ -2253,13 +2254,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2030206121}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.43840292, y: -0, z: -0, w: 0.89877856}
-  m_LocalPosition: {x: 8, y: 96, z: -96}
+  m_LocalRotation: {x: 0.49682748, y: -0, z: -0, w: 0.86784935}
+  m_LocalPosition: {x: 48.1, y: 78.3, z: 217.9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 52.004, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 59.581, y: 0, z: 0}
 --- !u!1 &2049178894
 GameObject:
   m_ObjectHideFlags: 0
