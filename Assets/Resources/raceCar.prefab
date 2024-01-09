@@ -456,7 +456,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 219
   maxReverseSpeed: 143
-  accelerationMultiplier: 13
+  accelerationMultiplier: 17
   maxSteeringAngle: 35
   steeringSpeed: 0.701
   brakeForce: 503
@@ -489,6 +489,7 @@ MonoBehaviour:
   carSpeed: 0
   isDrifting: 0
   isTractionLocked: 0
+  cameraInstance: {fileID: 0}
 --- !u!54 &7495412060220104037
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -497,7 +498,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538136458312656504}
   serializedVersion: 4
-  m_Mass: 300
+  m_Mass: 600
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}

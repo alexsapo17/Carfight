@@ -10,6 +10,7 @@ public class CarShopManager : MonoBehaviour
     public GameObject carPrefab1;
     public GameObject carPrefab2;
     public GameObject carPrefab3;
+    public GameObject carPrefab4;
     private DatabaseReference databaseReference;
 
     void Start()
@@ -34,6 +35,12 @@ public void BuyCar1()
         int carCost = 130;
         TryBuyCar("raceCar", carCost);
     }
+    public void BuyCar4()
+{
+    int carCost = 100; // Definisci il costo della Monstertruck
+    TryBuyCar("monstertruck", carCost);
+}
+
 
     private void TryBuyCar(string carName, int carCost)
     {
