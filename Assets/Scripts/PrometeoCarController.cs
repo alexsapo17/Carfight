@@ -159,6 +159,8 @@ public GameObject cameraPrefab;
       float localVelocityX;
       bool deceleratingCar;
       bool touchControlsSetup = false;
+      private GameObject cameraInstance;
+
         private Camera cam;
       /*
       The following variables are used to store information about sideways friction of the wheels (such as
@@ -314,6 +316,17 @@ if (useTouchControls)
         // Altre configurazioni per giocatori non proprietari...
     }
     }
+public void DestroyCameraInstance() {
+    if (cameraInstance != null) {
+        Debug.Log("Destroying camera instance");
+        Destroy(cameraInstance);
+        cameraInstance = null;
+    }
+    else {
+        Debug.Log("Camera instance is null");
+    }
+}
+
 
  public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
 {
@@ -372,19 +385,9 @@ if (useTouchControls)
       */
       if (useTouchControls && touchControlsSetup){
 
-        if(throttlePTI.buttonPressed){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoForward();
-        }
-        if(reversePTI.buttonPressed){
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoReverse();
-        }
+
 float turnValue = horizontalJoystick.GetHorizontal();
 float moveValue = horizontalJoystick.GetVertical();
-float threshold = 0.1f; // Soglia minima per rilevare un movimento significativo
 
 if (turnValue < 0.1) 
 {
@@ -400,19 +403,27 @@ else
 }
 
 
+    // Imposta i valori buttonPressed basati sulla posizione del joystick
+    throttlePTI.buttonPressed = moveValue > 0.1f;
+    reversePTI.buttonPressed = moveValue < -0.1f;
 
-// Controllo per l'accelerazione e la retromarcia basato sulla posizione del joystick
-if (moveValue > 0.01) { // Joystick spostato verso l'alto
-       CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoForward();
-
-} else if (moveValue < 0.01) { // Joystick spostato verso il basso
-
-          CancelInvoke("DecelerateCar");
-          deceleratingCar = false;
-          GoReverse();
-          }
+    if (throttlePTI.buttonPressed)
+    {
+        CancelInvoke("DecelerateCar");
+        deceleratingCar = false;
+        GoForward();
+    }
+    else if (reversePTI.buttonPressed)
+    {
+        CancelInvoke("DecelerateCar");
+        deceleratingCar = false;
+        GoReverse();
+    }
+    else if (!deceleratingCar)
+    {
+        InvokeRepeating("DecelerateCar", 0f, 0.1f);
+        deceleratingCar = true;
+    }
 
         if(handbrakePTI.buttonPressed){
           CancelInvoke("DecelerateCar");

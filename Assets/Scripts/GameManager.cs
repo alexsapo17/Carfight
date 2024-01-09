@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public GameObject brickWallPrefab; // Prefab del muro di mattoni
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
 public Camera mainCamera;
-
+public Image handbrakeButton; 
 
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
     private List<GameObject> finishedCars = new List<GameObject>(); // Macchine che hanno finito la gara
@@ -218,27 +218,28 @@ void Start()
                 Debug.Log(player.name + " è stato eliminato. Tempo: " + carFinishTimes[player]);
             }
 
-            // Disabilita i controlli del giocatore eliminato
-            var playerController = player.GetComponent<PrometeoCarController>();
-        if (playerController != null)
-        {
-            playerController.DisableControls();
+    // Disattiva i controlli del giocatore eliminato e gestisci la telecamera
+  // Nel contesto del giocatore eliminato
+    var playerController = player.GetComponent<PrometeoCarController>();
+    if (playerController != null) {
+        playerController.DisableControls();
+        playerController.DestroyCameraInstance();
+    }
 
-            // Disattiva la telecamera del player eliminato
-            Camera playerCamera = player.GetComponentInChildren<Camera>();
-            if (playerCamera != null)
-            {
-                playerCamera.gameObject.SetActive(false);
-            }
 
-            // Se il giocatore eliminato è il giocatore locale, attiva la Main Camera
-            if (player.GetComponent<PhotonView>().IsMine)
-            {
-                mainCamera.gameObject.SetActive(true); // Attiva la telecamera principale
-                resultsPanel.SetActive(true); // Mostra il pannello dei risultati
-                // Qui puoi anche attivare un qualsiasi altro UI o effetto desiderato
-            }
-        }
+    // Gestisci la telecamera principale e il pannello dei risultati
+    if (player.GetComponent<PhotonView>().IsMine)
+    {
+        mainCamera.gameObject.SetActive(true); // Attiva la telecamera principale
+        resultsPanel.SetActive(true); // Mostra il pannello dei risultati
+
+RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
+if (hbRectTransform != null)
+{
+    hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+    }
+        
 
             int totalPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
             int position = instantiatedCars.Count - eliminatedPlayers.Count + 1;
@@ -280,6 +281,13 @@ void Start()
                 resultsText.text = results;
                 resultsPanel.SetActive(true);
                 returnToLobbyButton.gameObject.SetActive(true);
+RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
+if (hbRectTransform != null)
+{
+    hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+
+
             }
         }
     }
@@ -341,11 +349,27 @@ void Start()
             {
                 resultsText.text = "Hai vinto!";
                 resultsPanel.SetActive(true);
+RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
+if (hbRectTransform != null)
+{
+    hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+
+
+
             }
             else
             {
                 resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + " ha vinto!";
                 resultsPanel.SetActive(true);
+RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
+if (hbRectTransform != null)
+{
+    hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+
+
+
             }
 
             // Inizia il processo di ritorno alla lobby dopo un breve ritardo
@@ -389,7 +413,15 @@ void Start()
         SceneManager.LoadScene("DemoAsteroids-LobbyScene"); // Nome della tua scena della lobby
     }
 
-
+[PunRPC]
+public void DestroyPlayer(int viewID)
+{
+    PhotonView pv = PhotonView.Find(viewID);
+    if (pv != null && pv.gameObject != null)
+    {
+        PhotonNetwork.Destroy(pv.gameObject);
+    }
+}
     [PunRPC]
     void SyncStartPosition()
     {

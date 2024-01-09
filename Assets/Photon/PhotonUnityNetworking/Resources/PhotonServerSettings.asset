@@ -49,6 +49,7 @@ MonoBehaviour:
   - ApplyPushForce_RPC
   - DestroyPickup
   - ApplyControlDisableEffect
+  - DestroyPlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1
