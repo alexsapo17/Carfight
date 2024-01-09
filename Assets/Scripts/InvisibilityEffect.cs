@@ -1,6 +1,5 @@
 using UnityEngine;
 using Photon.Pun;
-
 public class InvisibilityEffect : MonoBehaviourPunCallbacks
 {
     public float effectDuration = 5f;
@@ -15,32 +14,27 @@ public class InvisibilityEffect : MonoBehaviourPunCallbacks
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!photonView.IsMine || !other.CompareTag("Player"))
-            return;
-
-        PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-
-        if (playerPhotonView != null && playerPhotonView.IsMine)
+        // Verifica se l'oggetto che ha colpito il power-up è un giocatore
+        if (other.CompareTag("Player"))
         {
             PlayerEffects playerEffects = other.gameObject.GetComponent<PlayerEffects>();
+
+            // Applica l'effetto al giocatore e distruggi il power-up
             if (playerEffects != null)
             {
                 playerEffects.StartInvisibilityTimer(effectDuration);
+                DestroyPickup();
             }
-            photonView.RPC("DestroyPickup", RpcTarget.AllBuffered);
         }
     }
 
-    [PunRPC]
     void DestroyPickup()
     {
-        if (photonView.IsMine)
+        // Libera il punto di spawn e distruggi il power-up
+        if (spawnPointIndex != -1 && pickupsManager != null)
         {
-            if (spawnPointIndex != -1 && pickupsManager != null)
-            {
-                pickupsManager.FreeSpawnPoint(spawnPointIndex);
-            }
-            PhotonNetwork.Destroy(gameObject);
+            pickupsManager.FreeSpawnPoint(spawnPointIndex);
         }
+        PhotonNetwork.Destroy(gameObject);
     }
 }

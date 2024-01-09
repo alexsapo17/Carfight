@@ -6,7 +6,7 @@ public class ControlDisableEffect : MonoBehaviourPunCallbacks
     public float effectDuration = 5f; // Durata dell'effetto
     private int spawnPointIndex = -1;
     private PickupsManager pickupsManager;
-public GameObject explosionEffectPrefab;
+    public GameObject explosionEffectPrefab;
 
     public void Setup(int index, PickupsManager manager)
     {
@@ -14,54 +14,56 @@ public GameObject explosionEffectPrefab;
         pickupsManager = manager;
     }
 
-private void OnTriggerEnter(Collider other)
-{
-    if (!photonView.IsMine || !other.CompareTag("Player"))
-        return;
-
-    PhotonView playerPhotonView = other.GetComponent<PhotonView>();
-
-    if (playerPhotonView != null && playerPhotonView.IsMine)
+    private void OnTriggerEnter(Collider other)
     {
-        // Invia l'effetto a tutti gli altri giocatori
-        photonView.RPC("ApplyControlDisableEffect", RpcTarget.Others, effectDuration);
-        photonView.RPC("DestroyPickup", RpcTarget.AllBuffered);
-    }
-}
-
-[PunRPC]
-void ApplyControlDisableEffect(float duration)
-{
-    GameObject localPlayerGameObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
-    if (localPlayerGameObject != null)
-    {
-        PlayerEffects playerEffects = localPlayerGameObject.GetComponent<PlayerEffects>();
-        if (playerEffects != null)
+        if (other.CompareTag("Player"))
         {
-            playerEffects.StartControlDisableTimer(duration);
+            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
+
+            // Invia l'effetto a tutti gli altri giocatori
+            if (playerPhotonView != null)
+            {
+                photonView.RPC("ApplyControlDisableEffect", RpcTarget.Others, effectDuration, playerPhotonView.ViewID);
+                photonView.RPC("DestroyPickup", RpcTarget.AllBuffered);
+            }
         }
     }
-}
 
-
-[PunRPC]
-void DestroyPickup()
-{
-    if (photonView.IsMine)
+    [PunRPC]
+    void ApplyControlDisableEffect(float duration, int playerViewID)
     {
-        // Crea l'effetto di esplosione prima di distruggere il pickup
-        if (explosionEffectPrefab != null)
+        // Evita di applicare l'effetto al giocatore che ha raccolto il pickup
+        if (PhotonNetwork.LocalPlayer.ActorNumber != playerViewID)
         {
-            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            GameObject localPlayerGameObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
+            if (localPlayerGameObject != null)
+            {
+                PlayerEffects playerEffects = localPlayerGameObject.GetComponent<PlayerEffects>();
+                if (playerEffects != null)
+                {
+                    playerEffects.StartControlDisableTimer(duration);
+                }
+            }
         }
-
-        // Il resto del codice rimane invariato
-        if (spawnPointIndex != -1 && pickupsManager != null)
-        {
-            pickupsManager.FreeSpawnPoint(spawnPointIndex);
-        }
-        PhotonNetwork.Destroy(gameObject);
     }
-}
 
+    [PunRPC]
+    void DestroyPickup()
+    {
+        if (photonView.IsMine)
+        {
+            // Crea l'effetto di esplosione prima di distruggere il pickup
+            if (explosionEffectPrefab != null)
+            {
+                Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
+            }
+
+            // Il resto del codice rimane invariato
+            if (spawnPointIndex != -1 && pickupsManager != null)
+            {
+                pickupsManager.FreeSpawnPoint(spawnPointIndex);
+            }
+            PhotonNetwork.Destroy(gameObject);
+        }
+    }
 }

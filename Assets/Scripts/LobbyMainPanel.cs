@@ -209,7 +209,6 @@ public void OnLogoutButtonClicked()
     if (auth.CurrentUser != null)
     {
         auth.SignOut();
-        Debug.Log("User signed out successfully.");
 
         // Opzionalmente, aggiorna l'interfaccia utente o reindirizza l'utente a un altro pannello, ad esempio il pannello di login.
         SetActivePanel(LoginPanel.name);
@@ -259,7 +258,6 @@ public void OnLogoutButtonClicked()
                 }
                 else if (task.IsCompleted)
                 {
-                    Debug.Log("Nickname saved successfully.");
                     PlayerNameInput.gameObject.SetActive(false);
 
 
@@ -310,7 +308,6 @@ public void OnLogoutButtonClicked()
                     {
                         // L'autenticazione è riuscita, l'utente ha un ID univoco
                         Firebase.Auth.FirebaseUser newUser = task.Result.User; // Cambiato qui
-                        Debug.LogFormat("User signed in successfully: {0} ({1})", newUser.DisplayName, newUser.UserId);
                         // Associare il nickname all'ID univoco dell'utente
                         SaveNickname(playerName);
                         UpdateCurrencyUI();

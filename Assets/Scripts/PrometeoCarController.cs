@@ -159,7 +159,7 @@ public GameObject cameraPrefab;
       float localVelocityX;
       bool deceleratingCar;
       bool touchControlsSetup = false;
-      private GameObject cameraInstance;
+      public GameObject cameraInstance;
 
         private Camera cam;
       /*
@@ -495,13 +495,11 @@ void HandleHandbrakeInput()
 {
     if(Input.GetKey(KeyCode.Space) && !isHandbrakeActive)
     {
-        Debug.Log("Freno a mano premuto");
         isHandbrakeActive = true;
         Handbrake();
     }
     else if(Input.GetKeyUp(KeyCode.Space))
     {
-        Debug.Log("Freno a mano rilasciato");
         isHandbrakeActive = false;
         RecoverTraction();
     }
@@ -515,7 +513,6 @@ public void EnableControls()
 // Metodo per disabilitare i controlli del veicolo
 public void DisableControls()
 {
-    Debug.Log("Disabilitazione dei controlli per: " + gameObject.name);
     controlsEnabled = false;
     StopCar();
 }
@@ -902,7 +899,6 @@ public void GoReverseJoystick(float joystickValue){
     // will depend on the handbrakeDriftMultiplier variable. If this value is small, then the car will not drift too much, but if
     // it is high, then you could make the car to feel like going on ice.
     public void Handbrake(){
-      Debug.Log("Handbrake iniziato");
       CancelInvoke("RecoverTraction");
       // We are going to start losing traction smoothly, there is were our 'driftingAxis' variable takes
       // place. This variable will start from 0 and will reach a top value of 1, which means that the maximum
@@ -945,7 +941,6 @@ public void GoReverseJoystick(float joystickValue){
       // and, as a consequense, the car starts to emit trails to simulate the wheel skids.
       isTractionLocked = true;
       DriftCarPS();
-      Debug.Log("Handbrake terminato");
 
 
     }

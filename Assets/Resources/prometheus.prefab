@@ -149,6 +149,7 @@ MonoBehaviour:
   carSpeed: 0
   isDrifting: 0
   isTractionLocked: 0
+  cameraInstance: {fileID: 0}
 --- !u!114 &5164393416629975375
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -23,33 +23,49 @@ public GameObject collisionEffectPrefab;
     }
 
     // Funzione per avviare l'effetto di aumento di grandezza/massa
-    public void StartSizeMassIncreaseTimer(float duration, float sizeMultiplier, float massMultiplier)
+public void StartSizeMassIncreaseTimer(float duration, float sizeMultiplier, float massMultiplier)
+{
+        // Salva i valori originali
+    originalSize = transform.localScale;
+    Rigidbody rb = GetComponent<Rigidbody>();
+    if (rb != null)
     {
-        if (!effectActive)
-        {
-            effectActive = true;
-            originalSize = transform.localScale;
-            Rigidbody rb = GetComponent<Rigidbody>();
-            if (rb != null) originalMass = rb.mass;
+        originalMass = rb.mass;
+    }
+    photonView.RPC("ApplySizeMassIncrease", RpcTarget.All, duration, sizeMultiplier, massMultiplier);
 
-            // Applica l'effetto
-            ApplySizeMassIncrease(sizeMultiplier, massMultiplier);
-            Instantiate(sizeMassIncreaseEffectPrefab, transform.position, Quaternion.identity);
+}
 
-            // Avvia il timer per la durata dell'effetto
-            StartCoroutine(ResetSizeMassAfterDelay(duration));
-        }
+
+[PunRPC]
+void ApplySizeMassIncrease(float duration, float sizeMultiplier, float massMultiplier)
+{
+    if (!effectActive)
+    {
+        effectActive = true;
+        StartCoroutine(SizeMassIncreaseEffect(duration, sizeMultiplier, massMultiplier));
+    }
+}
+IEnumerator SizeMassIncreaseEffect(float duration, float sizeMultiplier, float massMultiplier)
+{
+    transform.localScale *= sizeMultiplier;
+    Rigidbody rb = GetComponent<Rigidbody>();
+    if (rb != null)
+    {
+        rb.mass *= massMultiplier;
     }
 
-    private void ApplySizeMassIncrease(float sizeMultiplier, float massMultiplier)
-    {
-        transform.localScale *= sizeMultiplier;
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null)
-        {
-            rb.mass *= massMultiplier;
-        }
-    }
+    // Attendi la durata dell'effetto
+       yield return new WaitForSeconds(duration);
+
+        // Ripristina i valori originali
+        transform.localScale = originalSize;
+        if (rb != null) rb.mass = originalMass;
+
+        effectActive = false;
+}
+
+
     // Metodo da chiamare alla collisione
     void OnCollisionEnter(Collision collision)
     {
@@ -62,31 +78,26 @@ public GameObject collisionEffectPrefab;
             Instantiate(collisionEffectPrefab, contactPoint, Quaternion.identity);
         }
     }
-    IEnumerator ResetSizeMassAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
 
-        // Ripristina i valori originali
-        transform.localScale = originalSize;
-        Rigidbody rb = GetComponent<Rigidbody>();
-        if (rb != null) rb.mass = originalMass;
 
-        effectActive = false;
-    }
+// Funzione per avviare l'effetto di invisibilità
+public void StartInvisibilityTimer(float duration)
+{
+    photonView.RPC("ApplyInvisibility", RpcTarget.All, duration);
+}
 
-    // Funzione per avviare l'effetto di invisibilità
-    public void StartInvisibilityTimer(float duration)
-    {
-        if (!effectActive)
-        {
-            effectActive = true;
-            SetInvisibility(true);
-            Instantiate(invisibilityEffectPrefab, transform.position, Quaternion.identity);
+[PunRPC]
+void ApplyInvisibility(float duration)
+{
+    StartCoroutine(InvisibilityEffect(duration));
+}
 
-            // Avvia il timer per la durata dell'effetto
-            StartCoroutine(ResetInvisibilityAfterDelay(duration));
-        }
-    }
+IEnumerator InvisibilityEffect(float duration)
+{
+    SetInvisibility(true);
+    yield return new WaitForSeconds(duration);
+    SetInvisibility(false);
+}
 
      private void SetInvisibility(bool invisible)
     {
@@ -133,27 +144,36 @@ public GameObject collisionEffectPrefab;
             }
         }
     }
-// Aggiungi questo metodo allo script PlayerEffects
+
 
 public void StartControlDisableTimer(float duration)
 {
+    photonView.RPC("ApplyControlDisable", RpcTarget.All, duration);
+}
+
+[PunRPC]
+void ApplyControlDisable(float duration)
+{
     StartCoroutine(DisableControlsForDuration(duration));
 }
+
+// Funzione per avviare l'effetto di aumento di velocità e attrito
 public void StartSpeedAndFrictionEffect(float duration, float accelerationMultiplier)
+{
+    photonView.RPC("ApplySpeedAndFrictionIncrease", RpcTarget.All, duration, accelerationMultiplier);
+}
+
+[PunRPC]
+void ApplySpeedAndFrictionIncrease(float duration, float accelerationMultiplier)
 {
     if (!effectActive)
     {
         effectActive = true;
-        var carController = GetComponent<PrometeoCarController>();
-        if (carController != null)
-        {
-            originalAccelerationMultiplier = carController.accelerationMultiplier; // Memorizza il valore originale
-        }
-        ApplySpeedAndFrictionIncrease(accelerationMultiplier);
-        StartCoroutine(ResetSpeedAndFrictionAfterDelay(duration));
+        StartCoroutine(SpeedAndFrictionEffect(duration, accelerationMultiplier));
     }
 }
-private void ApplySpeedAndFrictionIncrease(float accelerationMultiplier)
+
+IEnumerator SpeedAndFrictionEffect(float duration, float accelerationMultiplier)
 {
     var carController = GetComponent<PrometeoCarController>();
     if (carController != null)
@@ -161,7 +181,22 @@ private void ApplySpeedAndFrictionIncrease(float accelerationMultiplier)
         carController.accelerationMultiplier = (int)(carController.accelerationMultiplier * accelerationMultiplier);
         carController.IncreaseTireFriction(accelerationMultiplier);
     }
+
+    // Attendi la durata dell'effetto
+    yield return new WaitForSeconds(duration);
+
+    // Ripristina i valori originali
+    if (carController != null)
+    {
+        carController.accelerationMultiplier = originalAccelerationMultiplier;
+        carController.ResetTireFriction();
+    }
+
+    effectActive = false;
 }
+
+
+
 
 IEnumerator ResetSpeedAndFrictionAfterDelay(float delay)
 {
@@ -192,11 +227,5 @@ private IEnumerator DisableControlsForDuration(float duration)
     if (controller != null) controller.EnableControls();
 }
 
-    IEnumerator ResetInvisibilityAfterDelay(float delay)
-    {
-        yield return new WaitForSeconds(delay);
 
-        SetInvisibility(false);
-        effectActive = false;
-    }
 }
