@@ -299,7 +299,7 @@ MonoBehaviour:
   brickWallPrefab: {fileID: 7976881899898220016, guid: 91e161b65e380e94c973b84ec8b703ce, type: 3}
   brickWallSpawnPoints:
   - {fileID: 316324212}
-  mainCamera: {fileID: 0}
+  mainCamera: {fileID: 2030206123}
   rewardTiers:
   - playerCount: 1
     rewards: 4d010000
@@ -462,7 +462,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2929252283123773937, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Color.b
-      value: 0.025688648
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773937, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Color.g
@@ -470,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773937, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Pivot.x
@@ -506,15 +506,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.1908376
+      value: 0.9434251
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.5040326
+      value: 0.9434251
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.59803706
+      value: 0.9434251
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalPosition.x
@@ -550,7 +550,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 112
+      value: 153
       objectReference: {fileID: 0}
     - target: {fileID: 2929252283123773938, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -570,11 +570,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2929252285020697096, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.43536845
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2929252285020697096, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.80034
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2929252285020697096, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2929252285020698103, guid: aaa2c939c0359ac4dbce3f49e8b90252, type: 3}
       propertyPath: m_Color.b
@@ -1084,7 +1088,7 @@ Transform:
   m_GameObject: {fileID: 932499794}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 8.02, z: -59.8}
+  m_LocalPosition: {x: 0, y: 8.620001, z: -59.8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1549,7 +1553,7 @@ Transform:
   m_GameObject: {fileID: 1155411543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16.15, y: 8, z: -24.6}
+  m_LocalPosition: {x: -16.15, y: 8.6, z: -24.6}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1852,7 +1856,7 @@ MonoBehaviour:
   pickupPrefabs:
   - {fileID: 1118545505168787651, guid: 6e465678f82f31f4c8076a1f1e678a7a, type: 3}
   - {fileID: 3768875347148093211, guid: fd210462ab2883049bbe8a2b8b2701b0, type: 3}
-  - {fileID: 1618559456159296225, guid: 8023356cb841e3d4894d4adf7eae2cb8, type: 3}
+  - {fileID: 6673176140945319626, guid: a6f8893693967ba4aa326b6f3978067d, type: 3}
   spawnPoints:
   - {fileID: 1155411544}
   - {fileID: 1704019400}
@@ -1898,7 +1902,7 @@ Transform:
   m_GameObject: {fileID: 1704019399}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 37, y: 8, z: 0}
+  m_LocalPosition: {x: 37, y: 8.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

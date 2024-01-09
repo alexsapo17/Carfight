@@ -31,28 +31,34 @@ public class PickupsManager : MonoBehaviourPun
         }
     }
 
-    void SpawnPickup()
+void SpawnPickup()
+{
+    int attempts = spawnPoints.Length; // Numero massimo di tentativi per trovare uno spawn point libero
+
+    while (attempts > 0)
     {
-        // Scegli un indice casuale per lo spawn point
         int randomIndex = Random.Range(0, spawnPoints.Length);
-        // Verifica se lo spawn point è libero
         if (!isSpawnPointOccupied[randomIndex])
         {
             GameObject pickupToSpawn = pickupPrefabs[Random.Range(0, pickupPrefabs.Length)];
             Transform spawnPoint = spawnPoints[randomIndex];
 
-            // Istanzia il power-up nella posizione dello spawn point
             GameObject pickupInstance = PhotonNetwork.Instantiate(pickupToSpawn.name, spawnPoint.position, spawnPoint.rotation);
-            // Imposta il manager e l'indice dello spawn point nel PickupEffect
+
             PickupEffect pickupEffect = pickupInstance.GetComponent<PickupEffect>();
             if (pickupEffect != null)
             {
                 pickupEffect.Setup(randomIndex, this);
             }
-            // Segna lo spawn point come occupato
+
             isSpawnPointOccupied[randomIndex] = true;
+            break; // Uscita dal ciclo dopo lo spawn di un pickup
         }
+
+        attempts--; // Decrementa il numero di tentativi rimasti
     }
+}
+
 
     public void FreeSpawnPoint(int index)
     {

@@ -126,7 +126,7 @@ void Start()
         float timer = preRaceTimer;
         while (timer > 0)
         {
-            countdownText.text = $"La gara inizierà in {timer:F2} secondi";
+            countdownText.text = $"{timer:F2}";
             timer -= Time.deltaTime;
             yield return null;
         }
@@ -140,7 +140,7 @@ void Start()
         float startTimer = startRaceTimer;
         while (startTimer > 0)
         {
-            countdownText.text = $"Inizio gara in {startTimer:F2} secondi";
+            countdownText.text = $"{startTimer:F2}";
             startTimer -= Time.deltaTime;
             yield return null;
         }

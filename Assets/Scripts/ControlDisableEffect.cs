@@ -6,6 +6,7 @@ public class ControlDisableEffect : MonoBehaviourPunCallbacks
     public float effectDuration = 5f; // Durata dell'effetto
     private int spawnPointIndex = -1;
     private PickupsManager pickupsManager;
+public GameObject explosionEffectPrefab;
 
     public void Setup(int index, PickupsManager manager)
     {
@@ -43,16 +44,24 @@ void ApplyControlDisableEffect(float duration)
 }
 
 
-    [PunRPC]
-    void DestroyPickup()
+[PunRPC]
+void DestroyPickup()
+{
+    if (photonView.IsMine)
     {
-        if (photonView.IsMine)
+        // Crea l'effetto di esplosione prima di distruggere il pickup
+        if (explosionEffectPrefab != null)
         {
-            if (spawnPointIndex != -1 && pickupsManager != null)
-            {
-                pickupsManager.FreeSpawnPoint(spawnPointIndex);
-            }
-            PhotonNetwork.Destroy(gameObject);
+            Instantiate(explosionEffectPrefab, transform.position, Quaternion.identity);
         }
+
+        // Il resto del codice rimane invariato
+        if (spawnPointIndex != -1 && pickupsManager != null)
+        {
+            pickupsManager.FreeSpawnPoint(spawnPointIndex);
+        }
+        PhotonNetwork.Destroy(gameObject);
     }
+}
+
 }

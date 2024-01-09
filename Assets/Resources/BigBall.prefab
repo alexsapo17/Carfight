@@ -145,9 +145,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   effectDuration: 5
-  sizeMultiplier: 1.5
-  massMultiplier: 1.5
-  accelerationMultiplier: 1.5
+  sizeMultiplier: 1.3
+  massMultiplier: 1.3
+  accelerationMultiplier: 3.02
 --- !u!135 &-6380401701943432432
 SphereCollider:
   m_ObjectHideFlags: 0

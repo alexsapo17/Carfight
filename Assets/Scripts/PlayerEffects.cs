@@ -8,7 +8,6 @@ public class PlayerEffects : MonoBehaviourPun
     private Vector3 originalSize;
     private float originalMass;
     private bool effectActive = false;
-        // Materiale per l'outline (o glow)
     private Material outlineMaterial;
     private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
     private int originalAccelerationMultiplier;

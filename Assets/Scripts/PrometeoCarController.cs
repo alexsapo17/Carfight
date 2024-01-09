@@ -383,6 +383,8 @@ if (useTouchControls)
           GoReverse();
         }
 float turnValue = horizontalJoystick.GetHorizontal();
+float moveValue = horizontalJoystick.GetVertical();
+float threshold = 0.1f; // Soglia minima per rilevare un movimento significativo
 
 if (turnValue < 0.1) 
 {
@@ -397,6 +399,20 @@ else
     ResetSteeringAngle();
 }
 
+
+
+// Controllo per l'accelerazione e la retromarcia basato sulla posizione del joystick
+if (moveValue > 0.01) { // Joystick spostato verso l'alto
+       CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          GoForward();
+
+} else if (moveValue < 0.01) { // Joystick spostato verso il basso
+
+          CancelInvoke("DecelerateCar");
+          deceleratingCar = false;
+          GoReverse();
+          }
 
         if(handbrakePTI.buttonPressed){
           CancelInvoke("DecelerateCar");
@@ -794,6 +810,74 @@ private void ResetFriction(WheelCollider collider)
         CancelInvoke("DecelerateCar");
       }
     }
+public void GoForwardJoystick(float joystickValue){
+      float sensitivityMultiplier = 5f; // Regola questo valore per aumentare la sensibilità
+
+    if(Mathf.Abs(localVelocityX) > 2.5f){
+        isDrifting = true;
+        DriftCarPS();
+    } else {
+        isDrifting = false;
+        DriftCarPS();
+    }
+
+    // Regola la potenza dell'acceleratore in base al valore del joystick
+    throttleAxis = Mathf.Clamp(throttleAxis + (Time.deltaTime * sensitivityMultiplier * joystickValue), 0f, 1f);
+
+    if(localVelocityZ < -1f){
+        Brakes();
+    } else {
+        if(Mathf.RoundToInt(carSpeed) < maxSpeed){
+            frontLeftCollider.brakeTorque = 0;
+            frontLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            frontRightCollider.brakeTorque = 0;
+            frontRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            rearLeftCollider.brakeTorque = 0;
+            rearLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            rearRightCollider.brakeTorque = 0;
+            rearRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+        } else {
+            frontLeftCollider.motorTorque = 0;
+            frontRightCollider.motorTorque = 0;
+            rearLeftCollider.motorTorque = 0;
+            rearRightCollider.motorTorque = 0;
+        }
+    }
+}
+public void GoReverseJoystick(float joystickValue){
+      float sensitivityMultiplier = 5f; // Regola questo valore per aumentare la sensibilità
+
+    if(Mathf.Abs(localVelocityX) > 2.5f){
+        isDrifting = true;
+        DriftCarPS();
+    } else {
+        isDrifting = false;
+        DriftCarPS();
+    }
+
+    // Regola la potenza dell'acceleratore in base al valore del joystick
+    throttleAxis = Mathf.Clamp(throttleAxis - (Time.deltaTime * sensitivityMultiplier * Mathf.Abs(joystickValue)), -1f, 0f);
+
+    if(localVelocityZ > 1f){
+        Brakes();
+    } else {
+        if(Mathf.Abs(Mathf.RoundToInt(carSpeed)) < maxReverseSpeed){
+            frontLeftCollider.brakeTorque = 0;
+            frontLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            frontRightCollider.brakeTorque = 0;
+            frontRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            rearLeftCollider.brakeTorque = 0;
+            rearLeftCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+            rearRightCollider.brakeTorque = 0;
+            rearRightCollider.motorTorque = (accelerationMultiplier * 50f) * throttleAxis;
+        } else {
+            frontLeftCollider.motorTorque = 0;
+            frontRightCollider.motorTorque = 0;
+            rearLeftCollider.motorTorque = 0;
+            rearRightCollider.motorTorque = 0;
+        }
+    }
+}
 
     // This function applies brake torque to the wheels according to the brake force given by the user.
     public void Brakes(){
