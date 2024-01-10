@@ -135,7 +135,7 @@ public GameObject cameraPrefab;
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
- private bool controlsEnabled = true; // Variabile per controllare se i controlli sono abilitati
+ public bool controlsEnabled = true; // Variabile per controllare se i controlli sono abilitati
 
     //CAR DATA
 

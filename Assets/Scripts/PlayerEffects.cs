@@ -48,6 +48,8 @@ void ApplySizeMassIncrease(float duration, float sizeMultiplier, float massMulti
 }
 IEnumerator SizeMassIncreaseEffect(float duration, float sizeMultiplier, float massMultiplier)
 {
+        Instantiate(sizeMassIncreaseEffectPrefab, transform.position, Quaternion.identity);
+
     transform.localScale *= sizeMultiplier;
     Rigidbody rb = GetComponent<Rigidbody>();
     if (rb != null)
@@ -94,6 +96,8 @@ void ApplyInvisibility(float duration)
 
 IEnumerator InvisibilityEffect(float duration)
 {
+        Instantiate(invisibilityEffectPrefab, transform.position, Quaternion.identity);
+
     SetInvisibility(true);
     yield return new WaitForSeconds(duration);
     SetInvisibility(false);
@@ -215,17 +219,24 @@ IEnumerator ResetSpeedAndFrictionAfterDelay(float delay)
 
 private IEnumerator DisableControlsForDuration(float duration)
 {
-    // Disabilita i controlli
-    var controller = GetComponent<PrometeoCarController>();
-    if (controller != null) controller.DisableControls();
-            Instantiate(controlDisableEffectPrefab, transform.position, Quaternion.identity);
+    var carController = GetComponent<PrometeoCarController>();
 
+    if (carController != null) 
+    {
+        // Disabilita i controlli impostando enableControls su false
+        carController.controlsEnabled = false;
 
-    yield return new WaitForSeconds(duration);
+        // Istanzia l'effetto di disabilitazione dei controlli
+        Instantiate(controlDisableEffectPrefab, transform.position, Quaternion.identity);
 
-    // Riabilita i controlli
-    if (controller != null) controller.EnableControls();
+        // Attendi per la durata specificata
+        yield return new WaitForSeconds(duration);
+
+        // Riabilita i controlli impostando enableControls su true
+        carController.controlsEnabled = true;
+    }
 }
+
 
 
 }

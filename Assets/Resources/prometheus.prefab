@@ -146,6 +146,7 @@ MonoBehaviour:
   tireScreechSound: {fileID: 2329328475731222078, guid: 01cde7a9b611b394cb4e15727171c432, type: 3}
   useTouchControls: 1
   horizontalJoystick: {fileID: 0}
+  controlsEnabled: 1
   carSpeed: 0
   isDrifting: 0
   isTractionLocked: 0

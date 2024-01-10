@@ -66,6 +66,7 @@ public Text coinsText;
     }
 
     LoadOwnedCars();
+    UpdateCarButtons();
 }
     
 
@@ -112,10 +113,36 @@ public void SelectCar(string carName)
 {
     PlayerPrefs.SetString("SelectedCar", carName);
     PlayerPrefs.Save();
-    Debug.Log("Macchina selezionata: " + carName);
+    UpdateCarButtons();
 }
 
+private void UpdateCarButtons()
+{
+    string selectedCar = PlayerPrefs.GetString("SelectedCar", "");
 
+    foreach (var carButton in carButtons) // Assumi che carButtons sia una lista di tutti i pulsanti
+    {
+        string carName = carButton.name; // O come ottieni il nome dell'auto dal pulsante
+        Transform textTransform = carButton.transform.Find("SelectText"); // Assumi che il testo sia un figlio chiamato "SelectText"
+        
+        if (textTransform != null)
+        {
+            Text carText = textTransform.GetComponent<Text>();
+            if (carName == selectedCar)
+            {
+                carText.text = "SELEZIONATA";
+                carText.color = Color.green; // Cambia con il colore desiderato
+                // Aggiungi qui ulteriori modifiche visive se necessario
+            }
+            else
+            {
+                carText.text = "SELEZIONA";
+                carText.color = Color.white;
+                // Resetta altre modifiche visive se necessario
+            }
+        }
+    }
+}
     // Metodo per tornare alla lobby
     public void ReturnToLobby()
     {
