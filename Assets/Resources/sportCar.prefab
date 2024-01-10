@@ -88,13 +88,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2.2
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -360,13 +360,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2.2
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -715,13 +715,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2.2
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -786,13 +786,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 1
+    m_Stiffness: 2
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 1
+    m_Stiffness: 2.2
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -870,7 +870,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2298, y: 1.2298, z: 1.2298}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2652651765086488581}
@@ -919,12 +919,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSpeed: 190
   maxReverseSpeed: 90
-  accelerationMultiplier: 10
-  maxSteeringAngle: 42
+  accelerationMultiplier: 15
+  maxSteeringAngle: 38
   steeringSpeed: 0.6
-  brakeForce: 600
+  brakeForce: 543
   decelerationMultiplier: 3
-  handbrakeDriftMultiplier: 10
+  handbrakeDriftMultiplier: 9
   bodyMassCenter: {x: 0, y: 0, z: 0}
   frontLeftMesh: {fileID: 5070173340023223190}
   frontLeftCollider: {fileID: 4517246260034216830}
@@ -949,9 +949,11 @@ MonoBehaviour:
   tireScreechSound: {fileID: 2329328475731222078, guid: 01cde7a9b611b394cb4e15727171c432, type: 3}
   useTouchControls: 1
   horizontalJoystick: {fileID: 0}
+  controlsEnabled: 1
   carSpeed: 0
   isDrifting: 0
   isTractionLocked: 0
+  cameraInstance: {fileID: 0}
 --- !u!114 &7144966932269226900
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -982,7 +984,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8968474430482601261}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: efd9c9fb47c6029459772073d3818595, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1003,7 +1005,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8968474430482601261}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: efd9c9fb47c6029459772073d3818595, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

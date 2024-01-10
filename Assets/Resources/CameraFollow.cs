@@ -14,18 +14,22 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    void LateUpdate()
+void LateUpdate()
+{
+    if (target != null)
     {
-        if (target != null)
-        {
-            // Calcola la posizione desiderata della camera basandoti sulla rotazione del target
-            Vector3 desiredPosition = target.position - target.forward * offset.z + target.up * offset.y;
+        // Calcola la posizione desiderata della camera solo per gli assi X e Z, mantenendo costante l'asse Y.
+        Vector3 desiredPosition = target.position - target.forward * offset.z;
 
-            // Sposta la camera direttamente alla posizione desiderata senza alcuna interpolazione
-            transform.position = desiredPosition;
+        // Mantieni la stessa altezza (asse Y) per la camera.
+        desiredPosition.y = transform.position.y; // Usa l'attuale altezza della camera
 
-            // Imposta la rotazione della camera per guardare il target
-            transform.LookAt(target.position);
-        }
+        // Sposta la camera direttamente alla posizione desiderata senza alcuna interpolazione
+        transform.position = desiredPosition;
+
+        // Imposta la rotazione della camera per guardare il target
+        transform.LookAt(target.position);
     }
+}
+
 }
