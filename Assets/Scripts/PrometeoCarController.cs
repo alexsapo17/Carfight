@@ -179,11 +179,12 @@ public GameObject cameraPrefab;
     // Start is called before the first frame update
     void Start()
     {
+ controlsEnabled = false;
 
               horizontalJoystick = FindObjectOfType<HorizontalJoystick>();
 
 
-   controlsEnabled = false; 
+   
       photonView = GetComponent<PhotonView>();
       //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
       //gameObject. Also, we define the center of mass of the car with the Vector3 given

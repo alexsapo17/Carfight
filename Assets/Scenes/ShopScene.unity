@@ -354,7 +354,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 869113275}
         m_TargetAssemblyTypeName: CameraAnimationController, Assembly-CSharp
-        m_MethodName: PlayForward
+        m_MethodName: PlayOrContinueAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2796,14 +2796,14 @@ RectTransform:
   m_GameObject: {fileID: 1023062409}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3602, y: 0.29768, z: 1}
+  m_LocalScale: {x: 1.2193246, y: 0.26684937, z: 0.8964303}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 317910477}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -13.9}
+  m_AnchoredPosition: {x: 0, y: -13.1}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1023062411
@@ -3353,14 +3353,14 @@ RectTransform:
   m_GameObject: {fileID: 1231858515}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3602, y: 0.29768, z: 1}
+  m_LocalScale: {x: 1.2193246, y: 0.26684937, z: 0.8964303}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1848436630}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -12.4}
+  m_AnchoredPosition: {x: 0, y: -11.599999}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1231858517
@@ -3502,7 +3502,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 869113275}
         m_TargetAssemblyTypeName: CameraAnimationController, Assembly-CSharp
-        m_MethodName: PlayForward
+        m_MethodName: PlayOrContinueAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3656,14 +3656,14 @@ RectTransform:
   m_GameObject: {fileID: 1320203089}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3602, y: 0.29768, z: 1}
+  m_LocalScale: {x: 1.2193246, y: 0.26684937, z: 0.8964303}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 68395002}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -11.7}
+  m_AnchoredPosition: {x: 0, y: -10.900001}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1320203091
@@ -4098,7 +4098,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 869113275}
         m_TargetAssemblyTypeName: CameraAnimationController, Assembly-CSharp
-        m_MethodName: PlayBackward
+        m_MethodName: PlayOrContinueAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4458,7 +4458,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 869113275}
         m_TargetAssemblyTypeName: CameraAnimationController, Assembly-CSharp
-        m_MethodName: PlayBackward
+        m_MethodName: PlayOrContinueAnimation
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5289,14 +5289,14 @@ RectTransform:
   m_GameObject: {fileID: 2095126802}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.3602, y: 0.29768, z: 1}
+  m_LocalScale: {x: 1.2193246, y: 0.26684937, z: 0.8964303}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1885879533}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -13.6}
+  m_AnchoredPosition: {x: 0, y: -12.8}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2095126804

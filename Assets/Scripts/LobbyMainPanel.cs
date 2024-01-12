@@ -204,6 +204,11 @@ private void UpdateCurrencyUI()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
 }
+public void OnSinglePlayerButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("SinglePlayerScene");
+}
+
 public void OnLogoutButtonClicked()
 {
     if (auth.CurrentUser != null)
