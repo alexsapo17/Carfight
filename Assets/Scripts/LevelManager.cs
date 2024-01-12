@@ -38,7 +38,7 @@ public GameObject gameControlsUI;
         levelCarMap = new Dictionary<int, int>
         {
             { 0, 0 }, // Livello 0 usa la macchina 0
-            { 1, 1 }, // livello 1 usa la macchina 1
+            { 1, 0 }, // livello 1 usa la macchina 1
             { 2, 1 }, // Livelli 2-3 usano la macchina 1
             { 3, 1 }
         };
@@ -86,11 +86,14 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
 
 public void LoadLevel(int levelIndex)
 {
+        
+    currentLevelIndex = levelIndex;
+    Debug.Log($"Caricamento del livello {levelIndex}");
+
     if (currentLevel != null)
         PhotonNetwork.Destroy(currentLevel);
     if (currentCar != null)
         PhotonNetwork.Destroy(currentCar);
-
     Time.timeScale = 1;
     gameControlsUI.SetActive(true);
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);

@@ -12,12 +12,15 @@ public class LevelProgress
     public float bestTime;
     public int stars;
     public bool isUnlocked;
+            public bool coinsAwarded;
 
     public LevelProgress()
     {
         bestTime = float.MaxValue;
         stars = 0;
         isUnlocked = false;
+        coinsAwarded = false;
+
     }
 }
 [System.Serializable]
@@ -26,12 +29,14 @@ public class LevelStarRequirements
     public float timeForThreeStars;
     public float timeForTwoStars;
     public float timeForOneStar;
+ 
 
     public LevelStarRequirements(float threeStars, float twoStars, float oneStar)
     {
         timeForThreeStars = threeStars;
         timeForTwoStars = twoStars;
         timeForOneStar = oneStar;
+        
     }
 }
 public class LevelProgressManager : MonoBehaviour
@@ -44,6 +49,8 @@ public Text bestTimeText;
     public Transform levelsContainer; // Contenitore per gli UI dei livelli
     private LevelManager levelManager;
         public Dictionary<int, LevelStarRequirements> starRequirements;
+           private DatabaseReference databaseReference;
+private int playerCoins;
 
     void Awake()
     {
@@ -58,11 +65,50 @@ public Text bestTimeText;
             Instance = this;
             DontDestroyOnLoad(gameObject);
         }
-        LoadUserCoins();
+            databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+ LoadCoinsAndUpdateUI();
         InitializeLevels();
                 InitializeStarRequirements();
 
     }
+   
+
+
+private void SavePlayerCoins() {
+    string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+    databaseReference.Child("users").Child(userId).Child("coins").SetValueAsync(playerCoins);
+    UpdateCoinsUI(); // Aggiorna l'UI ogni volta che salvi le monete
+}
+
+private void AwardCoinsForLevel(int levelId, int starsEarned) {
+    if (!levelsProgress.ContainsKey(levelId)) return;
+
+    var levelProgress = levelsProgress[levelId];
+
+    if (levelProgress.coinsAwarded) return;
+
+    int coinsToAward = 0;
+    switch (starsEarned) {
+        case 1:
+            coinsToAward = 50;
+            break;
+        case 2:
+            coinsToAward = 150; // 100 + 50
+            break;
+        case 3:
+            coinsToAward = 300; // 150 + 100 + 50
+            break;
+        default:
+            return;
+    }
+
+  
+    playerCoins += coinsToAward;
+    SavePlayerCoins();
+
+    levelProgress.coinsAwarded = true;
+    SaveLevelData(levelId);
+}
 
 void InitializeLevels()
 {
@@ -90,25 +136,53 @@ public void FinishLevel(int levelId, float time)
 {
     UpdateLevelProgress(levelId, time);
     CheckAndUnlockNextLevel(levelId);
+    int newStars = CalculateStars(levelId, time);
+    AwardCoinsForLevel(levelId, newStars);
 }
-
-// Verifica e sblocca il livello successivo se necessario
 private void CheckAndUnlockNextLevel(int completedLevelId)
 {
     int nextLevelId = completedLevelId + 1;
-    if (nextLevelId < levelsProgress.Count && levelsProgress[completedLevelId].stars > 0)
+    if (nextLevelId < levelsProgress.Count)
     {
-        levelsProgress[nextLevelId].isUnlocked = true;
-        SaveLevelData(nextLevelId); // Salva lo stato di sblocco del livello successivo
-        UpdateLevelUI(nextLevelId); // Aggiorna l'UI del livello successivo
+        if (!levelsProgress.ContainsKey(nextLevelId))
+        {
+            // Inizializza il livello successivo solo se non esiste
+            levelsProgress[nextLevelId] = new LevelProgress();
+        }
+
+        if (levelsProgress[completedLevelId].stars > 0 && !levelsProgress[nextLevelId].isUnlocked)
+        {
+            // Sblocca il livello successivo solo se il livello attuale è stato completato con almeno una stella
+            levelsProgress[nextLevelId].isUnlocked = true;
+            // Aggiorna solo lo stato di sblocco su Firebase
+            UpdateUnlockStatusOnFirebase(nextLevelId);
+        }
     }
+    UpdateLevelUI(nextLevelId); // Aggiorna l'UI del livello successivo
 }
+
+private void UpdateUnlockStatusOnFirebase(int levelId)
+{
+    string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+    FirebaseDatabase.DefaultInstance
+        .GetReference("users")
+        .Child(userId)
+        .Child("levelsProgress")
+        .Child(levelId.ToString())
+        .Child("isUnlocked")
+        .SetValueAsync(levelsProgress[levelId].isUnlocked);
+}
+
+
+
     void InitializeStarRequirements()
     {
         starRequirements = new Dictionary<int, LevelStarRequirements>
         {
             { 0, new LevelStarRequirements(5f, 8f, 10f) },
             { 1, new LevelStarRequirements(5f, 8f, 10f) },
+            { 2, new LevelStarRequirements(5f, 8f, 10f) },
+            { 3, new LevelStarRequirements(10f, 15f, 20f) },
         };
     }
 private void CreateLevelUI(int levelId)
@@ -144,39 +218,27 @@ public void UpdateLevelUI(int levelId)
         }
     }
 }
- private void LoadUserCoins()
-    {
-        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
-
-        FirebaseDatabase.DefaultInstance
-            .GetReference("users")
-            .Child(userId)
-            .Child("coins")
-            .GetValueAsync().ContinueWithOnMainThread(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    // Gestire l'errore
-                }
-                else if (task.IsCompleted)
-                {
-                    DataSnapshot snapshot = task.Result;
-                    if (snapshot.Value != null)
-                    {
-                        int coins = int.Parse(snapshot.Value.ToString());
-                        UpdateCoinsUI(coins);
-                    }
-                }
-            });
-    }
-
-    private void UpdateCoinsUI(int coins)
-    {
-        if (coinsText != null)
-        {
-            coinsText.text = "Monete: " + coins;
+private void LoadCoinsAndUpdateUI() {
+    string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+    databaseReference.Child("users").Child(userId).Child("coins").GetValueAsync().ContinueWithOnMainThread(task => {
+        if (task.IsFaulted) {
+            // Gestire l'errore
+        } else if (task.IsCompleted) {
+            DataSnapshot snapshot = task.Result;
+            playerCoins = snapshot.Value != null ? int.Parse(snapshot.Value.ToString()) : 0;
+            UpdateCoinsUI();
         }
+    });
+}
+
+  private void UpdateCoinsUI()
+{
+    if (coinsText != null)
+    {
+        coinsText.text = "Monete: " + playerCoins;
     }
+}
+
  public void LoadBestTime(int levelId)
 {
     string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;

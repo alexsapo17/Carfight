@@ -27,24 +27,24 @@ public class CarShopManager : MonoBehaviour
 
 public void BuyCar1()
     {
-        int carCost = 100;
+        int carCost = 200;
         TryBuyCar("prometheus", carCost);
     }
 
     public void BuyCar2()
     {
-        int carCost = 120;
+        int carCost = 500;
         TryBuyCar("sportCar", carCost);
     }
 
     public void BuyCar3()
     {
-        int carCost = 130;
+        int carCost = 1000;
         TryBuyCar("raceCar", carCost);
     }
     public void BuyCar4()
 {
-    int carCost = 100; // Definisci il costo della Monstertruck
+    int carCost = 1500; // Definisci il costo della Monstertruck
     TryBuyCar("monstertruck", carCost);
 }
 

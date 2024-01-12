@@ -357,9 +357,13 @@ MonoBehaviour:
   handbrakeButton: {fileID: 5658953411371895010}
   rewardTiers:
   - playerCount: 1
-    rewards: 4d010000
+    rewards: 96000000
   - playerCount: 2
-    rewards: de0000006f000000
+    rewards: c800000032000000
+  - playerCount: 3
+    rewards: 2c0100009600000032000000
+  - playerCount: 4
+    rewards: 90010000c80000006400000032000000
 --- !u!4 &233959351
 Transform:
   m_ObjectHideFlags: 0

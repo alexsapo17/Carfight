@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class HomeNavigation : MonoBehaviour
 {
@@ -50,5 +51,9 @@ public void OnLevelSelect(int levelIndex)
         levelsPanel.SetActive(false);
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
+    }
+       public void ReturnToLobby()
+    {
+        SceneManager.LoadScene("DemoAsteroids-LobbyScene"); 
     }
 }
