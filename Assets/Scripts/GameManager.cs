@@ -422,25 +422,27 @@ public void DestroyPlayer(int viewID)
         PhotonNetwork.Destroy(pv.gameObject);
     }
 }
-    [PunRPC]
-    void SyncStartPosition()
-    {
-        Debug.Log("Sincronizzazione della posizione di partenza per " + instantiatedCars.Count + " auto.");
+[PunRPC]
+void SyncStartPosition()
+{
+    Debug.Log("Sincronizzazione della posizione di partenza per " + instantiatedCars.Count + " auto.");
 
-        for (int i = 0; i < instantiatedCars.Count; i++)
+    for (int i = 0; i < instantiatedCars.Count; i++)
+    {
+        if (i < startLineSpawnPoints.Length)
         {
-            if (i < startLineSpawnPoints.Length)
-            {
-                Debug.Log("Posizionamento dell'auto: " + instantiatedCars[i].name + " allo spawn point della linea di partenza " + i);
-                instantiatedCars[i].transform.position = startLineSpawnPoints[i].position;
-                instantiatedCars[i].transform.rotation = startLineSpawnPoints[i].rotation;
-            }
-            else
-            {
-                Debug.LogError("Non ci sono abbastanza spawn points sulla linea di partenza per tutte le auto. Auto non posizionata: " + instantiatedCars[i].name);
-            }
+            Debug.Log("Posizionamento dell'auto: " + instantiatedCars[i].name + 
+                      " allo spawn point della linea di partenza " + i +  ". Posizione: " + startLineSpawnPoints[i].position);
+            instantiatedCars[i].transform.position = startLineSpawnPoints[i].position;
+            instantiatedCars[i].transform.rotation = startLineSpawnPoints[i].rotation;
+        }
+        else
+        {
+            Debug.LogError("Non ci sono abbastanza spawn points sulla linea di partenza per tutte le auto. Auto non posizionata: " + instantiatedCars[i].name);
         }
     }
+}
+
 
     [PunRPC]
     void StartRaceSync()

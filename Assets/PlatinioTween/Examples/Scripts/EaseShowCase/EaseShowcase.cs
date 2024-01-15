@@ -12,17 +12,21 @@ namespace Platinio.TweenEngine
 
         private Vector3 startPosition = Vector3.zero;
 
-        private void Start()
-        {
-            startPosition = transform.position;
-            Move();
-        }
-        private void Move()
-        {
-            transform.position = startPosition;
-            transform.Move(pos, time).SetEase(ease);
-        }
-       
+ private void Start()
+{
+    startPosition = transform.position;
+    Debug.Log("Start - Position in Editor: " + startPosition);
+    Move();
+}
+
+private void Move()
+{
+    Debug.Log("Move - Current Position: " + transform.position + ", Target Position: " + pos);
+    transform.position = startPosition;
+    transform.Move(pos, time).SetEase(ease);
+    Debug.Log("After Move - New Position: " + transform.position);
+}
+
     }
 
 }
