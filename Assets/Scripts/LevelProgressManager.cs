@@ -56,15 +56,7 @@ private int playerCoins;
     {
             levelManager = FindObjectOfType<LevelManager>();
 
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        }
+ 
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
  LoadCoinsAndUpdateUI();
         InitializeLevels();
