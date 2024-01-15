@@ -6,8 +6,7 @@ public class CameraAnimationLobby : MonoBehaviour
 
     private void Start()
     {
-        // Inizia l'animazione e fermala immediatamente (se necessario)
-        cameraAnimator.speed = 0;
+    GoToNextStopPoint();
     }
 
     // Metodo per far avanzare l'animazione al prossimo punto di arresto

@@ -24,7 +24,8 @@ namespace Photon.Pun.Demo.Asteroids
 
         [Header("Create Room Panel")]
         public GameObject CreateRoomPanel;
-
+        [Header("Connecting Panel")]
+public GameObject ConnectingPanel;
         public InputField RoomNameInputField;
         public InputField MaxPlayersInputField;
 
@@ -274,7 +275,7 @@ public void OnLogoutButtonClicked()
         public void OnLoginButtonClicked()
         {
             string playerName = PlayerNameInput.text;
-
+this.SetActivePanel(ConnectingPanel.name);
             if (!string.IsNullOrEmpty(playerName))
             {
                 // Controllo se l'utente è autenticato con Firebase
@@ -632,6 +633,7 @@ PhotonNetwork.Disconnect();
             JoinRandomRoomPanel.SetActive(activePanel.Equals(JoinRandomRoomPanel.name));
             RoomListPanel.SetActive(activePanel.Equals(RoomListPanel.name));    // UI should call OnRoomListButtonClicked() to activate this
             InsideRoomPanel.SetActive(activePanel.Equals(InsideRoomPanel.name));
+            ConnectingPanel.SetActive(activePanel.Equals(ConnectingPanel.name));
         }
 
         private void UpdateCachedRoomList(List<RoomInfo> roomList)

@@ -14,38 +14,43 @@ public class ControlDisableEffect : MonoBehaviourPunCallbacks
         pickupsManager = manager;
     }
 
-    private void OnTriggerEnter(Collider other)
+private void OnTriggerEnter(Collider other)
+{
+    Debug.Log("[ControlDisableEffect] Pickup interagito da: " + other.gameObject.name);
+    if (other.CompareTag("Player"))
     {
-        if (other.CompareTag("Player"))
-        {
-            PhotonView playerPhotonView = other.GetComponent<PhotonView>();
+        PhotonView playerPhotonView = other.GetComponent<PhotonView>();
 
-            // Invia l'effetto a tutti gli altri giocatori
-            if (playerPhotonView != null)
+        if (playerPhotonView != null)
+        {
+            photonView.RPC("ApplyControlDisableEffect", RpcTarget.All, effectDuration, playerPhotonView.ViewID);
+            photonView.RPC("DestroyPickup", RpcTarget.AllBuffered);
+            Debug.Log("[ControlDisableEffect] Inviato RPC per disabilitare i controlli degli altri giocatori.");
+        }
+    }
+}
+
+
+[PunRPC]
+void ApplyControlDisableEffect(float duration, int playerViewID)
+{
+    Debug.Log($"[ControlDisableEffect] Tentativo di applicare l'effetto di disabilitazione per {duration} secondi. PlayerViewID: {playerViewID}");
+    if (PhotonNetwork.LocalPlayer.ActorNumber != playerViewID)
+    {
+        GameObject localPlayerGameObject = PhotonNetwork.LocalPlayer.TagObject as GameObject; 
+        if (localPlayerGameObject != null)
+        {
+            PlayerEffects playerEffects = localPlayerGameObject.GetComponent<PlayerEffects>();
+            if (playerEffects != null)
             {
-                photonView.RPC("ApplyControlDisableEffect", RpcTarget.Others, effectDuration, playerPhotonView.ViewID);
-                photonView.RPC("DestroyPickup", RpcTarget.AllBuffered);
+                playerEffects.StartControlDisableTimer(duration);
+                Debug.Log("[ControlDisableEffect] Applicato l'effetto di disabilitazione.");
             }
         }
     }
 
-    [PunRPC]
-    void ApplyControlDisableEffect(float duration, int playerViewID)
-    {
-        // Evita di applicare l'effetto al giocatore che ha raccolto il pickup
-        if (PhotonNetwork.LocalPlayer.ActorNumber != playerViewID)
-        {
-            GameObject localPlayerGameObject = PhotonNetwork.LocalPlayer.TagObject as GameObject;
-            if (localPlayerGameObject != null)
-            {
-                PlayerEffects playerEffects = localPlayerGameObject.GetComponent<PlayerEffects>();
-                if (playerEffects != null)
-                {
-                    playerEffects.StartControlDisableTimer(duration);
-                }
-            }
-        }
-    }
+}
+
 
     [PunRPC]
     void DestroyPickup()

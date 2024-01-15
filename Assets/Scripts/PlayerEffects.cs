@@ -25,6 +25,8 @@ public GameObject collisionEffectPrefab;
     // Funzione per avviare l'effetto di aumento di grandezza/massa
 public void StartSizeMassIncreaseTimer(float duration, float sizeMultiplier, float massMultiplier)
 {
+        if (!effectActive)
+    {
         // Salva i valori originali
     originalSize = transform.localScale;
     Rigidbody rb = GetComponent<Rigidbody>();
@@ -33,18 +35,17 @@ public void StartSizeMassIncreaseTimer(float duration, float sizeMultiplier, flo
         originalMass = rb.mass;
     }
     photonView.RPC("ApplySizeMassIncrease", RpcTarget.All, duration, sizeMultiplier, massMultiplier);
-
+}
 }
 
 
 [PunRPC]
 void ApplySizeMassIncrease(float duration, float sizeMultiplier, float massMultiplier)
 {
-    if (!effectActive)
-    {
+
         effectActive = true;
         StartCoroutine(SizeMassIncreaseEffect(duration, sizeMultiplier, massMultiplier));
-    }
+    
 }
 IEnumerator SizeMassIncreaseEffect(float duration, float sizeMultiplier, float massMultiplier)
 {
@@ -156,25 +157,34 @@ public void StartControlDisableTimer(float duration)
 }
 
 [PunRPC]
-void ApplyControlDisable(float duration)
+void ApplyControlDisable(float duration, int playerWhoPickedUpID)
 {
-    StartCoroutine(DisableControlsForDuration(duration));
+if (photonView.ViewID != playerWhoPickedUpID)
+{
+StartCoroutine(DisableControlsForDuration(duration));
+Debug.Log("[PlayerEffects] Disabilitazione controlli per " + gameObject.name);
 }
-
+else
+{
+Debug.Log("[PlayerEffects] Ignorato disabilitazione controlli per il giocatore che ha raccolto il pickup: " + gameObject.name);
+}
+}
 // Funzione per avviare l'effetto di aumento di velocità e attrito
 public void StartSpeedAndFrictionEffect(float duration, float accelerationMultiplier)
 {
+       if (!effectActive)
+    {
     photonView.RPC("ApplySpeedAndFrictionIncrease", RpcTarget.All, duration, accelerationMultiplier);
+}
 }
 
 [PunRPC]
 void ApplySpeedAndFrictionIncrease(float duration, float accelerationMultiplier)
 {
-    if (!effectActive)
-    {
+ 
         effectActive = true;
         StartCoroutine(SpeedAndFrictionEffect(duration, accelerationMultiplier));
-    }
+    
 }
 
 IEnumerator SpeedAndFrictionEffect(float duration, float accelerationMultiplier)
@@ -200,31 +210,13 @@ IEnumerator SpeedAndFrictionEffect(float duration, float accelerationMultiplier)
 }
 
 
-
-
-IEnumerator ResetSpeedAndFrictionAfterDelay(float delay)
-{
-    yield return new WaitForSeconds(delay);
-
-    var carController = GetComponent<PrometeoCarController>();
-    if (carController != null)
-    {
-        carController.accelerationMultiplier = originalAccelerationMultiplier; // Ripristina il valore originale
-        carController.ResetTireFriction();
-    }
-
-    effectActive = false;
-}
-
-
 private IEnumerator DisableControlsForDuration(float duration)
 {
     var carController = GetComponent<PrometeoCarController>();
 
     if (carController != null) 
     {
-        // Disabilita i controlli impostando enableControls su false
-        carController.controlsEnabled = false;
+        carController.DisableControls();  // Usa la stessa logica di GameManager
 
         // Istanzia l'effetto di disabilitazione dei controlli
         Instantiate(controlDisableEffectPrefab, transform.position, Quaternion.identity);
@@ -232,8 +224,12 @@ private IEnumerator DisableControlsForDuration(float duration)
         // Attendi per la durata specificata
         yield return new WaitForSeconds(duration);
 
-        // Riabilita i controlli impostando enableControls su true
-        carController.controlsEnabled = true;
+        carController.EnableControls();  // Riabilita i controlli
+        Debug.Log("[PlayerEffects] Riabilitazione controlli per " + gameObject.name);
+    }
+    else
+    {
+        Debug.LogError("[PlayerEffects] Nessun carController trovato su " + gameObject.name);
     }
 }
 

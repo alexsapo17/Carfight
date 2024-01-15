@@ -3,6 +3,8 @@ using System.Collections.Generic; // Aggiungi questo per utilizzare i dizionari
 using Photon.Pun;
 using UnityEngine.UI;
 using System.Collections;
+using UnityEngine.SceneManagement;
+
 
 
 public class LevelManager : MonoBehaviour
@@ -39,8 +41,10 @@ public GameObject gameControlsUI;
         {
             { 0, 0 }, // Livello 0 usa la macchina 0
             { 1, 0 }, // livello 1 usa la macchina 1
-            { 2, 1 }, // Livelli 2-3 usano la macchina 1
-            { 3, 1 }
+            { 2, 0 }, // Livelli 2-3 usano la macchina 1
+            { 3, 0 },
+            { 4, 1 }, // Livelli 2-3 usano la macchina 1
+            { 5, 1 },
         };
     }
 
@@ -191,8 +195,12 @@ isLevelReady = false;
 
 }
 
+   public void ReturnToLobby()
+    {
+        // Disattiva la modalità offline di Photon e disconnettiti
+        PhotonNetwork.OfflineMode = false;
+        PhotonNetwork.Disconnect();
 
-
-
-    // Altri metodi possono essere aggiunti qui
-}
+        // Carica la scena della lobby
+        SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+    }}

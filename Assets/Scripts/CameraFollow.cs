@@ -13,6 +13,7 @@ public class CameraFollowPlayer : MonoBehaviour
     [Header("Camera Offsets")]
     public Vector3 initialCameraPosition;
     public Vector3 absoluteInitCameraPosition;
+    private List<Renderer> lastObstructingObjects = new List<Renderer>(); // Lista degli oggetti che ostruivano la vista
 
     void Start()
     {
@@ -37,6 +38,8 @@ public class CameraFollowPlayer : MonoBehaviour
         // Move to car
         Vector3 targetPos = absoluteInitCameraPosition + carTransform.position;
         transform.position = Vector3.Lerp(transform.position, targetPos, followSpeed * Time.deltaTime);
+                // Raycasting per verificare se la vista è ostruita
+        CheckObstructions();
     }
 
     // Funzione per regolare gli offset attraverso l'Inspector di Unity
@@ -44,5 +47,41 @@ public class CameraFollowPlayer : MonoBehaviour
     {
         initialCameraPosition = newInitialCameraPosition;
         absoluteInitCameraPosition = newAbsoluteInitCameraPosition;
+    }
+void CheckObstructions()
+    {
+        // Ripristina la trasparenza degli oggetti precedentemente ostruenti
+        foreach (Renderer r in lastObstructingObjects)
+        {
+            SetTransparency(r, 1.0f); // Imposta l'opacità completa
+        }
+        lastObstructingObjects.Clear();
+
+        // Sparare un raggio dalla camera al personaggio
+        RaycastHit[] hits;
+        Vector3 direction = carTransform.position - transform.position;
+        hits = Physics.RaycastAll(transform.position, direction, direction.magnitude);
+
+        // Controlla se ci sono oggetti che ostruiscono la vista
+        foreach (RaycastHit hit in hits)
+        {
+            Renderer rend = hit.collider.GetComponent<Renderer>();
+            if (rend != null)
+            {
+                SetTransparency(rend, 0.5f); // Imposta la semi-trasparenza
+                lastObstructingObjects.Add(rend);
+            }
+        }
+    }
+
+    void SetTransparency(Renderer renderer, float alpha)
+    {
+        if (renderer.material.HasProperty("_Color"))
+        {
+            Color color = renderer.material.color;
+            color.a = alpha;
+            renderer.material.color = color;
+        }
+        // Considera di aggiungere supporto per altri tipi di materiali/shader se necessario
     }
 }

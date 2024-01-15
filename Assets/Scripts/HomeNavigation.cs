@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Photon.Pun;
 
 public class HomeNavigation : MonoBehaviour
 {
@@ -52,8 +53,5 @@ public void OnLevelSelect(int levelIndex)
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
     }
-       public void ReturnToLobby()
-    {
-        SceneManager.LoadScene("DemoAsteroids-LobbyScene"); 
-    }
+
 }

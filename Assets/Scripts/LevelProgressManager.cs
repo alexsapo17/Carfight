@@ -183,6 +183,8 @@ private void UpdateUnlockStatusOnFirebase(int levelId)
             { 1, new LevelStarRequirements(5f, 8f, 10f) },
             { 2, new LevelStarRequirements(5f, 8f, 10f) },
             { 3, new LevelStarRequirements(10f, 15f, 20f) },
+            { 4, new LevelStarRequirements(5f, 10f, 20f) },
+            { 5, new LevelStarRequirements(10f, 15f, 20f) },
         };
     }
 private void CreateLevelUI(int levelId)
