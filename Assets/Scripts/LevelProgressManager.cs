@@ -229,7 +229,7 @@ private void LoadCoinsAndUpdateUI() {
 {
     if (coinsText != null)
     {
-        coinsText.text = "Monete: " + playerCoins;
+        coinsText.text = "" + playerCoins;
     }
 }
 

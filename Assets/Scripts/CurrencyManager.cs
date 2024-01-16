@@ -96,7 +96,7 @@ public void RefundCoins(int amount, Action onComplete)
     {
         if (coinsText != null)
         {
-            coinsText.text = "Coins: " + playerCoins.ToString();
+            coinsText.text = playerCoins.ToString();
         }
     }
    public bool HasEnoughCoins(int amount)
