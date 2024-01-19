@@ -72,7 +72,7 @@ void Start()
     int spawnIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
     if (spawnIndex < spawnPoints.Length)
     {
-        GameObject car = PhotonNetwork.Instantiate(carPrefab.name, spawnPoints[spawnIndex].position, spawnPoints[spawnIndex].rotation);
+        GameObject car = PhotonNetwork.Instantiate(carPrefab.name, spawnPoints[spawnIndex].position, carPrefab.transform.rotation);
         photonView.RPC("RegisterCarInstance", RpcTarget.All, car.name);
     }
     else
