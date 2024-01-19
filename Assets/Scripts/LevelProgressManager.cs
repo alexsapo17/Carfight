@@ -177,6 +177,11 @@ private void UpdateUnlockStatusOnFirebase(int levelId)
             { 3, new LevelStarRequirements(10f, 15f, 20f) },
             { 4, new LevelStarRequirements(5f, 10f, 20f) },
             { 5, new LevelStarRequirements(10f, 15f, 20f) },
+            { 6, new LevelStarRequirements(10f, 20f, 30f) },
+            { 7, new LevelStarRequirements(10f, 15f, 20f) },
+            { 8, new LevelStarRequirements(10f, 15f, 20f) },
+            { 9, new LevelStarRequirements(10f, 15f, 20f) },
+
         };
     }
 private void CreateLevelUI(int levelId)
@@ -289,7 +294,7 @@ private void LoadCoinsAndUpdateUI() {
     }
 }
 
- private int CalculateStars(int levelId, float time)
+ public int CalculateStars(int levelId, float time)
 {
     if (!starRequirements.ContainsKey(levelId))
     {
@@ -365,6 +370,9 @@ private void SaveLevelData(int levelId)
         .Child("levelsProgress")
         .Child(levelId.ToString())
         .SetRawJsonValueAsync(jsonData);
+
+
+        UpdateLevelUI(levelId);
 }
 private void SaveTotalStars()
 {
@@ -375,7 +383,6 @@ private void SaveTotalStars()
         totalStars += level.stars;
     }
 
-    // Salva il totale delle stelle su Firebase
-    // (implementa il salvataggio effettivo qui)
+  
 }
 }

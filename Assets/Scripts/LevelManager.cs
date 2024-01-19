@@ -21,13 +21,20 @@ public class LevelManager : MonoBehaviour
     private bool raceStarted = false;
     public Text raceTimerText; // Riferimento al testo del timer nel UI
     public PrometeoCarController carController; // Riferimento al controller della macchina
-public Text finishTimeText; 
-public Text countdownText;
+    public Text finishTimeText; 
+    public Text countdownText;
     private int currentLevelIndex = 0;
     private bool isLevelReady = false;
-public LevelProgressManager progressManager;
-public GameObject gameControlsUI;
+    public LevelProgressManager progressManager;
+    public GameObject gameControlsUI;
     public GameObject levelLockedPanel; 
+    public Image imageOnCanvas; // Aggiungi questa per l'immagine nel canvas
+    public Image childCanvasImage;
+    public Image[] starImages; // Array di immagini delle stelle
+    public Sprite fullStarSprite; // Sprite per la stella piena
+public Sprite emptyStarSprite; // Sprite per la stella vuota
+
+
 
     void Start()
     {
@@ -40,11 +47,16 @@ public GameObject gameControlsUI;
         levelCarMap = new Dictionary<int, int>
         {
             { 0, 0 }, // Livello 0 usa la macchina 0
-            { 1, 0 }, // livello 1 usa la macchina 1
-            { 2, 0 }, // Livelli 2-3 usano la macchina 1
+            { 1, 1 }, // livello 1 usa la macchina 1
+            { 2, 0 },
             { 3, 0 },
-            { 4, 1 }, // Livelli 2-3 usano la macchina 1
+            { 4, 1 },
             { 5, 1 },
+            { 6, 0 }, 
+            { 7, 0 },
+            { 8, 0 },
+            { 9, 1 },
+    
         };
     }
 
@@ -54,6 +66,8 @@ public GameObject gameControlsUI;
         LoadLevel(currentLevelIndex); // Ricarica il livello corrente
         finishPanel.SetActive(false); // Nasconde il pannello di fine livello
         gameControlsUI.SetActive(true);
+    SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
+    childCanvasImage.gameObject.SetActive(false);
     }
 
 public void LoadNextLevel()
@@ -69,6 +83,8 @@ public void LoadNextLevel()
         LoadLevel(nextLevelIndex);
         finishPanel.SetActive(false);
         gameControlsUI.SetActive(true);
+    SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
+    childCanvasImage.gameObject.SetActive(false);
     }
     else
     {
@@ -115,6 +131,8 @@ public void LoadLevel(int levelIndex)
     raceStarted = false;
 
     levelsPanel.SetActive(false);
+    SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
+    childCanvasImage.gameObject.SetActive(false);
 }
     public void EliminatedPlayer()
     {
@@ -126,6 +144,10 @@ public void LoadLevel(int levelIndex)
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
     Time.timeScale = 0;
 isLevelReady = false;
+    SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
+    childCanvasImage.gameObject.SetActive(true);
+
+    UpdateStarDisplay(0);
     }
 void Update()
 {
@@ -148,8 +170,23 @@ void Update()
 
 
 }
+private void UpdateStarDisplay(int starsEarned)
+{
+    for (int i = 0; i < starImages.Length; i++)
+    {
+        starImages[i].sprite = i < starsEarned ? fullStarSprite : emptyStarSprite;
+    }
+}
 
-
+private void SetImageTransparency(Image image, float alpha)
+{
+    if (image != null)
+    {
+        Color color = image.color;
+        color.a = alpha;
+        image.color = color;
+    }
+}
 private void UpdateRaceTimer()
 {
     if (!raceStarted)
@@ -188,10 +225,14 @@ gameControlsUI.SetActive(false);
     finishPanel.SetActive(true);
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
     Time.timeScale = 0;
-isLevelReady = false;
-    // Aggiorna i progressi del livello
+    isLevelReady = false;
+   int starsEarned = progressManager.CalculateStars(currentLevelIndex, raceTimer);
+    UpdateStarDisplay(starsEarned);
+    
     progressManager.UpdateLevelProgress(currentLevelIndex, raceTimer);
-        progressManager.FinishLevel(currentLevelIndex, raceTimer);
+    progressManager.FinishLevel(currentLevelIndex, raceTimer);
+    SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
+    childCanvasImage.gameObject.SetActive(true);
 
 }
 
@@ -200,7 +241,7 @@ isLevelReady = false;
         // Disattiva la modalità offline di Photon e disconnettiti
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.Disconnect();
-
+Time.timeScale = 1;
         // Carica la scena della lobby
         SceneManager.LoadScene("DemoAsteroids-LobbyScene");
     }}

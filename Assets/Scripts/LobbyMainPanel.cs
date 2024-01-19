@@ -43,7 +43,13 @@ public GameObject ConnectingPanel;
 
         public Button StartGameButton;
         public GameObject PlayerListEntryPrefab;
+   public Button ShopButton;
+    public Button SinglePlayerButton;
+    public Button LoginButton;
+    public GameObject TutorialPanel;
 
+public GameObject NoCoinsPanel;
+public GameObject NoCarSelectedPanel;
 
 
         private Dictionary<string, RoomInfo> cachedRoomList;
@@ -110,11 +116,8 @@ private void UpdateCurrencyUI()
 
         #region PUN CALLBACKS
 
-        public override void OnConnectedToMaster()
-        {
-            this.SetActivePanel(SelectionPanel.name);
-            UpdateCurrencyUI();
-        }
+
+
 
         public override void OnRoomListUpdate(List<RoomInfo> roomList)
         {
@@ -185,13 +188,20 @@ private void UpdateCurrencyUI()
             else
             {
                 // L'utente non è autenticato, verifica se è la prima volta che accede al gioco
-                if (!PlayerPrefs.HasKey("PlayerID"))
-                {
-                    // È la prima volta, mostra l'input field
-                    SetActivePanel(LoginPanel.name);
-                    PlayerNameInput.gameObject.SetActive(true);
-                    PlayerNameInput.text = "";
-                }
+                     if (!PlayerPrefs.HasKey("PlayerID"))
+        {
+            // È la prima volta, mostra l'input field e modifica i pulsanti
+            SetActivePanel(LoginPanel.name);
+            PlayerNameInput.gameObject.SetActive(true);
+            PlayerNameInput.text = "";
+    TutorialPanel.SetActive(true);
+            // Nascondi i pulsanti Shop e SinglePlayer
+            ShopButton.gameObject.SetActive(false);
+            SinglePlayerButton.gameObject.SetActive(false);
+
+            // Cambia il testo del pulsante Login in "Procedi"
+            LoginButton.GetComponentInChildren<Text>().text = "Procedi";
+        }
                 else
                 {
                     // Non è la prima volta, ma l'utente non è autenticato su Firebase
@@ -253,51 +263,72 @@ public void OnLogoutButtonClicked()
             });
         }
 
-        private void SaveNickname(string nickname)
+private void SaveNickname(string nickname)
+{
+    string userId = auth.CurrentUser.UserId;
+    databaseReference.Child("users").Child(userId).Child("nickname").SetValueAsync(nickname).ContinueWithOnMainThread(task =>
+    {
+        if (task.IsFaulted)
         {
-            string userId = auth.CurrentUser.UserId;
-            databaseReference.Child("users").Child(userId).Child("nickname").SetValueAsync(nickname).ContinueWithOnMainThread(task =>
-            {
-                if (task.IsFaulted)
-                {
-                    Debug.LogError("Error saving nickname: " + task.Exception);
-                }
-                else if (task.IsCompleted)
-                {
-                    PlayerNameInput.gameObject.SetActive(false);
-
-
-
-
-                }
-            });
+            Debug.LogError("Error saving nickname: " + task.Exception);
         }
-        public void OnLoginButtonClicked()
+        else if (task.IsCompleted)
         {
-            string playerName = PlayerNameInput.text;
-this.SetActivePanel(ConnectingPanel.name);
-            if (!string.IsNullOrEmpty(playerName))
+            // Nascondi l'input field del nickname
+            PlayerNameInput.gameObject.SetActive(false);
+                        // Controlla se è la prima volta che l'utente accede al gioco
+            if (!PlayerPrefs.HasKey("FirstTimeLoginCompleted"))
             {
-                // Controllo se l'utente è autenticato con Firebase
-                if (auth.CurrentUser != null)
-                {
-                    // L'utente è già autenticato, salva il nickname e continua
-                    SaveNickname(playerName);
-                }
-                else
-                {
-                    // L'utente non è autenticato, esegui il processo di registrazione o login
-                    // Questo potrebbe essere un nuovo metodo che gestisce la registrazione o il login
-                    RegisterOrLoginUser(playerName);
-                }
+                // Imposta il flag per indicare che il primo login è stato completato
+                PlayerPrefs.SetInt("FirstTimeLoginCompleted", 1);
+
+                // Ricarica la scena
+                SceneManager.LoadScene(SceneManager.GetActiveScene().name);
             }
             else
             {
-                Debug.LogError("Player Name is invalid.");
+                // Se non è la prima volta, connetti a Photon
+                ConnectToPhoton();
             }
-            ConnectToPhoton();
-            
+
         }
+    });
+}
+   public override void OnConnectedToMaster()
+{
+ 
+        this.SetActivePanel(SelectionPanel.name);
+        UpdateCurrencyUI();
+    
+}
+public void OnLoginButtonClicked()
+{
+    string playerName = PlayerNameInput.text;
+    
+
+    if (!string.IsNullOrEmpty(playerName))
+    {
+        if (auth.CurrentUser != null)
+        {
+            // Salva il nickname
+            SaveNickname(playerName);
+
+
+        }
+        else
+        {
+            RegisterOrLoginUser(playerName);
+            // Non connettere a Photon qui, sarà gestito dopo il login/registrazione
+        }
+    }
+    else
+    {
+        Debug.LogError("Player Name is invalid.");
+        return;
+    }
+    this.SetActivePanel(ConnectingPanel.name);
+}
+
         private void RegisterOrLoginUser(string playerName)
         {
             if (auth.CurrentUser == null)
@@ -492,41 +523,56 @@ PhotonNetwork.Disconnect();
             PhotonNetwork.CreateRoom(roomName, options, null);
         }
 
-        public void OnJoinRandomRoomButtonClicked()
+      public void OnJoinRandomRoomButtonClicked()
+{
+    // Verifica se c'è una macchina selezionata nelle PlayerPrefs
+    if (!PlayerPrefs.HasKey("SelectedCar"))
+    {
+        // Mostra un pannello o gestisci il caso in cui non ci sia una macchina selezionata
+NoCarSelectedPanel.SetActive(true);
+       return;
+    }
+
+    // Aggiorna il nickname di Photon prima di unirsi alla stanza
+    if (auth.CurrentUser != null)
+    {
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("users").Child(userId).Child("nickname").GetValueAsync().ContinueWithOnMainThread(task =>
         {
-            // Aggiorna il nickname di Photon prima di unirsi alla stanza
-            if (auth.CurrentUser != null)
+            if (task.IsCompleted && task.Result.Exists)
             {
-                string userId = auth.CurrentUser.UserId;
-                databaseReference.Child("users").Child(userId).Child("nickname").GetValueAsync().ContinueWithOnMainThread(task =>
-                {
-                    if (task.IsCompleted && task.Result.Exists)
-                    {
-                        string nickname = task.Result.Value.ToString();
-                        PhotonNetwork.NickName = nickname;
-                    }
-                });
+                string nickname = task.Result.Value.ToString();
+                PhotonNetwork.NickName = nickname;
             }
+        });
+    }
 
-            // Trova il CurrencyManager nella scena
-            CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
-            if (currencyManager == null)
-            {
-                Debug.LogError("CurrencyManager non trovato.");
-                return;
-            }
+    // Trova il CurrencyManager nella scena
+    CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+    if (currencyManager == null)
+    {
+        Debug.LogError("CurrencyManager non trovato.");
+        return;
+    }
 
-            int entryCost = 100; // Costo per unirsi alla stanza
-            if (currencyManager.HasEnoughCoins(entryCost))
-            {
-                SetActivePanel(JoinRandomRoomPanel.name);
-                PhotonNetwork.JoinRandomRoom();
-            }
-            else
-            {
-                Debug.LogError("Non hai abbastanza monete per unirti alla stanza.");
-            }
-        }
+    int entryCost = 100; // Costo per unirsi alla stanza
+    if (currencyManager.HasEnoughCoins(entryCost))
+    {
+        SetActivePanel(JoinRandomRoomPanel.name);
+        PhotonNetwork.JoinRandomRoom();
+    }
+    else
+    {
+NoCoinsPanel.SetActive(true);
+            // Disattiva il pannello delle monete dopo 3 secondi
+        Invoke("DisableNoCoinsPanel", 3f);
+        
+    }
+}
+private void DisableNoCoinsPanel()
+{
+    NoCoinsPanel.SetActive(false);
+}
 
         public void OnStartGameButtonClicked()
         {

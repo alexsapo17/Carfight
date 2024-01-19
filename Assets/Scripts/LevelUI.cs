@@ -11,6 +11,12 @@ public class LevelUI : MonoBehaviour
       public Text levelText;
       public Button levelButton;
       public GameObject levelLockedPanel;
+          public Image star1; // Aggiungi queste
+    public Image star2; // reference alle
+    public Image star3; // immagini delle stelle
+
+    public Sprite emptyStar; // Sprite per stella vuota
+    public Sprite filledStar; // Sprite per stella piena
 
    public void Initialize(int levelId, LevelProgressManager manager)
 {
@@ -43,9 +49,17 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
 }
     public void UpdateUI(float bestTime, int stars)
     {
-
         bestTimeText.text = "Miglior Tempo: " + bestTime.ToString("F2");
-        starsText.text = "Stelle: " + stars;
+
+        // Aggiorna le stelle
+        UpdateStars(stars);
+    }
+
+    private void UpdateStars(int stars)
+    {
+        star1.sprite = stars >= 1 ? filledStar : emptyStar;
+        star2.sprite = stars >= 2 ? filledStar : emptyStar;
+        star3.sprite = stars >= 3 ? filledStar : emptyStar;
     }
 
     // Aggiungi qui ulteriori metodi se necessario
