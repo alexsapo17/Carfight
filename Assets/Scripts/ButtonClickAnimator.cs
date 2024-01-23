@@ -35,14 +35,7 @@ public class ButtonClickAnimator : MonoBehaviour
             yield return null;
         }
 
-        // Inizia la riduzione dell'opacità
-        time = 0;
-        while (time < animationDuration)
-        {
-            canvasGroup.alpha = 1 - (time / animationDuration);
-            time += Time.deltaTime;
-            yield return null;
-        }
+
 
         // Ripristina lo stato originale e attiva l'evento onclick
         transform.localScale = originalScale;

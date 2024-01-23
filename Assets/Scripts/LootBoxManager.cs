@@ -11,7 +11,6 @@ public class LootBoxManager : MonoBehaviour
 {
     private DatabaseReference databaseReference;
     private string userId;
-public Animator lootBoxAnimator;
 public Canvas lootBoxCanvas; 
 
 public Transform spawnPoint; // Punto dove spawnare la macchina
@@ -19,6 +18,17 @@ public Vector3 spawnScale = Vector3.one; // Scala del prefab al momento dello sp
 public Vector3 rotationSpeed = new Vector3(0, 100, 0); // Velocità di rotazione (gradi al secondo)
 public float moveUpSpeed = 1f; // Velocità di movimento verso l'alto
 public float destructionDelay = 2f; // Tempo dopo il quale il prefab verrà distrutto
+public LootBox[] lootBoxes;
+
+[System.Serializable]
+public class LootBox
+{
+    public int boxCost; // Costo per aprire questa cassa
+    public Animator lootBoxAnimator;
+    public CarProbability[] carProbabilities; // Probabilità delle macchine per questa cassa
+    public int experienceGain;
+}
+
 
 [System.Serializable]
 public class CarProbability
@@ -31,7 +41,6 @@ public class CarProbability
         public Vector3 initialRotation = Vector3.zero; 
 }
 
-    public CarProbability[] carProbabilities; // Array di tutte le macchine e le loro probabilità
 
     void Start()
     {
@@ -39,45 +48,49 @@ public class CarProbability
         userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
     }
 
-    public void OpenLootBox(int boxCost)
+    public void OpenLootBox(int lootBoxIndex)
     {
-        if (!CurrencyManager.Instance.HasEnoughCoins(boxCost))
+        if (lootBoxIndex < 0 || lootBoxIndex >= lootBoxes.Length)
         {
-            Debug.Log("Non hai abbastanza monete.");
+            Debug.LogError("Indice cassa non valido.");
             return;
         }
-        if (lootBoxAnimator == null)
-{
-    Debug.LogError("Animator non assegnato!");
-    return;
-}
 
+        LootBox selectedBox = lootBoxes[lootBoxIndex];
+
+        if (!CurrencyManager.Instance.HasEnoughCoins(selectedBox.boxCost))
+        {
+            Debug.Log("Non hai abbastanza monete per aprire questa cassa.");
+            return;
+        }
     // Disattiva il canvas e avvia l'animazione
     lootBoxCanvas.enabled = false;
-    lootBoxAnimator.SetTrigger("OpenChest");
-    
-         string selectedCar = SelectRandomCar();
-        SaveCar(selectedCar);
-        CurrencyManager.Instance.TrySpendCoins(boxCost);
-        CurrencyManager.Instance.UpdateCoinsUI();
-         // Avvia la coroutine per gestire il flusso
-    StartCoroutine(WaitAndReactivateCanvas());  
-        // Avvia la coroutine per spawnare la macchina dopo l'animazione
-    StartCoroutine(SpawnCarAfterAnimation(selectedCar));
+selectedBox.lootBoxAnimator.SetTrigger("OpenChest");
+      string selectedCar = SelectRandomCar(selectedBox.carProbabilities);
+    SaveCar(selectedCar);
+    CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCost);
+    CurrencyManager.Instance.UpdateCoinsUI();
+    // Avvia la coroutine per gestire il flusso
+    StartCoroutine(WaitAndReactivateCanvas(selectedBox.lootBoxAnimator));  
+    // Avvia la coroutine per spawnare la macchina dopo l'animazione
+    StartCoroutine(SpawnCarAfterAnimation(selectedCar, selectedBox.carProbabilities));
+    ExperienceManager.Instance.AddExperience(selectedBox.experienceGain);
+
     }
 
-private IEnumerator WaitAndReactivateCanvas()
+private IEnumerator WaitAndReactivateCanvas(Animator animator)
 {
     // Attendi la fine dell'animazione 
-    yield return new WaitForSeconds(4f);
+    yield return new WaitForSeconds(4.5f);
     
     // Riattiva il canvas
     lootBoxCanvas.enabled = true;
     
-    // Resetta l'animazione della cassa qui se necessario
-    lootBoxAnimator.SetTrigger("ResetChest");
+    // Resetta l'animazione della cassa
+    animator.SetTrigger("ResetChest");
 }
-    private string SelectRandomCar()
+
+    private string SelectRandomCar(CarProbability[] carProbabilities)
     {
         float totalProbability = 0;
         foreach (var car in carProbabilities)
@@ -112,15 +125,16 @@ private IEnumerator WaitAndReactivateCanvas()
         });
           
     }
-    private IEnumerator SpawnCarAfterAnimation(string carName)
+private IEnumerator SpawnCarAfterAnimation(string carName, CarProbability[] carProbabilities)
 {
     // Attendi la fine dell'animazione della cassa
     yield return new WaitForSeconds(3f); 
 
     // Spawn del prefab della macchina
-    SpawnCarPrefab(carName);
+    SpawnCarPrefab(carName, carProbabilities);
 }
-private void SpawnCarPrefab(string carName)
+
+private void SpawnCarPrefab(string carName, CarProbability[] carProbabilities)
 {
     var carData = carProbabilities.FirstOrDefault(car => car.carName == carName);
     if(carData == null || carData.carPrefab == null)
@@ -128,7 +142,6 @@ private void SpawnCarPrefab(string carName)
         Debug.LogError("Car prefab not found: " + carName);
         return;
     }
-
     GameObject carInstance = Instantiate(carData.carPrefab, spawnPoint.position, Quaternion.Euler(carData.initialRotation));
     carInstance.transform.localScale = carData.customSpawnScale;
     carInstance.transform.SetParent(spawnPoint);
@@ -137,14 +150,21 @@ private void SpawnCarPrefab(string carName)
     Destroy(carInstance, destructionDelay);
 }
 
-
 private IEnumerator MoveAndRotate(GameObject carInstance, Vector3 rotationSpeed)
 {
-    float startTime = Time.time;
+    Vector3 startPostion = carInstance.transform.position;
+    Vector3 endPosition = startPostion + Vector3.up * moveUpSpeed * destructionDelay; // Calcola la posizione finale basata sulla velocità e sul tempo
 
-    while(Time.time - startTime < destructionDelay)
+    float startTime = Time.time;
+    float journeyLength = Vector3.Distance(startPostion, endPosition);
+    float fracJourney = 0f;
+
+    while(fracJourney < 1f)
     {
-        carInstance.transform.position += Vector3.up * moveUpSpeed * Time.deltaTime;
+        float distCovered = (Time.time - startTime) * moveUpSpeed;
+        fracJourney = distCovered / journeyLength;
+
+        carInstance.transform.position = Vector3.Lerp(startPostion, endPosition, fracJourney);
         carInstance.transform.Rotate(rotationSpeed * Time.deltaTime);
 
         yield return null;
