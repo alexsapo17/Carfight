@@ -11,7 +11,9 @@ using UnityEngine.UI;
 public class CurrencyManager : MonoBehaviour
 {
     private int playerCoins;
-public Text coinsText;       
+     private int playerGems;
+public Text coinsText;  
+public Text gemsText;     
     private DatabaseReference databaseReference;
     public static CurrencyManager Instance;
 
@@ -32,6 +34,7 @@ public Text coinsText;
     {
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
         
+    
        
     }
 
@@ -109,6 +112,75 @@ public void RefundCoins(int amount, Action onComplete)
         if (HasEnoughCoins(amount))
         {
             ModifyCoins(-amount);
+            return true;
+        }
+        return false;
+    }
+      // Metodi per le gemme
+    public void LoadGems()
+    {
+        FirebaseAuth auth = FirebaseAuth.DefaultInstance;
+        FirebaseUser user = auth.CurrentUser;
+
+        if (user != null && databaseReference != null)
+        {
+            string userId = user.UserId;
+            databaseReference.Child("users").Child(userId).Child("gems").GetValueAsync().ContinueWithOnMainThread(task =>
+            {
+                if (task.IsFaulted)
+                {
+                    Debug.LogError("Error loading gems: " + task.Exception);
+                }
+                else if (task.IsCompleted)
+                {
+                    DataSnapshot snapshot = task.Result;
+                    if (snapshot.Value != null)
+                    {
+                        playerGems = int.Parse(snapshot.Value.ToString());
+                        UpdateGemsUI();
+                    }
+                    else
+                    {
+                        playerGems = 50; // Valore iniziale per le gemme
+                        SaveGems();
+                    }
+                }
+            });
+        }
+    }
+
+    private void SaveGems()
+    {
+        string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
+        databaseReference.Child("users").Child(userId).Child("gems").SetValueAsync(playerGems);
+        UpdateGemsUI();
+    }
+
+    public void ModifyGems(int amount)
+    {
+        playerGems += amount;
+        SaveGems();
+        UpdateGemsUI();
+    }
+
+    public void UpdateGemsUI()
+    {
+        if (gemsText != null)
+        {
+            gemsText.text = playerGems.ToString();
+        }
+    }
+
+    public bool HasEnoughGems(int amount)
+    {
+        return playerGems >= amount;
+    }
+
+    public bool TrySpendGems(int amount)
+    {
+        if (HasEnoughGems(amount))
+        {
+            ModifyGems(-amount);
             return true;
         }
         return false;

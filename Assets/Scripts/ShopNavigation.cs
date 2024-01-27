@@ -14,9 +14,12 @@ public class ShopNavigation : MonoBehaviour
     public GameObject customPanel; // Pannello personalizzazione
     public GameObject[] carButtons;
 public Text coinsText;
+public Text gemsText;
+
     void Start()
     {
         UpdateCoinsUI();
+        UpdateGemsUI();
     }
 
    private void UpdateCoinsUI()
@@ -26,6 +29,15 @@ public Text coinsText;
         {
             currencyManager.coinsText = coinsText;
             currencyManager.UpdateCoinsUI();
+        }
+    }
+       private void UpdateGemsUI()
+    {
+        CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+        if (currencyManager != null && gemsText != null)
+        {
+            currencyManager.gemsText = gemsText;
+            currencyManager.UpdateGemsUI();
         }
     }
     // Metodo per mostrare il pannello principale dello shop

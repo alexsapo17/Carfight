@@ -33,6 +33,7 @@ public class LevelManager : MonoBehaviour
     public Image[] starImages; // Array di immagini delle stelle
     public Sprite fullStarSprite; // Sprite per la stella piena
 public Sprite emptyStarSprite; // Sprite per la stella vuota
+public Text gemsText;
 
 
 
@@ -58,6 +59,7 @@ public Sprite emptyStarSprite; // Sprite per la stella vuota
             { 9, 1 },
     
         };
+        UpdateGemsUI();
     }
 
     public void RestartLevel()
@@ -103,6 +105,15 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
     panel.SetActive(false);
 }
 
+   private void UpdateGemsUI()
+    {
+        CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+        if (currencyManager != null && gemsText != null)
+        {
+            currencyManager.gemsText = gemsText;
+            currencyManager.UpdateGemsUI();
+        }
+    }
 
 public void LoadLevel(int levelIndex)
 {

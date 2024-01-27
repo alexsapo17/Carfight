@@ -86,32 +86,50 @@ public void Start()
     UpdateCurrencyUI();
 }
 
-private void UpdateCurrencyUI()
-{
-    CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
-    if (currencyManager != null)
-    {
-        // Trova il componente Text UI standard
-        Text coinTextComponent = GameObject.Find("CoinsText").GetComponent<Text>();
-
-        // Assicurati che il componente sia stato trovato
-        if (coinTextComponent != null)
+ private void UpdateCurrencyUI()
         {
-            currencyManager.coinsText = coinTextComponent;
-            currencyManager.UpdateCoinsUI();
+            CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+            if (currencyManager != null)
+            {
+                // Aggiorna UI delle monete
+                UpdateCoinsUI(currencyManager);
+
+                // Aggiorna UI delle gemme
+                UpdateGemsUI(currencyManager);
+            }
+            else
+            {
+                Debug.LogError("CurrencyManager non trovato nella scena.");
+            }
         }
-        else
+
+        private void UpdateCoinsUI(CurrencyManager currencyManager)
         {
-            Debug.LogError("Componente Text UI per le monete non trovato.");
+            Text coinTextComponent = GameObject.Find("CoinsText").GetComponent<Text>();
+            if (coinTextComponent != null)
+            {
+                currencyManager.coinsText = coinTextComponent;
+                currencyManager.UpdateCoinsUI();
+            }
+            else
+            {
+                Debug.LogError("Componente Text UI per le monete non trovato.");
+            }
         }
-    }
 
-    else
-    {
-    Debug.LogError("CurrencyManager non trovato nella scena.");
-    }
-}
-
+        private void UpdateGemsUI(CurrencyManager currencyManager)
+        {
+            Text gemsTextComponent = GameObject.Find("GemsText").GetComponent<Text>();
+            if (gemsTextComponent != null)
+            {
+                currencyManager.gemsText = gemsTextComponent;
+                currencyManager.UpdateGemsUI();
+            }
+            else
+            {
+                Debug.LogError("Componente Text UI per le gemme non trovato.");
+            }
+        }
         #endregion
 
         #region PUN CALLBACKS
@@ -179,6 +197,8 @@ private void UpdateCurrencyUI()
         {
             currencyManager.LoadCoins();
             currencyManager.UpdateCoinsUI();
+                        currencyManager.LoadGems();
+            currencyManager.UpdateGemsUI();
         }
         else
         {
@@ -501,6 +521,7 @@ UpdateCurrencyUI();
 
             SetActivePanel(SelectionPanel.name);
         }
+    
               public void OnBackButtonSelectionPanelClicked()
         {
    

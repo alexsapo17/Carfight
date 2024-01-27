@@ -13,6 +13,7 @@ public class LevelProgress
     public int stars;
     public bool isUnlocked;
             public bool coinsAwarded;
+            public bool gemsAwarded;
 
     public LevelProgress()
     {
@@ -20,6 +21,7 @@ public class LevelProgress
         stars = 0;
         isUnlocked = false;
         coinsAwarded = false;
+        gemsAwarded = false;
 
     }
 }
@@ -43,6 +45,7 @@ public class LevelProgressManager : MonoBehaviour
 {
     public static LevelProgressManager Instance;
 public Text coinsText;
+public Text gemsText;
     public Dictionary<int, LevelProgress> levelsProgress = new Dictionary<int, LevelProgress>();
 public Text bestTimeText;
     public GameObject levelUIPrefab; // Prefab per UI del livello

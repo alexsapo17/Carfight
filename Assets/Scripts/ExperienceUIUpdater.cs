@@ -3,6 +3,7 @@ using Firebase.Database;
 using Firebase.Auth;
 using UnityEngine.UI;
 using Firebase.Extensions;
+
 public class ExperienceUIUpdater : MonoBehaviour
 {
     public Slider experienceSlider; // Assegna questo nell'Inspector
@@ -26,51 +27,53 @@ public class ExperienceUIUpdater : MonoBehaviour
             }
             else if (task.IsCompleted)
             {
+                int playerExperience = 0;
                 DataSnapshot snapshot = task.Result;
                 if (snapshot.Value != null)
                 {
-                    int playerExperience = int.Parse(snapshot.Value.ToString());
-                    int playerLevel = CalculateLevel(playerExperience);
-                    UpdateExperienceUI(playerExperience, playerLevel);
+                    playerExperience = int.Parse(snapshot.Value.ToString());
                 }
+                // Carica il livello dopo aver caricato l'esperienza
+                LoadLevel(playerExperience, userId);
             }
         });
     }
 
-private int CalculateLevel(int playerExperience)
-{
-    // Esempio di calcolo del livello
-    int expThreshold = 10;
-    int playerLevel = 1;
-    while (playerExperience >= expThreshold)
+    private void LoadLevel(int playerExperience, string userId)
     {
-        playerLevel++;
-        expThreshold += 12 + (playerLevel - 1) * 2; // Incrementa la soglia per il prossimo livello
+        databaseReference.Child("users").Child(userId).Child("level").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsFaulted)
+            {
+                Debug.LogError("Error loading level: " + task.Exception);
+            }
+            else if (task.IsCompleted)
+            {
+                int playerLevel = 1;
+                DataSnapshot snapshot = task.Result;
+                if (snapshot.Value != null)
+                {
+                    playerLevel = int.Parse(snapshot.Value.ToString());
+                }
+                UpdateExperienceUI(playerExperience, playerLevel);
+            }
+        });
     }
 
-    return playerLevel;
+    public void UpdateExperienceUI(int playerExperience, int playerLevel)
+    {
+        int expForCurrentLevel = (playerLevel - 1) * 100 * playerLevel / 2;
+        int expForNextLevel = playerLevel * 100 * (playerLevel + 1) / 2;
+        float experienceFraction = (float)(playerExperience - expForCurrentLevel) / (expForNextLevel - expForCurrentLevel);
+
+        if (experienceSlider != null)
+        {
+            experienceSlider.value = experienceFraction;
+        }
+
+        if (levelText != null)
+        {
+            levelText.text = $"{playerLevel}";
+        }
+    }
 }
-
-private void UpdateExperienceUI(int playerExperience, int playerLevel)
-{
-    // Calcola la frazione dell'esperienza per il livello corrente
-    int prevThreshold = (playerLevel - 1) * (10 + (playerLevel - 1) * 12) / 2;
-    int nextThreshold = playerLevel * (10 + playerLevel * 12) / 2;
-    float experienceFraction = (float)(playerExperience - prevThreshold) / (nextThreshold - prevThreshold);
-
-    if (experienceSlider != null)
-    {
-        experienceSlider.value = experienceFraction;
-    }
-
-    if (levelText != null)
-    {
-        levelText.text = playerLevel.ToString();
-    }
-}
-    public void ForceUpdateUI()
-    {
-        LoadExperienceAndLevel();
-    }
-}
-

@@ -23,7 +23,6 @@ namespace Platinio.TweenEngine
             }
 
             startPosition = transform.position;
-            Debug.Log("Start - Position in Editor: " + startPosition);
             Move();
         }
 
@@ -51,10 +50,8 @@ namespace Platinio.TweenEngine
         private IEnumerator MoveCoroutine()
         {
             isMoving = true;
-            Debug.Log("Move - Current Position: " + transform.position + ", Target Position: " + pos);
             transform.position = startPosition;
             transform.Move(pos, time).SetEase(ease);
-            Debug.Log("After Move - New Position: " + transform.position);
 
             // Aspetta che l'animazione sia completata
             yield return new WaitForSeconds(time);
