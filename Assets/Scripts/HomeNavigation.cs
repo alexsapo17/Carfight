@@ -21,6 +21,7 @@ public GameObject finishPanel;
 
     public void OpenLevelsPanel()
     {
+        Time.timeScale = 0;
         // Mostra LevelsPanel e nascondi gli altri
         levelsPanel.SetActive(true);
         firstPanel.SetActive(false);
@@ -48,6 +49,7 @@ public void OnLevelSelect(int levelIndex)
     public void ReturnToFirstPanel()
     {
         // Mostra FirstPanel e nascondi gli altri
+        Time.timeScale = 0;
         firstPanel.SetActive(true);
         levelsPanel.SetActive(false);
         missionsPanel.SetActive(false);

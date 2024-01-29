@@ -64,7 +64,6 @@ public Text gemsText;
 
     public void RestartLevel()
     {
-        Time.timeScale = 1;
         LoadLevel(currentLevelIndex); // Ricarica il livello corrente
         finishPanel.SetActive(false); // Nasconde il pannello di fine livello
         gameControlsUI.SetActive(true);
@@ -94,7 +93,6 @@ public void LoadNextLevel()
         StartCoroutine(DisablePanelAfterDelay(levelLockedPanel, 3f));
         return;
     }
-            Time.timeScale = 1;
 
 
 }
@@ -125,7 +123,6 @@ public void LoadLevel(int levelIndex)
         PhotonNetwork.Destroy(currentLevel);
     if (currentCar != null)
         PhotonNetwork.Destroy(currentCar);
-    Time.timeScale = 1;
     gameControlsUI.SetActive(true);
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);
     int carIndex = levelCarMap[levelIndex];
@@ -147,13 +144,13 @@ public void LoadLevel(int levelIndex)
 }
     public void EliminatedPlayer()
     {
-  
+  Time.timeScale = 0;
+
   gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
     finishPanel.SetActive(true);
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
-    Time.timeScale = 0;
 isLevelReady = false;
     SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
     childCanvasImage.gameObject.SetActive(true);
@@ -229,13 +226,13 @@ private void StartRace()
 
 public void FinishRace()
 {
+    Time.timeScale = 0;
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
     finishTimeText.text = "Tempo Finale: " + raceTimer.ToString("F2") + " secondi";
     finishPanel.SetActive(true);
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
-    Time.timeScale = 0;
     isLevelReady = false;
    int starsEarned = progressManager.CalculateStars(currentLevelIndex, raceTimer);
     UpdateStarDisplay(starsEarned);
@@ -252,7 +249,6 @@ gameControlsUI.SetActive(false);
         // Disattiva la modalità offline di Photon e disconnettiti
         PhotonNetwork.OfflineMode = false;
         PhotonNetwork.Disconnect();
-Time.timeScale = 1;
         // Carica la scena della lobby
         SceneManager.LoadScene("DemoAsteroids-LobbyScene");
     }}

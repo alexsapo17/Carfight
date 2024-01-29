@@ -17,6 +17,7 @@ public class ButtonClickAnimator : MonoBehaviour
         originalScale = transform.localScale;
         canvasGroup = GetComponent<CanvasGroup>();
         if (canvasGroup == null) canvasGroup = gameObject.AddComponent<CanvasGroup>();
+
     }
 
     public void OnButtonClick()
@@ -26,20 +27,31 @@ public class ButtonClickAnimator : MonoBehaviour
 
     IEnumerator AnimateButton()
     {
-        // Ingrandisci
+
+
         float time = 0;
+        Time.timeScale = 1;
         while (time < animationDuration)
         {
             transform.localScale = Vector3.Lerp(originalScale, enlargedScale, time / animationDuration);
             time += Time.deltaTime;
             yield return null;
-        }
 
+        }
 
 
         // Ripristina lo stato originale e attiva l'evento onclick
         transform.localScale = originalScale;
         canvasGroup.alpha = 1;
-        onClick?.Invoke();
+        
+        if (onClick != null)
+        {
+            onClick.Invoke();
+        }
+        else
+        {
+            Debug.Log("Attenzione: onClick è null.");
+        }
+
     }
 }
