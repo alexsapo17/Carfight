@@ -491,7 +491,10 @@ void Update()
         HandleHandbrakeInput();
     }
 }
-
+    public void SetKinematic(bool isKinematic)
+    {
+        carRigidbody.isKinematic = isKinematic;
+    }
 void HandleHandbrakeInput()
 {
     if(Input.GetKey(KeyCode.Space) && !isHandbrakeActive)

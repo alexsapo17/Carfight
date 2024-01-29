@@ -1158,9 +1158,9 @@ MonoBehaviour:
   maxSpeed: 135
   maxReverseSpeed: 98
   accelerationMultiplier: 30
-  maxSteeringAngle: 20
+  maxSteeringAngle: 24
   steeringSpeed: 0.3
-  brakeForce: 511
+  brakeForce: 340
   decelerationMultiplier: 27
   handbrakeDriftMultiplier: 10
   bodyMassCenter: {x: 0, y: 0, z: 0}
@@ -1276,7 +1276,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6556457136227218487}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: efd9c9fb47c6029459772073d3818595, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

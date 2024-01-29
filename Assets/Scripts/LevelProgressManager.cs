@@ -5,6 +5,7 @@ using Firebase.Auth;
 using Firebase.Database;
 using Firebase.Extensions;
 using UnityEngine.UI; 
+using System.Linq;
 
 [System.Serializable]
 public class LevelProgress
@@ -61,12 +62,31 @@ private int playerCoins;
 
  
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
+
  LoadCoinsAndUpdateUI();
         InitializeLevels();
                 InitializeStarRequirements();
 
     }
-   
+
+
+
+
+public void UpdateLevelProgress(int levelId, float time)
+{
+    if (!levelsProgress.ContainsKey(levelId)) return;
+
+    var levelProgress = levelsProgress[levelId];
+
+    if (time < levelProgress.bestTime)
+    {
+        levelProgress.bestTime = time;
+        levelProgress.stars = CalculateStars(levelId, time);
+
+        SaveLevelData(levelId); // Salva i dati del livello
+
+    }
+}
 
 
 private void SavePlayerCoins() {
@@ -279,23 +299,8 @@ private void LoadCoinsAndUpdateUI() {
             bestTimeText.text = "Miglior Tempo: " + bestTime.ToString("F2");
         }
     }
- public void UpdateLevelProgress(int levelId, float time)
-{
-    if (!levelsProgress.ContainsKey(levelId)) return;
 
-    var levelProgress = levelsProgress[levelId];
 
-    Debug.Log($"Aggiornamento livello {levelId}. Tempo: {time}, Miglior tempo: {levelProgress.bestTime}");
-
-    if (time < levelProgress.bestTime)
-    {
-        levelProgress.bestTime = time;
-        levelProgress.stars = CalculateStars(levelId, time);
-
-        Debug.Log($"Nuovo record! Tempo: {time}, Stelle: {levelProgress.stars}");
-        SaveLevelData(levelId); // Assicurati che questa chiamata venga eseguita
-    }
-}
 
  public int CalculateStars(int levelId, float time)
 {

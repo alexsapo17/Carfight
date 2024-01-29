@@ -144,8 +144,10 @@ public void LoadLevel(int levelIndex)
 }
     public void EliminatedPlayer()
     {
-  Time.timeScale = 0;
-
+    if (carController != null)
+    {
+        carController.SetKinematic(true);
+    }
   gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
@@ -226,7 +228,10 @@ private void StartRace()
 
 public void FinishRace()
 {
-    Time.timeScale = 0;
+        if (carController != null)
+    {
+        carController.SetKinematic(true);
+    }
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;

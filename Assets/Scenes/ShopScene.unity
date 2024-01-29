@@ -1021,8 +1021,8 @@ GameObject:
   - component: {fileID: 68395005}
   - component: {fileID: 68395004}
   - component: {fileID: 68395003}
-  - component: {fileID: 68395006}
   - component: {fileID: 68395007}
+  - component: {fileID: 68395008}
   m_Layer: 5
   m_Name: Cassa 3
   m_TagString: Untagged
@@ -1108,6 +1108,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 68395008}
+        m_TargetAssemblyTypeName: CustomVibration, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 68395007}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
@@ -1158,18 +1170,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 68395001}
   m_CullTransparentMesh: 1
---- !u!114 &68395006
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 68395001}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30db1294886a7f049b1331783f3c0b8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &68395007
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1266,6 +1266,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &68395008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 68395001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735456a2fe8663a4f9fbd406c68e5b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vibrationType: 6
+  vibrateOnAwake: 0
+  vibrateOnCollision: 0
+  vibrateOnClick: 1
+  heartbeatDuration: 3
+  delayBeforeVibrating: 0
 --- !u!1 &69997894
 GameObject:
   m_ObjectHideFlags: 0
@@ -14144,8 +14162,8 @@ GameObject:
   - component: {fileID: 317910480}
   - component: {fileID: 317910479}
   - component: {fileID: 317910478}
-  - component: {fileID: 317910481}
   - component: {fileID: 317910482}
+  - component: {fileID: 317910483}
   m_Layer: 5
   m_Name: Cassa 1
   m_TagString: Untagged
@@ -14231,6 +14249,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 317910483}
+        m_TargetAssemblyTypeName: CustomVibration, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 317910482}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
@@ -14281,18 +14311,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 317910476}
   m_CullTransparentMesh: 1
---- !u!114 &317910481
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 317910476}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30db1294886a7f049b1331783f3c0b8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &317910482
 AudioSource:
   m_ObjectHideFlags: 0
@@ -14389,6 +14407,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &317910483
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 317910476}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735456a2fe8663a4f9fbd406c68e5b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vibrationType: 6
+  vibrateOnAwake: 0
+  vibrateOnCollision: 0
+  vibrateOnClick: 1
+  heartbeatDuration: 3
+  delayBeforeVibrating: 0
 --- !u!1 &323809220
 GameObject:
   m_ObjectHideFlags: 0
@@ -92492,8 +92528,8 @@ GameObject:
   - component: {fileID: 1848436633}
   - component: {fileID: 1848436632}
   - component: {fileID: 1848436631}
-  - component: {fileID: 1848436634}
   - component: {fileID: 1848436635}
+  - component: {fileID: 1848436636}
   m_Layer: 5
   m_Name: Cassa 2
   m_TagString: Untagged
@@ -92579,6 +92615,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1848436636}
+        m_TargetAssemblyTypeName: CustomVibration, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1848436635}
         m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
         m_MethodName: Play
@@ -92629,18 +92677,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1848436629}
   m_CullTransparentMesh: 1
---- !u!114 &1848436634
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1848436629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30db1294886a7f049b1331783f3c0b8a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!82 &1848436635
 AudioSource:
   m_ObjectHideFlags: 0
@@ -92737,6 +92773,24 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &1848436636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1848436629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 735456a2fe8663a4f9fbd406c68e5b49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vibrationType: 6
+  vibrateOnAwake: 0
+  vibrateOnCollision: 0
+  vibrateOnClick: 1
+  heartbeatDuration: 3
+  delayBeforeVibrating: 0
 --- !u!1 &1861374266
 GameObject:
   m_ObjectHideFlags: 0
@@ -93295,6 +93349,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1885879537}
+        m_TargetAssemblyTypeName: CustomVibration, Assembly-CSharp
+        m_MethodName: OnButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1885879535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93342,9 +93408,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1885879532}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 30db1294886a7f049b1331783f3c0b8a, type: 3}
+  m_Script: {fileID: 11500000, guid: 735456a2fe8663a4f9fbd406c68e5b49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  vibrationType: 6
+  vibrateOnAwake: 0
+  vibrateOnCollision: 0
+  vibrateOnClick: 1
+  heartbeatDuration: 3
+  delayBeforeVibrating: 0
 --- !u!1 &1891519059
 GameObject:
   m_ObjectHideFlags: 0

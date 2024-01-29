@@ -5,6 +5,7 @@ using Photon.Pun;
 public class HomeNavigation : MonoBehaviour
 {
     public GameObject firstPanel; // Riferimento al FirstPanel
+    public GameObject LeaderboardPanel;
     public GameObject levelsPanel; // Riferimento al LevelsPanel
     public GameObject missionsPanel; // Riferimento al MissionsPanel
     public GameObject gameControlsUI; // UI per il controllo del gioco
@@ -14,6 +15,7 @@ public GameObject finishPanel;
     {
         // Assicurati che solo il FirstPanel sia visibile all'avvio
         firstPanel.SetActive(true);
+        LeaderboardPanel.SetActive(false);
         levelsPanel.SetActive(false);
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
@@ -21,12 +23,13 @@ public GameObject finishPanel;
 
     public void OpenLevelsPanel()
     {
-        Time.timeScale = 0;
         // Mostra LevelsPanel e nascondi gli altri
         levelsPanel.SetActive(true);
         firstPanel.SetActive(false);
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
+        LeaderboardPanel.SetActive(false);
+
     }
 
     // Chiamato quando un pulsante del livello è premuto
@@ -36,6 +39,8 @@ public void OnLevelSelect(int levelIndex)
     gameControlsUI.SetActive(true); // Attiva l'UI di controllo della macchina
     levelManager.LoadLevel(levelIndex); // Carica il livello selezionato
     finishPanel.SetActive(false);
+    LeaderboardPanel.SetActive(false);
+
 }
     public void OpenMissionsPanel()
     {
@@ -44,16 +49,30 @@ public void OnLevelSelect(int levelIndex)
         firstPanel.SetActive(false);
         levelsPanel.SetActive(false);
         finishPanel.SetActive(false);
+        LeaderboardPanel.SetActive(false);
+
     }
 
     public void ReturnToFirstPanel()
     {
         // Mostra FirstPanel e nascondi gli altri
-        Time.timeScale = 0;
         firstPanel.SetActive(true);
         levelsPanel.SetActive(false);
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
+     LeaderboardPanel.SetActive(false);
+
+    }
+        public void OpenLeaderBoardPanel()
+    {
+        // Mostra FirstPanel e nascondi gli altri
+      
+        firstPanel.SetActive(false);
+        levelsPanel.SetActive(false);
+        missionsPanel.SetActive(false);
+        finishPanel.SetActive(false);
+     LeaderboardPanel.SetActive(true);
+
     }
 
 }
