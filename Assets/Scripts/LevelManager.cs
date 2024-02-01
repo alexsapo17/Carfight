@@ -225,7 +225,10 @@ private void StartRace()
     raceTimer = 0;
     raceTimerText.gameObject.SetActive(true);
 }
-
+        public void OnShopButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
+}
 public void FinishRace()
 {
         if (carController != null)

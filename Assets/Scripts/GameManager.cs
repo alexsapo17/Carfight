@@ -27,6 +27,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
 public Camera mainCamera;
 public Image handbrakeButton; 
+public HorizontalJoystick horizontalJoystick;
 
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
     private List<GameObject> finishedCars = new List<GameObject>(); // Macchine che hanno finito la gara
@@ -35,8 +36,9 @@ public Image handbrakeButton;
     private List<GameObject> eliminatedPlayers = new List<GameObject>();
     private GameObject lastPlayerStanding;
     private Dictionary<string, int> playerPositions = new Dictionary<string, int>();
+public GameObject arrowPrefab;
+  public ArrowDirection arrowScript;
 
-  
     public Dictionary<string, GameObject> carPrefabs;
 
 
@@ -54,25 +56,32 @@ void Start()
     string selectedCarName = PlayerPrefs.GetString("SelectedCar", "DefaultCarName");
     GameObject carPrefab = Resources.Load<GameObject>(selectedCarName);  
 
-    // Verifica se il prefab è stato caricato correttamente
     if (carPrefab == null)
     {
         Debug.LogError("Impossibile caricare il prefab della macchina: " + selectedCarName);
         return;
     }
 
-    // Verifica se Photon è connesso e pronto
     if (!PhotonNetwork.IsConnectedAndReady)
     {
         Debug.LogError("Photon non è connesso e pronto.");
         return;
     }
 
-    // Procedi con l'istanziazione della macchina
-    int spawnIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
+   int spawnIndex = PhotonNetwork.LocalPlayer.ActorNumber - 1;
     if (spawnIndex < spawnPoints.Length)
     {
         GameObject car = PhotonNetwork.Instantiate(carPrefab.name, spawnPoints[spawnIndex].position, carPrefab.transform.rotation);
+        
+        // Istanziare la freccia
+        GameObject arrow = PhotonNetwork.Instantiate(arrowPrefab.name, car.transform.position + Vector3.up * 2, Quaternion.identity);
+        ArrowDirection arrowScript = arrow.GetComponent<ArrowDirection>();
+        if (arrowScript != null)
+        {
+            arrowScript.SetTarget(car.transform);
+            arrowScript.SetJoystick(horizontalJoystick); // Passa il riferimento al joystick
+        }
+        // Assicurati che il RPC faccia ciò che desideri con car.name
         photonView.RPC("RegisterCarInstance", RpcTarget.All, car.name);
     }
     else

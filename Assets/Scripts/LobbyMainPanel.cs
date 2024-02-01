@@ -239,7 +239,10 @@ public void OnSinglePlayerButtonClicked()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("SinglePlayerScene");
 }
-
+public void OnOnlineButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+}
 public void OnLogoutButtonClicked()
 {
     if (auth.CurrentUser != null)

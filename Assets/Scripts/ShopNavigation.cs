@@ -80,7 +80,18 @@ public Text gemsText;
     LoadOwnedCars();
     UpdateCarButtons();
 }
-    
+        public void OnShopButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
+}
+public void OnSinglePlayerButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("SinglePlayerScene");
+}
+public void OnOnlineButtonClicked()
+{
+    UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+}
 
    private void LoadOwnedCars()
     {
