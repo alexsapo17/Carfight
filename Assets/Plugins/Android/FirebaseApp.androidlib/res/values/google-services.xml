@@ -1,10 +1,10 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources xmlns:tools="http://schemas.android.com/tools" tools:keep="@string/firebase_database_url,@string/gcm_defaultSenderId,@string/google_storage_bucket,@string/project_id,@string/google_api_key,@string/google_crash_reporting_api_key,@string/google_app_id">
-  <string name="firebase_database_url" translatable="false">https://carfight-61f11-default-rtdb.europe-west1.firebasedatabase.app</string>
-  <string name="gcm_defaultSenderId" translatable="false">336471796444</string>
-  <string name="google_storage_bucket" translatable="false">carfight-61f11.appspot.com</string>
-  <string name="project_id" translatable="false">carfight-61f11</string>
-  <string name="google_api_key" translatable="false">AIzaSyAOyCkQIXXD6UsW4qDZE2iyXSKCZKSIw6Q</string>
-  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAOyCkQIXXD6UsW4qDZE2iyXSKCZKSIw6Q</string>
-  <string name="google_app_id" translatable="false">1:336471796444:android:9da3422b5f0c9baf456219</string>
+  <string name="firebase_database_url" translatable="false">https://carfight-c990a-default-rtdb.europe-west1.firebasedatabase.app</string>
+  <string name="gcm_defaultSenderId" translatable="false">864531663573</string>
+  <string name="google_storage_bucket" translatable="false">carfight-c990a.appspot.com</string>
+  <string name="project_id" translatable="false">carfight-c990a</string>
+  <string name="google_api_key" translatable="false">AIzaSyAypYz5hnmzxw1D7r54vkFLjJce7ptGS7w</string>
+  <string name="google_crash_reporting_api_key" translatable="false">AIzaSyAypYz5hnmzxw1D7r54vkFLjJce7ptGS7w</string>
+  <string name="google_app_id" translatable="false">1:864531663573:android:4be094caa289975bc6305c</string>
 </resources>
