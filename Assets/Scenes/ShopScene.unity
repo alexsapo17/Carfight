@@ -6852,6 +6852,7 @@ GameObject:
   - component: {fileID: 120012749}
   - component: {fileID: 120012750}
   - component: {fileID: 120012751}
+  - component: {fileID: 120012752}
   m_Layer: 5
   m_Name: CustomButton
   m_TagString: Untagged
@@ -7134,6 +7135,20 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &120012752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120012744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9bd906c6ca65a484db108f5b0527714e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  buttonToClick1: {fileID: 0}
+  buttonToClick2: {fileID: 120012746}
 --- !u!1 &121970783
 GameObject:
   m_ObjectHideFlags: 0
@@ -66886,7 +66901,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bd906c6ca65a484db108f5b0527714e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonToClick: {fileID: 1243039952}
+  buttonToClick1: {fileID: 1243039952}
+  buttonToClick2: {fileID: 0}
 --- !u!1 &1260548089
 GameObject:
   m_ObjectHideFlags: 0
@@ -69650,7 +69666,7 @@ GameObject:
   - component: {fileID: 1460863740}
   - component: {fileID: 1460863739}
   m_Layer: 0
-  m_Name: BDMusic
+  m_Name: BGMusic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

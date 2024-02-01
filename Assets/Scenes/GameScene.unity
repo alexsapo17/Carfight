@@ -386,7 +386,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   carPrefab: {fileID: 3650815947992404517, guid: b8811cac4a4b72240a8e855a4b1bf2cc, type: 3}
-  preRaceTimer: 3
+  preRaceTimer: 5
   spawnPoints:
   - {fileID: 931042176}
   - {fileID: 90240937}
@@ -395,7 +395,7 @@ MonoBehaviour:
   - {fileID: 598824479}
   - {fileID: 1751788271}
   - {fileID: 1068993633}
-  startRaceTimer: 2
+  startRaceTimer: 3
   resultsPanel: {fileID: 862213913}
   resultsText: {fileID: 331984326}
   returnToLobbyButton: {fileID: 2140046638}

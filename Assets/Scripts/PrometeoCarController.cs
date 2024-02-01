@@ -390,11 +390,11 @@ public void DestroyCameraInstance() {
 float turnValue = horizontalJoystick.GetHorizontal();
 float moveValue = horizontalJoystick.GetVertical();
 
-if (turnValue < 0.1) 
+if (turnValue < 0.3) 
 {
     TurnLeft(turnValue); // Passa il valore del joystick
 }
-else if (turnValue > -0.1)
+else if (turnValue > -0.3)
 {
     TurnRight(turnValue); // Passa il valore del joystick
 }
@@ -405,8 +405,8 @@ else
 
 
     // Imposta i valori buttonPressed basati sulla posizione del joystick
-    throttlePTI.buttonPressed = moveValue > 0.1f;
-    reversePTI.buttonPressed = moveValue < -0.1f;
+    throttlePTI.buttonPressed = moveValue > 0.3f;
+    reversePTI.buttonPressed = moveValue < -0.3f;
 
     if (throttlePTI.buttonPressed)
     {

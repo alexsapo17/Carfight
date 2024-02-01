@@ -73,14 +73,14 @@ void Start()
     {
         GameObject car = PhotonNetwork.Instantiate(carPrefab.name, spawnPoints[spawnIndex].position, carPrefab.transform.rotation);
         
-        // Istanziare la freccia
-        GameObject arrow = PhotonNetwork.Instantiate(arrowPrefab.name, car.transform.position + Vector3.up * 2, Quaternion.identity);
-        ArrowDirection arrowScript = arrow.GetComponent<ArrowDirection>();
-        if (arrowScript != null)
-        {
-            arrowScript.SetTarget(car.transform);
-            arrowScript.SetJoystick(horizontalJoystick); // Passa il riferimento al joystick
-        }
+       GameObject arrow = PhotonNetwork.Instantiate(arrowPrefab.name, car.transform.position + Vector3.up * 2, Quaternion.identity);
+ArrowDirection arrowScript = arrow.GetComponent<ArrowDirection>();
+if (arrowScript != null)
+{
+    arrowScript.SetTarget(car.transform);
+    arrowScript.SetJoystick(horizontalJoystick); // Assicurati che il joystick sia impostato correttamente
+}
+
         // Assicurati che il RPC faccia ciò che desideri con car.name
         photonView.RPC("RegisterCarInstance", RpcTarget.All, car.name);
     }
@@ -143,7 +143,8 @@ void Start()
         countdownText.text = "Via!";
         yield return new WaitForSeconds(1f); // Breve pausa prima di iniziare la gara.
 
-        photonView.RPC("SyncStartPosition", RpcTarget.All);
+   // Sincronizza le posizioni di partenza prima di iniziare la gara.
+    photonView.RPC("SyncStartPosition", RpcTarget.All);
 
         // Aggiungi il countdown per l'inizio della gara
         float startTimer = startRaceTimer;
@@ -286,7 +287,7 @@ if (hbRectTransform != null)
             if (eliminatedPlayerView.IsMine)
             {
                 string playerName = eliminatedPlayerView.Owner.NickName;
-                string results = $"Sei stato eliminato. Posizione: {place}. {playerName} - Tempo: {carFinishTimes[eliminatedPlayer]:F2} secondi";
+                string results = $" Posizione: {place}. {playerName} - Tempo: {carFinishTimes[eliminatedPlayer]:F2}";
                 resultsText.text = results;
                 resultsPanel.SetActive(true);
                 returnToLobbyButton.gameObject.SetActive(true);
@@ -434,23 +435,22 @@ public void DestroyPlayer(int viewID)
 [PunRPC]
 void SyncStartPosition()
 {
-    Debug.Log("Sincronizzazione della posizione di partenza per " + instantiatedCars.Count + " auto.");
-
     for (int i = 0; i < instantiatedCars.Count; i++)
     {
-        if (i < startLineSpawnPoints.Length)
-        {
-            Debug.Log("Posizionamento dell'auto: " + instantiatedCars[i].name + 
-                      " allo spawn point della linea di partenza " + i +  ". Posizione: " + startLineSpawnPoints[i].position);
-            instantiatedCars[i].transform.position = startLineSpawnPoints[i].position;
-            instantiatedCars[i].transform.rotation = startLineSpawnPoints[i].rotation;
-        }
-        else
-        {
-            Debug.LogError("Non ci sono abbastanza spawn points sulla linea di partenza per tutte le auto. Auto non posizionata: " + instantiatedCars[i].name);
-        }
+        // Trova l'ActorNumber del proprietario dell'auto.
+        int actorNumber = instantiatedCars[i].GetComponent<PhotonView>().Owner.ActorNumber;
+        
+        // Calcola l'indice dello spawn point basandosi sull'ActorNumber.
+        int spawnIndex = (actorNumber - 1) % startLineSpawnPoints.Length;
+        
+        // Posiziona l'auto al suo spawn point designato.
+        instantiatedCars[i].transform.position = startLineSpawnPoints[spawnIndex].position;
+        instantiatedCars[i].transform.rotation = startLineSpawnPoints[spawnIndex].rotation;
+        
+        Debug.Log($"Auto {instantiatedCars[i].name} posizionata allo spawn point {spawnIndex}.");
     }
 }
+
 
 
     [PunRPC]
