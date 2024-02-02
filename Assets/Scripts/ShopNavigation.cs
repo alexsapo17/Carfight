@@ -15,7 +15,7 @@ public class ShopNavigation : MonoBehaviour
     public GameObject[] carButtons;
 public Text coinsText;
 public Text gemsText;
-
+public Animator transitionAnimator; 
     void Start()
     {
         UpdateCoinsUI();
@@ -86,9 +86,21 @@ public Text gemsText;
 }
 public void OnSinglePlayerButtonClicked()
 {
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadSinglePlayerScene", 1f);
+    }
+    // Metodo separato per caricare la scena, chiamato dopo il ritardo
+void LoadSinglePlayerScene()
+{
     UnityEngine.SceneManagement.SceneManager.LoadScene("SinglePlayerScene");
 }
 public void OnOnlineButtonClicked()
+{
+   transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadOnlineScene", 1f);
+    }
+    // Metodo separato per caricare la scena, chiamato dopo il ritardo
+void LoadOnlineScene()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
 }

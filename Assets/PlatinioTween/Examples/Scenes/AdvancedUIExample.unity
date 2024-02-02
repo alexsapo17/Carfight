@@ -669,7 +669,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: In
-  ease: 16
+  ease: 23
   time: 1.5
   targetScale: {x: 1, y: 1, z: 1}
 --- !u!114 &249271202

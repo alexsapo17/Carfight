@@ -48,6 +48,8 @@ public GameObject ConnectingPanel;
     public Button LoginButton;
     public GameObject TutorialPanel;
 
+public Animator transitionAnimator;
+
 public GameObject NoCoinsPanel;
 public GameObject NoCarSelectedPanel;
 
@@ -231,14 +233,27 @@ public void Start()
                 }
             }
         }
-        public void OnShopButtonClicked()
+public void OnShopButtonClicked()
+{
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadShopScene", 1f); // Sostituisce la coroutine con Invoke
+}
+
+// Metodo separato per caricare la scena, chiamato dopo il ritardo
+void LoadShopScene()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
 }
+
 public void OnSinglePlayerButtonClicked()
+{
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadSinglePlayerScene", 1f); }
+public void LoadSinglePlayerScene()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("SinglePlayerScene");
 }
+
 public void OnOnlineButtonClicked()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");

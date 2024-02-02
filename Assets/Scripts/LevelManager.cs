@@ -34,7 +34,7 @@ public class LevelManager : MonoBehaviour
     public Sprite fullStarSprite; // Sprite per la stella piena
 public Sprite emptyStarSprite; // Sprite per la stella vuota
 public Text gemsText;
-
+public Animator transitionAnimator;
 
 
     void Start()
@@ -225,7 +225,14 @@ private void StartRace()
     raceTimer = 0;
     raceTimerText.gameObject.SetActive(true);
 }
-        public void OnShopButtonClicked()
+public void OnShopButtonClicked()
+{
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadShopScene", 1f); // Sostituisce la coroutine con Invoke
+}
+
+// Metodo separato per caricare la scena, chiamato dopo il ritardo
+void LoadShopScene()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
 }
@@ -252,7 +259,16 @@ gameControlsUI.SetActive(false);
 
 }
 
-   public void ReturnToLobby()
+
+public void ReturnToLobby()
+{
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadLobbyScene", 1f); // Sostituisce la coroutine con Invoke
+}
+
+
+
+   public void LoadLobbyScene()
     {
         // Disattiva la modalità offline di Photon e disconnettiti
         PhotonNetwork.OfflineMode = false;

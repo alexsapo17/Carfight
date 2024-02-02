@@ -1,10 +1,10 @@
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
-
 public class PauseMenu : MonoBehaviourPunCallbacks
 {
     public GameObject pauseMenuUI;
+public Animator transitionAnimator;
 
     void Update()
     {
@@ -38,7 +38,11 @@ public class PauseMenu : MonoBehaviourPunCallbacks
 
     public override void OnDisconnected(DisconnectCause cause)
     {
-        // Carica la scena della lobby dopo essersi disconnesso.
-        UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+            transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadOnlineScene", 1f);
     }
+    void LoadOnlineScene()
+{
+        UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+}
 }

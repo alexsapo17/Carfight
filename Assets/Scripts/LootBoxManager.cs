@@ -6,6 +6,12 @@ using Firebase.Auth;
 using Firebase.Extensions;
 using System.Linq;
 
+public enum CurrencyType
+{
+    Coins,
+    Gems,
+    Both
+}
 
 public class LootBoxManager : MonoBehaviour
 {
@@ -23,11 +29,14 @@ public LootBox[] lootBoxes;
 [System.Serializable]
 public class LootBox
 {
-    public int boxCost; // Costo per aprire questa cassa
+    public int boxCostCoins; // Costo in monete per aprire questa cassa
+    public int boxCostGems; // Costo in gemme per aprire questa cassa
+    public CurrencyType currencyType; // Tipo di valuta richiesta
     public Animator lootBoxAnimator;
-    public CarProbability[] carProbabilities; // Probabilità delle macchine per questa cassa
+    public CarProbability[] carProbabilities;
     public int experienceGain;
 }
+
 
 
 [System.Serializable]
@@ -48,35 +57,55 @@ public class CarProbability
         userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
     }
 
-    public void OpenLootBox(int lootBoxIndex)
+public void OpenLootBox(int lootBoxIndex)
+{
+    LootBox selectedBox = lootBoxes[lootBoxIndex];
+    
+    bool canOpen = false;
+    switch (selectedBox.currencyType)
     {
-        if (lootBoxIndex < 0 || lootBoxIndex >= lootBoxes.Length)
-        {
-            Debug.LogError("Indice cassa non valido.");
-            return;
-        }
-
-        LootBox selectedBox = lootBoxes[lootBoxIndex];
-
-        if (!CurrencyManager.Instance.HasEnoughCoins(selectedBox.boxCost))
-        {
-            Debug.Log("Non hai abbastanza monete per aprire questa cassa.");
-            return;
-        }
+        case CurrencyType.Coins:
+            if (CurrencyManager.Instance.HasEnoughCoins(selectedBox.boxCostCoins))
+            {
+                CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCostCoins);
+                canOpen = true;
+            }
+            break;
+        case CurrencyType.Gems:
+            if (CurrencyManager.Instance.HasEnoughGems(selectedBox.boxCostGems))
+            {
+                CurrencyManager.Instance.TrySpendGems(selectedBox.boxCostGems);
+                canOpen = true;
+            }
+            break;
+        case CurrencyType.Both:
+            if (CurrencyManager.Instance.HasEnoughCoins(selectedBox.boxCostCoins) && CurrencyManager.Instance.HasEnoughGems(selectedBox.boxCostGems))
+            {
+                CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCostCoins);
+                CurrencyManager.Instance.TrySpendGems(selectedBox.boxCostGems);
+                canOpen = true;
+            }
+            break;
+    }
+    
+    if (!canOpen)
+    {
+        Debug.Log("Non hai abbastanza risorse per aprire questa cassa.");
+        return;
+    }
     // Disattiva il canvas e avvia l'animazione
     lootBoxCanvas.enabled = false;
-selectedBox.lootBoxAnimator.SetTrigger("OpenChest");
-      string selectedCar = SelectRandomCar(selectedBox.carProbabilities);
+    selectedBox.lootBoxAnimator.SetTrigger("OpenChest");
+    string selectedCar = SelectRandomCar(selectedBox.carProbabilities);
     SaveCar(selectedCar);
-    CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCost);
-    CurrencyManager.Instance.UpdateCoinsUI();
+    CurrencyManager.Instance.UpdateCoinsUI(); // Assicurati che questa funzione aggiorni anche l'UI delle gemme se necessario
     // Avvia la coroutine per gestire il flusso
     StartCoroutine(WaitAndReactivateCanvas(selectedBox.lootBoxAnimator));  
     // Avvia la coroutine per spawnare la macchina dopo l'animazione
     StartCoroutine(SpawnCarAfterAnimation(selectedCar, selectedBox.carProbabilities));
     ExperienceManager.Instance.AddExperience(selectedBox.experienceGain);
+}
 
-    }
 
 private IEnumerator WaitAndReactivateCanvas(Animator animator)
 {
@@ -152,24 +181,23 @@ private void SpawnCarPrefab(string carName, CarProbability[] carProbabilities)
 
 private IEnumerator MoveAndRotate(GameObject carInstance, Vector3 rotationSpeed)
 {
-    Vector3 startPostion = carInstance.transform.position;
-    Vector3 endPosition = startPostion + Vector3.up * moveUpSpeed * destructionDelay; // Calcola la posizione finale basata sulla velocità e sul tempo
+    Vector3 startPosition = carInstance.transform.position;
+    Vector3 endPosition = startPosition + Vector3.up * moveUpSpeed * destructionDelay;
+    Quaternion startRotation = carInstance.transform.rotation;
+    Quaternion endRotation = startRotation * Quaternion.Euler(rotationSpeed * destructionDelay);
 
-    float startTime = Time.time;
-    float journeyLength = Vector3.Distance(startPostion, endPosition);
-    float fracJourney = 0f;
+    float elapsedTime = 0f;
 
-    while(fracJourney < 1f)
+    while (elapsedTime < destructionDelay)
     {
-        float distCovered = (Time.time - startTime) * moveUpSpeed;
-        fracJourney = distCovered / journeyLength;
-
-        carInstance.transform.position = Vector3.Lerp(startPostion, endPosition, fracJourney);
-        carInstance.transform.Rotate(rotationSpeed * Time.deltaTime);
-
+        float fracComplete = elapsedTime / destructionDelay;
+        carInstance.transform.position = Vector3.Lerp(startPosition, endPosition, fracComplete);
+        carInstance.transform.rotation = Quaternion.Slerp(startRotation, endRotation, fracComplete);
+        elapsedTime += Time.deltaTime;
         yield return null;
     }
 }
+
 
 
     // Altre funzioni...

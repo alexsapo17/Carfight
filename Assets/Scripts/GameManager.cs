@@ -38,7 +38,7 @@ public HorizontalJoystick horizontalJoystick;
     private Dictionary<string, int> playerPositions = new Dictionary<string, int>();
 public GameObject arrowPrefab;
   public ArrowDirection arrowScript;
-
+public Animator transitionAnimator;
     public Dictionary<string, GameObject> carPrefabs;
 
 
@@ -419,10 +419,12 @@ if (hbRectTransform != null)
         {
             yield return null; // Aspetta che il giocatore sia completamente disconnesso
         }
-
-        SceneManager.LoadScene("DemoAsteroids-LobbyScene"); // Nome della tua scena della lobby
+    transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("LoadLobbyScene", 1f);
     }
-
+void LoadLobbyScene()
+{
+SceneManager.LoadScene("DemoAsteroids-LobbyScene");}
 [PunRPC]
 public void DestroyPlayer(int viewID)
 {
