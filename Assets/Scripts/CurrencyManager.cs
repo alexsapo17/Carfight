@@ -16,7 +16,7 @@ public Text coinsText;
 public Text gemsText;     
     private DatabaseReference databaseReference;
     public static CurrencyManager Instance;
-
+public Animator coinAnimator;
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -73,6 +73,13 @@ public void LoadCoins()
  
 }
 
+public void TriggerCoinAnimation()
+{
+    if (coinAnimator != null)
+    {
+        coinAnimator.SetTrigger("AddedCoins");
+    }
+}
     private void SaveCoins()
     {
         string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
@@ -80,12 +87,20 @@ public void LoadCoins()
         UpdateCoinsUI();
     }
 
-    public void ModifyCoins(int amount)
+ public void ModifyCoins(int amount)
+{
+    playerCoins += amount;
+    SaveCoins();
+    if (coinsText != null)
     {
-        playerCoins += amount;
-        SaveCoins();
-        UpdateCoinsUI();
+        SlotMachineEffect slotMachineEffect = coinsText.GetComponent<SlotMachineEffect>();
+        if (slotMachineEffect != null)
+        {
+            slotMachineEffect.AnimateText(playerCoins - amount, playerCoins);
+        }
     }
+    TriggerCoinAnimation(); // Attiva l'animazione delle monete
+}
 
 public void RefundCoins(int amount, Action onComplete)
 {

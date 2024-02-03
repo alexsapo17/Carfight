@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
 public Camera mainCamera;
 public Image handbrakeButton; 
+public Image throttleButton;
+public Image reverseButton;
 public HorizontalJoystick horizontalJoystick;
 
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
@@ -248,6 +250,16 @@ if (hbRectTransform != null)
 {
     hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
+RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
+if (tbRectTransform != null)
+{
+    tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
+if (rbRectTransform != null)
+{
+    rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
     }
         
 
@@ -296,8 +308,16 @@ if (hbRectTransform != null)
 {
     hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-
-
+RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
+if (tbRectTransform != null)
+{
+    tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
+if (rbRectTransform != null)
+{
+    rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
             }
         }
     }
@@ -364,7 +384,16 @@ if (hbRectTransform != null)
 {
     hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-
+RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
+if (tbRectTransform != null)
+{
+    tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
+if (rbRectTransform != null)
+{
+    rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
 
 
             }
@@ -377,7 +406,16 @@ if (hbRectTransform != null)
 {
     hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-
+RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
+if (tbRectTransform != null)
+{
+    tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
+if (rbRectTransform != null)
+{
+    rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
 
 
             }

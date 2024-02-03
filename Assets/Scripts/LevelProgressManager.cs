@@ -55,10 +55,12 @@ public Text bestTimeText;
         public Dictionary<int, LevelStarRequirements> starRequirements;
            private DatabaseReference databaseReference;
 private int playerCoins;
-
+public Animator coinsAnimator;
+private SlotMachineEffect slotMachineEffect;
     void Awake()
     {
             levelManager = FindObjectOfType<LevelManager>();
+    slotMachineEffect = coinsText.GetComponent<SlotMachineEffect>();
 
  
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
@@ -108,22 +110,41 @@ private void AwardCoinsForLevel(int levelId, int starsEarned) {
             coinsToAward = 50;
             break;
         case 2:
-            coinsToAward = 150; // 100 + 50
+            coinsToAward = 150;
             break;
         case 3:
-            coinsToAward = 300; // 150 + 100 + 50
+            coinsToAward = 300;
             break;
         default:
             return;
     }
 
-  
+    int startValue = playerCoins; // Definisci startValue qui
+    int endValue = playerCoins + coinsToAward; // Definisci endValue qui
+
     playerCoins += coinsToAward;
     SavePlayerCoins();
+
+    // Imposta il trigger AddedCoins sull'Animator, utilizzando il nome corretto della variabile
+    if (coinsAnimator != null) {
+        coinsAnimator.SetTrigger("AddedCoins");
+    } else {
+        Debug.LogWarning("Animator per le monete non impostato");
+    }
+
+    // Attiva l'animazione del testo delle monete
+    if (slotMachineEffect != null) {
+        slotMachineEffect.AnimateText(startValue, endValue);
+    } else {
+        Debug.LogWarning("SlotMachineEffect non trovato sul componente Text delle monete");
+    }
 
     levelProgress.coinsAwarded = true;
     SaveLevelData(levelId);
 }
+
+
+  
 
 void InitializeLevels()
 {
