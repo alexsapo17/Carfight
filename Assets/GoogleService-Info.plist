@@ -36,6 +36,6 @@
 	<key>GOOGLE_APP_ID</key>
 	<string>1:864531663573:ios:eee271b5063160fec6305c</string>
 	<key>DATABASE_URL</key>
-	<string>http://carfight-c990a-default-rtdb.europe-west1.firebasedatabase.app</string>
+	<string>https://carfight-c990a-default-rtdb.europe-west1.firebasedatabase.app</string>
 </dict>
 </plist>
