@@ -1208,6 +1208,8 @@ MonoBehaviour:
   controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  shockwaveRadius: 5
+  shockwaveForce: 1000
 --- !u!114 &5209504309275095321
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,17 +13,12 @@ public class InvisibilityEffect : MonoBehaviourPunCallbacks
         pickupsManager = manager;
     }
 
-    private void OnTriggerEnter(Collider other)
+    public void ActivateInvisibility(PlayerEffects playerEffects)
     {
-        if (other.CompareTag("Player"))
+        if (playerEffects != null)
         {
-            PlayerEffects playerEffects = other.gameObject.GetComponent<PlayerEffects>();
-
-            if (playerEffects != null)
-            {
-                playerEffects.StartInvisibilityTimer(effectDuration);
-                RequestDestroyPickup();
-            }
+            playerEffects.StartInvisibilityTimer(effectDuration);
+            RequestDestroyPickup();
         }
     }
 
@@ -51,8 +46,6 @@ public class InvisibilityEffect : MonoBehaviourPunCallbacks
         {
             pickupsManager.FreeSpawnPoint(spawnPointIndex);
         }
-        PhotonNetwork
-.Destroy(gameObject);
+        PhotonNetwork.Destroy(gameObject);
+    }
 }
-}
-

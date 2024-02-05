@@ -78,7 +78,7 @@ public class CarSelector : MonoBehaviour
     {
         if (Input.GetMouseButton(0) && currentCarInstance != null)
         {
-            float rotationSpeed = 500.0f;
+            float rotationSpeed = 50.0f;
             float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
             currentCarInstance.transform.Rotate(Vector3.up, -mouseX);
         }

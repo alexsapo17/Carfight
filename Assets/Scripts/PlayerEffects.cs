@@ -15,6 +15,11 @@ public GameObject collisionEffectPrefab;
     public GameObject controlDisableEffectPrefab;
     public GameObject sizeMassIncreaseEffectPrefab;
     public GameObject invisibilityEffectPrefab;
+    public float shockwaveRadius = 100f; // Raggio dell'onda d'urto
+    public float shockwaveForce = 1000f; // Forza dell'onda d'urto
+
+
+
         void Start()
     {
         // Crea un materiale per l'outline
@@ -234,5 +239,33 @@ private IEnumerator DisableControlsForDuration(float duration)
 }
 
 
+    // Funzione da chiamare per attivare l'effetto dell'onda d'urto
+    public void StartShockwaveEffect()
+    {
+        photonView.RPC("ApplyShockwaveEffect", RpcTarget.All);
+    }
 
+    [PunRPC]
+    void ApplyShockwaveEffect()
+    {
+        // Ottieni tutti i collider entro il raggio dell'onda d'urto
+        Collider[] hitColliders = Physics.OverlapSphere(transform.position, shockwaveRadius);
+        foreach (var hitCollider in hitColliders)
+        {
+            // Controlla se il collider appartiene a un "Player"
+            if (hitCollider.CompareTag("Player") && hitCollider.gameObject != gameObject) // Escludi il giocatore che ha attivato l'onda d'urto
+            {
+                // Ottieni il componente Rigidbody del giocatore colpito
+                Rigidbody rb = hitCollider.GetComponent<Rigidbody>();
+                if (rb != null)
+                {
+                    // Calcola la direzione della forza da applicare
+                    Vector3 forceDirection = hitCollider.transform.position - transform.position;
+                    rb.AddForce(forceDirection.normalized * shockwaveForce, ForceMode.Impulse);
+                }
+            }
+        }
+
+        // Opzionale: Puoi istanziare un effetto visivo per l'onda d'urto qui
+    }
 }
