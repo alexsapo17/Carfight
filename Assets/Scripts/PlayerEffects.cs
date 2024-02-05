@@ -15,8 +15,8 @@ public GameObject collisionEffectPrefab;
     public GameObject controlDisableEffectPrefab;
     public GameObject sizeMassIncreaseEffectPrefab;
     public GameObject invisibilityEffectPrefab;
-    public float shockwaveRadius = 100f; // Raggio dell'onda d'urto
-    public float shockwaveForce = 1000f; // Forza dell'onda d'urto
+    public float shockwaveRadius = 500f; // Raggio dell'onda d'urto
+    public float shockwaveForce = 10000f; // Forza dell'onda d'urto
 
 
 
@@ -213,7 +213,33 @@ IEnumerator SpeedAndFrictionEffect(float duration, float accelerationMultiplier)
 
     effectActive = false;
 }
+// Aggiungi questo metodo dentro PlayerEffects
+public void StartJump(float jumpForce)
+{
+    if (photonView.IsMine) // Assicurati che solo il giocatore locale possa saltare
+    {
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null && IsGrounded()) // Implementa IsGrounded in base alla tua logica specifica
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+}
 
+    bool IsGrounded()
+    {
+        WheelCollider[] wheelColliders = GetComponentsInChildren<WheelCollider>();
+        foreach (var wheel in wheelColliders)
+        {
+            if (wheel.isGrounded)
+            {
+                Debug.Log("IsGrounded: true");
+                return true; // Almeno una ruota tocca il suolo
+            }
+        }
+        Debug.Log("IsGrounded: false");
+        return false; // Nessuna ruota tocca il suolo
+    }
 
 private IEnumerator DisableControlsForDuration(float duration)
 {

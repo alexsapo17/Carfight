@@ -613,8 +613,20 @@ private void DisableNoCoinsPanel()
     NoCoinsPanel.SetActive(false);
 }
 
+
+
+
         public void OnStartGameButtonClicked()
         {
+
+                transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
+    Invoke("StartGame", 1f); // Sostituisce la coroutine con Invoke
+
+        }
+// Metodo separato per caricare la scena, chiamato dopo il ritardo
+void StartGame()
+{
+
             CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
             if (currencyManager == null)
             {
@@ -635,7 +647,7 @@ private void DisableNoCoinsPanel()
                 Debug.LogError("Non hai abbastanza monete per avviare il gioco.");
                 // Gestisci il caso in cui il giocatore non ha abbastanza monete
             }
-        }
+            }
 
         public void OnLeaveGameButtonClicked()
         {

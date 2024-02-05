@@ -5,6 +5,7 @@ using UnityEngine.UI;
 public class ActivateShockwaveFromButton : MonoBehaviour
 {
     public Button shockwaveButton; // Assegna questo nell'Inspector
+    public GameObject visualEffectPrefab; // Assegna il prefab dell'effetto visivo nell'Inspector
 
     void Start()
     {
@@ -22,6 +23,10 @@ public class ActivateShockwaveFromButton : MonoBehaviour
                 // Ottieni il componente PlayerEffects e attiva l'effetto
                 var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();
                 playerEffects.StartShockwaveEffect();
+
+                // Istanziare l'effetto visivo nel punto della macchina
+                Instantiate(visualEffectPrefab, pv.transform.position, Quaternion.identity);
+
                 break; // Interrompe il ciclo una volta trovato e attivato l'effetto
             }
         }

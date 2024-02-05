@@ -350,16 +350,11 @@ public void DestroyCameraInstance() {
     }
 }
 
-    // Update is called once per frame
   void FixedUpdate()
 {
    if (!controlsEnabled)
         return;
-  if (!photonView.IsMine)
-{
-    rb.position = Vector3.MoveTowards(rb.position, targetPosition, Time.fixedDeltaTime);
-    rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRotation, Time.fixedDeltaTime * 100.0f);
-}
+
     if (photonView.IsMine)
     {
       //CAR DATA
@@ -388,7 +383,7 @@ public void DestroyCameraInstance() {
 
 
 float turnValue = horizontalJoystick.GetHorizontal();
-//float moveValue = horizontalJoystick.GetVertical();
+float moveValue = horizontalJoystick.GetVertical();
 
 if (turnValue < 0.3) 
 {
@@ -405,8 +400,8 @@ else
 
 
     // Imposta i valori buttonPressed basati sulla posizione del joystick
-    // throttlePTI.buttonPressed = moveValue > 0.3f;
-    // reversePTI.buttonPressed = moveValue < -0.3f;
+     throttlePTI.buttonPressed = moveValue > 0.3f;
+    reversePTI.buttonPressed = moveValue < -0.3f;
 
     if (throttlePTI.buttonPressed)
     {
@@ -489,6 +484,22 @@ void Update()
     if (photonView.IsMine)
     {
         HandleHandbrakeInput();
+    }
+        else
+    {
+        UpdateNetworkedPlayerPositionAndRotation();
+    }
+
+}
+void UpdateNetworkedPlayerPositionAndRotation()
+{
+    // Assicurati che questo codice venga eseguito solo per i giocatori non locali
+    if (!photonView.IsMine)
+    {
+
+    rb.position = Vector3.MoveTowards(rb.position, targetPosition, Time.fixedDeltaTime);
+    rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRotation, Time.fixedDeltaTime * 100.0f);
+
     }
 }
     public void SetKinematic(bool isKinematic)
