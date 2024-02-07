@@ -74,13 +74,18 @@ public class CarSelector : MonoBehaviour
         }
     }
 
-    void Update()
+void Update()
+{
+    if (Input.touchCount > 0 && currentCarInstance != null)
     {
-        if (Input.GetMouseButton(0) && currentCarInstance != null)
+        Touch touch = Input.GetTouch(0);
+        
+        if (touch.phase == TouchPhase.Moved)
         {
             float rotationSpeed = 50.0f;
-            float mouseX = Input.GetAxis("Mouse X") * rotationSpeed * Time.deltaTime;
-            currentCarInstance.transform.Rotate(Vector3.up, -mouseX);
+            float touchDeltaX = touch.deltaPosition.x * rotationSpeed * Time.deltaTime;
+            currentCarInstance.transform.Rotate(Vector3.up, -touchDeltaX);
         }
     }
+}
 }

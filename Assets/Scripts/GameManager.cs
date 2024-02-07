@@ -30,7 +30,8 @@ public Image handbrakeButton;
 public Image throttleButton;
 public Image reverseButton;
 public HorizontalJoystick horizontalJoystick;
-
+    public RectTransform button1RectTransform; // Assicurati di assegnare questi nel Unity Inspector
+    public RectTransform button2RectTransform;
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
     private List<GameObject> finishedCars = new List<GameObject>(); // Macchine che hanno finito la gara
     private Dictionary<GameObject, float> carFinishTimes = new Dictionary<GameObject, float>(); // Tempi di arrivo delle macchine
@@ -96,12 +97,23 @@ if (arrowScript != null)
     {
         PhotonNetwork.Instantiate(brickWallPrefab.name, spawnPoint.position, spawnPoint.rotation);
     }
-
+        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+        if (controlSetup == 1)
+        {
+            // Sposta i pulsanti verso destra, fuori dal canvas
+            MoveButtonOutOfView(button1RectTransform);
+            MoveButtonOutOfView(button2RectTransform);
+        }
     StartCoroutine(PreRaceCountdown());
     resultsPanel.SetActive(false);
 }
 
-
+    private void MoveButtonOutOfView(RectTransform buttonRectTransform)
+    {
+        // Questo è solo un esempio, dovrai adattare i valori in base alle dimensioni del tuo canvas e alla posizione desiderata
+        Vector2 newPosition = new Vector2(2000, buttonRectTransform.anchoredPosition.y); // Sposta di 2000 unità a destra
+        buttonRectTransform.anchoredPosition = newPosition;
+    }
     [PunRPC]
     void RegisterCarInstance(string carName)
     {

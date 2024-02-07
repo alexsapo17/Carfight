@@ -357,6 +357,7 @@ public void DestroyCameraInstance() {
 
     if (photonView.IsMine)
     {
+          int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
       //CAR DATA
 
       // We determine the speed of the car.
@@ -383,7 +384,10 @@ public void DestroyCameraInstance() {
 
 
 float turnValue = horizontalJoystick.GetHorizontal();
-float moveValue = horizontalJoystick.GetVertical();
+  
+ float moveValue = horizontalJoystick.GetVertical();
+
+            
 
 if (turnValue < 0.3) 
 {
@@ -399,9 +403,12 @@ else
 }
 
 
-    // Imposta i valori buttonPressed basati sulla posizione del joystick
-     throttlePTI.buttonPressed = moveValue > 0.3f;
-    reversePTI.buttonPressed = moveValue < -0.3f;
+            // Se è stato selezionato il Setup 1, disattiva certi controlli
+            if (controlSetup == 1)
+            {
+                throttlePTI.buttonPressed = moveValue > 0.3f;
+                reversePTI.buttonPressed = moveValue < -0.3f;
+            }
 
     if (throttlePTI.buttonPressed)
     {

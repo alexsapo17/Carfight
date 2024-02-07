@@ -175,7 +175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpButton: {fileID: 46886666}
-  jumpForce: 50
+  jumpForce: 5500
 --- !u!114 &46886666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -543,6 +543,8 @@ MonoBehaviour:
   throttleButton: {fileID: 2032418187}
   reverseButton: {fileID: 1176987381}
   horizontalJoystick: {fileID: 421249299}
+  button1RectTransform: {fileID: 1176987380}
+  button2RectTransform: {fileID: 2032418185}
   arrowPrefab: {fileID: 2822788840113049947, guid: b885d6b124127124facaf74c06df928a, type: 3}
   arrowScript: {fileID: 7964921921761104881, guid: b885d6b124127124facaf74c06df928a, type: 3}
   transitionAnimator: {fileID: 1833762036}
