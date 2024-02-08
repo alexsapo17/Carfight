@@ -12,21 +12,167 @@ public class CameraAnimationController : MonoBehaviour
     private void Start()
     {
         originalPosition = transform.position; // Memorizza la posizione iniziale
-        cameraAnimator.Play("CameraShopAnimation", 0, 0f);
+
         cameraAnimator.speed = 0;
     }
 
-    public void PlayOrContinueAnimation()
+     public void PlayCameraShopAnimation()
     {
         cameraAnimator.enabled = true;
+        cameraAnimator.Play("CameraShopAnimation", 0, 0f);
         cameraAnimator.speed = 1;
     }
 
-    public void StopAnimation()
+    public void PlayCarShopAnimationBack()
     {
-        cameraAnimator.speed = 0;
+        cameraAnimator.Play("CameraShopAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
     }
 
+    public void PlayRaceCarAnimation()
+    {
+        cameraAnimator.Play("RaceCarAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void PlayRaceCarBackAnimation()
+    {
+        cameraAnimator.Play("RaceCarBackAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+public void PlayPrometheusAnimation()
+    {
+        cameraAnimator.Play("prometheusAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void PlayPrometheusBackAnimation()
+    {
+        cameraAnimator.Play("prometheusAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+    public void Monstertruck()
+    {
+        cameraAnimator.Play("monstertruckAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void MonstertruckBack()
+    {
+        cameraAnimator.Play("monstertruckAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+        public void sportCar()
+    {
+        cameraAnimator.Play("sportCarAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void sportCarBack()
+    {
+        cameraAnimator.Play("sportCarAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+            public void MicraRiccio()
+    {
+        cameraAnimator.Play("MicraRiccioAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void MicraRiccioBack()
+    {
+        cameraAnimator.Play("MicraRiccioAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+               public void Ambulance()
+    {
+        cameraAnimator.Play("AmbulanceAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void AmbulanceBack()
+    {
+        cameraAnimator.Play("AmbulanceAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+               public void PoliceMonsterTruck()
+    {
+        cameraAnimator.Play("PoliceMonsterTruckAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void PoliceMonstreTruckBack()
+    {
+        cameraAnimator.Play("PoliceMonsterTruckAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+                   public void SportRacingCar()
+    {
+        cameraAnimator.Play("SportRacingCarAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void SportRacingCarBack()
+    {
+        cameraAnimator.Play("SportRacingCarAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+              public void Cice()
+    {
+        cameraAnimator.Play("CiceAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void CiceBack()
+    {
+        cameraAnimator.Play("CiceAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+                public void Bus()
+    {
+        cameraAnimator.Play("BusAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void BusBack()
+    {
+        cameraAnimator.Play("BusAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+                   public void Ruby()
+    {
+        cameraAnimator.Play("RubyAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void RubyBack()
+    {
+        cameraAnimator.Play("RubyAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+                     public void Jeep()
+    {
+        cameraAnimator.Play("JeepAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void JeepBack()
+    {
+        cameraAnimator.Play("JeepAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+                         public void Firetruck()
+    {
+        cameraAnimator.Play("FiretruckAnimation", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
+
+    public void FiretruckBack()
+    {
+        cameraAnimator.Play("FiretruckAnimationBack", 0, 0f);
+        cameraAnimator.speed = 1;
+    }
  IEnumerator MoveCameraRightCoroutine()
 {
     Vector3 targetPosition = transform.position + moveOffset;

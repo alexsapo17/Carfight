@@ -39,8 +39,8 @@ public HorizontalJoystick horizontalJoystick;
     private List<GameObject> eliminatedPlayers = new List<GameObject>();
     private GameObject lastPlayerStanding;
     private Dictionary<string, int> playerPositions = new Dictionary<string, int>();
-public GameObject arrowPrefab;
-  public ArrowDirection arrowScript;
+//public GameObject arrowPrefab;
+ // public ArrowDirection arrowScript;
 public Animator transitionAnimator;
     public Dictionary<string, GameObject> carPrefabs;
 
@@ -76,13 +76,13 @@ void Start()
     {
         GameObject car = PhotonNetwork.Instantiate(carPrefab.name, spawnPoints[spawnIndex].position, carPrefab.transform.rotation);
         
-       GameObject arrow = PhotonNetwork.Instantiate(arrowPrefab.name, car.transform.position + Vector3.up * 2, Quaternion.identity);
-ArrowDirection arrowScript = arrow.GetComponent<ArrowDirection>();
+     //  GameObject arrow = PhotonNetwork.Instantiate(arrowPrefab.name, car.transform.position + Vector3.up * 2, Quaternion.identity);
+/*ArrowDirection arrowScript = arrow.GetComponent<ArrowDirection>();
 if (arrowScript != null)
 {
     arrowScript.SetTarget(car.transform);
     arrowScript.SetJoystick(horizontalJoystick); // Assicurati che il joystick sia impostato correttamente
-}
+}*/
 
         // Assicurati che il RPC faccia ciò che desideri con car.name
         photonView.RPC("RegisterCarInstance", RpcTarget.All, car.name);

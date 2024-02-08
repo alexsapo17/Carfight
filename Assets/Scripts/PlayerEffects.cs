@@ -15,8 +15,8 @@ public GameObject collisionEffectPrefab;
     public GameObject controlDisableEffectPrefab;
     public GameObject sizeMassIncreaseEffectPrefab;
     public GameObject invisibilityEffectPrefab;
-    public float shockwaveRadius = 500f; // Raggio dell'onda d'urto
-    public float shockwaveForce = 10000f; // Forza dell'onda d'urto
+    public float shockwaveRadius = 250f; // Raggio dell'onda d'urto
+    public float shockwaveForce = 8000f; // Forza dell'onda d'urto
 
 
 
@@ -271,27 +271,31 @@ private IEnumerator DisableControlsForDuration(float duration)
         photonView.RPC("ApplyShockwaveEffect", RpcTarget.All);
     }
 
-    [PunRPC]
-    void ApplyShockwaveEffect()
+ [PunRPC]
+void ApplyShockwaveEffect()
+{
+    // Ottieni tutti i collider entro il raggio dell'onda d'urto
+    Collider[] hitColliders = Physics.OverlapSphere(transform.position, shockwaveRadius);
+    foreach (var hitCollider in hitColliders)
     {
-        // Ottieni tutti i collider entro il raggio dell'onda d'urto
-        Collider[] hitColliders = Physics.OverlapSphere(transform.position, shockwaveRadius);
-        foreach (var hitCollider in hitColliders)
+        // Controlla se il collider appartiene a un "Player"
+        if (hitCollider.CompareTag("Player") && hitCollider.gameObject != gameObject) // Escludi il giocatore che ha attivato l'onda d'urto
         {
-            // Controlla se il collider appartiene a un "Player"
-            if (hitCollider.CompareTag("Player") && hitCollider.gameObject != gameObject) // Escludi il giocatore che ha attivato l'onda d'urto
+            // Ottieni il componente Rigidbody del giocatore colpito
+            Rigidbody rb = hitCollider.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                // Ottieni il componente Rigidbody del giocatore colpito
-                Rigidbody rb = hitCollider.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    // Calcola la direzione della forza da applicare
-                    Vector3 forceDirection = hitCollider.transform.position - transform.position;
-                    rb.AddForce(forceDirection.normalized * shockwaveForce, ForceMode.Impulse);
-                }
+                // Calcola la direzione della forza da applicare
+                Vector3 forceDirection = hitCollider.transform.position - transform.position;
+                // Aggiungi una componente verticale alla forza
+                forceDirection += Vector3.up * shockwaveForce * 0.5f; // Aggiusta il moltiplicatore per controllare l'intensità della spinta verticale
+
+                rb.AddForce(forceDirection.normalized * shockwaveForce, ForceMode.Impulse);
             }
         }
-
-        // Opzionale: Puoi istanziare un effetto visivo per l'onda d'urto qui
     }
+
+    // Opzionale: Puoi istanziare un effetto visivo per l'onda d'urto qui
+}
+
 }

@@ -12,6 +12,19 @@ public class ShopNavigation : MonoBehaviour
     public GameObject carPanel;   // Pannello per le macchine
     public GameObject skillPanel; // Pannello per le abilità
     public GameObject customPanel; // Pannello personalizzazione
+     public GameObject raceCarPanel;
+     public GameObject prometheusPanel;
+     public GameObject monstertruckPanel;
+     public GameObject MicraRiccioPanel;
+     public GameObject AmbulancePanel;
+     public GameObject SportRacingCarPanel;
+     public GameObject PoliceMonsterTruckPanel;
+     public GameObject CicePanel;
+     public GameObject BusPanel;
+     public GameObject RubyPanel;
+     public GameObject JeepPanel;
+     public GameObject FiretruckPanel;
+     public GameObject sportCarPanel;
     public GameObject[] carButtons;
 public Text coinsText;
 public Text gemsText;
@@ -68,6 +81,19 @@ public Animator transitionAnimator;
     }
         public void ShowCustomPanel()
     {
+        raceCarPanel.SetActive(false);
+        prometheusPanel.SetActive(false);
+        monstertruckPanel.SetActive(false);
+        sportCarPanel.SetActive(false);
+        AmbulancePanel.SetActive(false);
+        SportRacingCarPanel.SetActive(false);
+        PoliceMonsterTruckPanel.SetActive(false);
+        CicePanel.SetActive(false);
+        BusPanel.SetActive(false);
+        RubyPanel.SetActive(false);
+        JeepPanel.SetActive(false);
+        FiretruckPanel.SetActive(false);
+        MicraRiccioPanel.SetActive(false);
         shopPanel.SetActive(false);
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
@@ -80,6 +106,98 @@ public Animator transitionAnimator;
     LoadOwnedCars();
     UpdateCarButtons();
 }
+public void ShowraceCarPanel()
+    {
+        raceCarPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+    public void ShowprometheusPanel()
+    {
+        prometheusPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowmonstertruckPanel()
+    {
+        monstertruckPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowMicraRiccioPanel()
+    {
+        MicraRiccioPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowsportCarPanel()
+    {
+        sportCarPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowAmbulancePanel()
+    {
+        AmbulancePanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowSportRacingCarPanel()
+    {
+        SportRacingCarPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowPoliceMonsterTruckPanel()
+    {
+        PoliceMonsterTruckPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowCicePanel()
+    {
+        CicePanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+       public void ShowBusPanel()
+    {
+        BusPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+           public void ShowRubyPanel()
+    {
+        RubyPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+           public void ShowJeepPanel()
+    {
+        JeepPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+           public void ShowFiretruckPanel()
+    {
+        FiretruckPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+    }
+
         public void OnShopButtonClicked()
 {
     UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
@@ -143,12 +261,26 @@ private void EnableCarButton(string carName)
     }
 }
 
-// Aggiorna i metodi SelectCar per usare PlayerPrefs
 public void SelectCar(string carName)
 {
+    // Salva il nome della macchina selezionata nelle PlayerPrefs
     PlayerPrefs.SetString("SelectedCar", carName);
+
+    // Imposta l'abilità "Invisibility" come l'abilità selezionata nelle PlayerPrefs
+    PlayerPrefs.SetString("SelectedAbility", "Invisibility");
+
+    // Salva le modifiche nelle PlayerPrefs
     PlayerPrefs.Save();
+
+    // Aggiorna i pulsanti delle macchine per riflettere la selezione corrente
     UpdateCarButtons();
+
+    // Trova l'istanza di AbilitySelection e chiama UpdateButtonColors
+    AbilitySelection abilitySelection = FindObjectOfType<AbilitySelection>();
+    if (abilitySelection != null)
+    {
+        abilitySelection.StartDelayedUpdateButtonColors();
+    }
 }
 
 private void UpdateCarButtons()

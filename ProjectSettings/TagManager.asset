@@ -5,6 +5,11 @@ TagManager:
   serializedVersion: 2
   tags:
   - TransitionController
+  - FxTemporaire
+  - SFX
+  - Music
+  - Wall
+  - AbilityButton
   layers:
   - Default
   - TransparentFX
