@@ -297,5 +297,18 @@ void ApplyShockwaveEffect()
 
     // Opzionale: Puoi istanziare un effetto visivo per l'onda d'urto qui
 }
+public void StartFlashbangEffect()
+{
+    photonView.RPC("ActivateFlashEffect", RpcTarget.Others);
+}
 
+[PunRPC]
+void ActivateFlashEffect()
+{
+    // Questo metodo verrà eseguito su tutti i client eccetto quello che ha invocato l'effetto.
+    // L'effetto reale sarà gestito lato client, quindi qui dovresti idealmente invocare un metodo
+    // che attiva l'effetto flashbang sull'interfaccia utente di ciascun giocatore.
+    // Nota: dato che non possiamo accedere direttamente al pannello UI da qui, useremo un evento o un callback.
+    FlashbangManager.Instance.TriggerFlashbangEffect(0.2f, 1f); // Durata e tempo di fade out sono esempi
+}
 }

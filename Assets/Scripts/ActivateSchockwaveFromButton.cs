@@ -12,7 +12,7 @@ public class ActivateShockwaveFromButton : MonoBehaviour
         shockwaveButton.onClick.AddListener(ActivateShockwave);
     }
 
-    void ActivateShockwave()
+   public void ActivateShockwave()
     {
         // Cerca tra tutti i PhotonView presenti nella scena
         foreach (var pv in FindObjectsOfType<PhotonView>())
