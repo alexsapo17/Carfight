@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI; // Importa il namespace per UI
+using System.Collections;
 
 public class SettingsManager : MonoBehaviour
 {
@@ -7,6 +8,9 @@ public class SettingsManager : MonoBehaviour
     public Button setup1Button; // Riferimento al pulsante per il setup 1
     public Button setup2Button; // Riferimento al pulsante per il setup 2
     private bool settingsPanelActive;
+    public Animator settingsPanelAnimator;
+
+    private bool isClosing = false;
 
     void Start()
     {
@@ -30,14 +34,33 @@ public class SettingsManager : MonoBehaviour
     }
 
     public void ToggleSettingsPanel()
+{
+    settingsPanelActive = !settingsPanelActive;
+    if (settingsPanelActive && !isClosing)
     {
-        settingsPanelActive = !settingsPanelActive;
-        settingsPanel.SetActive(settingsPanelActive);
-        if (settingsPanelActive)
-        {
-            UpdateButtonColors(); // Aggiorna i colori ogni volta che il pannello viene aperto
+        settingsPanel.SetActive(true);
+        UpdateButtonColors(); // Aggiorna i colori ogni volta che il pannello viene aperto
+        if(settingsPanelAnimator.HasState(0, Animator.StringToHash("SettingsPanelAnimation"))) {
+            settingsPanelAnimator.Play("SettingsPanelAnimation", -1, 0f); // Avvia l'animazione di apertura
         }
     }
+    else if (!settingsPanelActive && !isClosing)
+    {
+        StartCoroutine(CloseSettingsPanel());
+    }
+}
+
+IEnumerator CloseSettingsPanel()
+{
+    isClosing = true;
+    if(settingsPanelAnimator.HasState(0, Animator.StringToHash("SettingsPanelAnimationBack"))) {
+        settingsPanelAnimator.Play("SettingsPanelAnimationBack", -1, 0f); // Avvia l'animazione di chiusura
+    }
+    yield return new WaitForSeconds(0.5f); // Aspetta un secondo per assicurarti che l'animazione sia terminata
+    settingsPanel.SetActive(false); // Disattiva il pannello
+    isClosing = false;
+}
+
 
     public void ChooseSetup1()
     {

@@ -15,8 +15,9 @@ public GameObject collisionEffectPrefab;
     public GameObject controlDisableEffectPrefab;
     public GameObject sizeMassIncreaseEffectPrefab;
     public GameObject invisibilityEffectPrefab;
-    public float shockwaveRadius = 250f; // Raggio dell'onda d'urto
-    public float shockwaveForce = 8000f; // Forza dell'onda d'urto
+    private float shockwaveRadius = 10f; // Raggio dell'onda d'urto
+    private float shockwaveForce = 5000f; // Forza dell'onda d'urto
+  private Vector3 cubeRelativeOffset;
 
 
 
@@ -271,7 +272,7 @@ private IEnumerator DisableControlsForDuration(float duration)
         photonView.RPC("ApplyShockwaveEffect", RpcTarget.All);
     }
 
- [PunRPC]
+[PunRPC]
 void ApplyShockwaveEffect()
 {
     // Ottieni tutti i collider entro il raggio dell'onda d'urto
@@ -288,7 +289,9 @@ void ApplyShockwaveEffect()
                 // Calcola la direzione della forza da applicare
                 Vector3 forceDirection = hitCollider.transform.position - transform.position;
                 // Aggiungi una componente verticale alla forza
-                forceDirection += Vector3.up * shockwaveForce * 0.5f; // Aggiusta il moltiplicatore per controllare l'intensità della spinta verticale
+                forceDirection += Vector3.up * shockwaveForce * 0.5f ; // Aggiusta il moltiplicatore per controllare l'intensità della spinta verticale
+                // Aggiungi una componente orizzontale opposta alla direzione del giocatore che ha attivato l'onda d'urto
+                forceDirection += (hitCollider.transform.position - transform.position).normalized * shockwaveForce ; 
 
                 rb.AddForce(forceDirection.normalized * shockwaveForce, ForceMode.Impulse);
             }
@@ -297,18 +300,69 @@ void ApplyShockwaveEffect()
 
     // Opzionale: Puoi istanziare un effetto visivo per l'onda d'urto qui
 }
+
 public void StartFlashbangEffect()
 {
     photonView.RPC("ActivateFlashEffect", RpcTarget.Others);
 }
 
-[PunRPC]
+ [PunRPC]
 void ActivateFlashEffect()
 {
     // Questo metodo verrà eseguito su tutti i client eccetto quello che ha invocato l'effetto.
-    // L'effetto reale sarà gestito lato client, quindi qui dovresti idealmente invocare un metodo
-    // che attiva l'effetto flashbang sull'interfaccia utente di ciascun giocatore.
-    // Nota: dato che non possiamo accedere direttamente al pannello UI da qui, useremo un evento o un callback.
+
     FlashbangManager.Instance.TriggerFlashbangEffect(0.2f, 1f); // Durata e tempo di fade out sono esempi
 }
+public void ActivateCubeEffect(GameObject cubePrefab, float cubeDuration, Vector3 offsetDistance, Vector3 cubeScale)
+{
+    // Calcola la posizione iniziale del cubo vicino al giocatore
+    Vector3 cubePosition = transform.position + transform.forward * offsetDistance.z;
+
+    // Calcola l'offset relativo del cubo rispetto al giocatore
+    cubeRelativeOffset = cubePosition - transform.position;
+
+    // Istanza il cubo vicino al giocatore
+    GameObject cubeInstance = Instantiate(cubePrefab, cubePosition, Quaternion.identity);
+
+    // Applica la scala al cubo
+    cubeInstance.transform.localScale = cubeScale;
+
+    // Avvia una coroutine per distruggere il cubo dopo un certo periodo di tempo
+    StartCoroutine(DestroyCubeAfterDelay(cubeInstance, cubeDuration));
+
+    // Avvia una coroutine per far seguire il giocatore al cubo
+    StartCoroutine(FollowPlayer(cubeInstance));
+}
+
+
+private IEnumerator FollowPlayer(GameObject cube)
+{
+    while (true)
+    {
+        // Calcola la posizione desiderata del cubo mantenendo l'offset relativo rispetto al giocatore
+        Vector3 targetPosition = transform.position + cubeRelativeOffset;
+
+        // Imposta direttamente la posizione del cubo alla posizione desiderata
+        cube.transform.position = targetPosition;
+
+        // Imposta direttamente la rotazione del cubo alla rotazione del giocatore
+        cube.transform.rotation = transform.rotation;
+
+        yield return null; // Attendi fino al prossimo frame
+    }
+}
+
+
+
+private IEnumerator DestroyCubeAfterDelay(GameObject cube, float delay)
+{
+    yield return new WaitForSeconds(delay);
+
+    // Distruggi il cubo dopo il periodo di tempo specificato
+    if (cube != null)
+    {
+        Destroy(cube);
+    }
+}
+
 }

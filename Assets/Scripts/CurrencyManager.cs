@@ -175,8 +175,15 @@ public void RefundCoins(int amount, Action onComplete)
     {
         playerGems += amount;
         SaveGems();
-        UpdateGemsUI();
+    if (gemsText != null)
+    {
+        SlotMachineEffect slotMachineEffect = gemsText.GetComponent<SlotMachineEffect>();
+        if (slotMachineEffect != null)
+        {
+            slotMachineEffect.AnimateText(playerGems - amount, playerGems);
+        }
     }
+        }
 
     public void UpdateGemsUI()
     {

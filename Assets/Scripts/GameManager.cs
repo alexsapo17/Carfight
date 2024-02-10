@@ -29,6 +29,7 @@ public Camera mainCamera;
 public Image handbrakeButton; 
 public Image throttleButton;
 public Image reverseButton;
+public RectTransform abilityButtons;
 public HorizontalJoystick horizontalJoystick;
     public RectTransform button1RectTransform; // Assicurati di assegnare questi nel Unity Inspector
     public RectTransform button2RectTransform;
@@ -271,6 +272,11 @@ RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
 if (rbRectTransform != null)
 {
     rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+}
+RectTransform abilityRectTransform = abilityButtons.GetComponent<RectTransform>();
+if (abilityRectTransform != null)
+{
+    abilityRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
     }
         

@@ -484,6 +484,7 @@ if(Input.GetKey(KeyCode.D)){
       AnimateWheelMeshes();
 
     }
+     
 
 }
 void Update()
@@ -501,7 +502,7 @@ void Update()
 void UpdateNetworkedPlayerPositionAndRotation()
 {
     // Assicurati che questo codice venga eseguito solo per i giocatori non locali
-    if (!photonView.IsMine)
+   if (!photonView.IsMine)
     {
 
     rb.position = Vector3.MoveTowards(rb.position, targetPosition, Time.fixedDeltaTime);

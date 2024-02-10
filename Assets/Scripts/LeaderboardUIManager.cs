@@ -33,7 +33,7 @@ public class LeaderboardUIManager : MonoBehaviour
         }
     }
 
-    public void LoadAndShowLeaderboard(int levelId)
+  public void LoadAndShowLeaderboard(int levelId)
 {
     scrollView.SetActive(false); // Nasconde lo ScrollView
     leaderboardPanel.SetActive(true); // Mostra la leaderboard
@@ -51,7 +51,6 @@ public class LeaderboardUIManager : MonoBehaviour
             else if (task.IsCompleted)
             {
                 DataSnapshot snapshot = task.Result;
-                string leaderboardDisplay = $"Top 5 Tempi - Livello {levelId}:\n";
 
                 List<KeyValuePair<string, double>> topTimes = new List<KeyValuePair<string, double>>();
 
@@ -71,6 +70,8 @@ public class LeaderboardUIManager : MonoBehaviour
                 // Prendi solo i primi 5 tempi
                 topTimes = topTimes.Take(5).ToList();
 
+                string leaderboardDisplay = "";
+
                 foreach (var entry in topTimes)
                 {
                     string nickname = entry.Key;
@@ -83,6 +84,7 @@ public class LeaderboardUIManager : MonoBehaviour
             }
         });
 }
+
 
 
     public void HideLeaderboard()

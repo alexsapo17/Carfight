@@ -1946,6 +1946,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4364354964670000193, guid: 3801a320e9ae1bf44a14efa194c86c3f, type: 3}
+      propertyPath: InitialModule.startColor.maxColor.a
+      value: 0.46666667
+      objectReference: {fileID: 0}
     - target: {fileID: 4364354964670000254, guid: 3801a320e9ae1bf44a14efa194c86c3f, type: 3}
       propertyPath: m_Materials.Array.size
       value: 1
@@ -2261,6 +2265,7 @@ MonoBehaviour:
   settingsPanel: {fileID: 1873183783}
   setup1Button: {fileID: 1656541249}
   setup2Button: {fileID: 1961968889}
+  settingsPanelAnimator: {fileID: 1873183787}
 --- !u!4 &204802124
 Transform:
   m_ObjectHideFlags: 0
@@ -5865,17 +5870,17 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 401072882}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2.6793, y: 2.6793, z: 2.6793}
+  m_LocalScale: {x: 2.3115346, y: 2.3115346, z: 2.3115346}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1000361661}
-  m_Father: {fileID: 516933163}
+  m_Father: {fileID: 1873183784}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 618.78, y: -222}
+  m_AnchoredPosition: {x: -255, y: -549}
   m_SizeDelta: {x: 160, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &401072884
@@ -7569,7 +7574,6 @@ RectTransform:
   m_Children:
   - {fileID: 1165784657}
   - {fileID: 1310044696}
-  - {fileID: 401072883}
   - {fileID: 729357934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -27295,6 +27299,7 @@ GameObject:
   - component: {fileID: 1873183784}
   - component: {fileID: 1873183786}
   - component: {fileID: 1873183785}
+  - component: {fileID: 1873183787}
   m_Layer: 5
   m_Name: SettingsPanel
   m_TagString: Untagged
@@ -27318,11 +27323,12 @@ RectTransform:
   - {fileID: 1961968892}
   - {fileID: 1779619860}
   - {fileID: 1052978775}
+  - {fileID: 401072883}
   m_Father: {fileID: 964844638}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -512, y: -82}
+  m_AnchoredPosition: {x: -505, y: -82}
   m_SizeDelta: {x: -1623.488, y: -264.206}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1873183785
@@ -27363,6 +27369,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1873183783}
   m_CullTransparentMesh: 1
+--- !u!95 &1873183787
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1873183783}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7374101a4cfbb4a4082c91e970480c1f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1001 &1889369683
 PrefabInstance:
   m_ObjectHideFlags: 0
