@@ -35,6 +35,8 @@ public class LevelManager : MonoBehaviour
 public Sprite emptyStarSprite; // Sprite per la stella vuota
 public Text gemsText;
 public Animator transitionAnimator;
+private InterstitialAd interstitialAd;
+
 
 
     void Start()
@@ -60,6 +62,8 @@ public Animator transitionAnimator;
     
         };
         UpdateGemsUI();
+            interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
+
     }
 
     public void RestartLevel()
@@ -69,6 +73,10 @@ public Animator transitionAnimator;
         gameControlsUI.SetActive(true);
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
     childCanvasImage.gameObject.SetActive(false);
+       if (interstitialAd != null)
+    {
+        interstitialAd.LoadAd();
+    }
     }
 
 public void LoadNextLevel()
@@ -94,7 +102,10 @@ public void LoadNextLevel()
         return;
     }
 
-
+   if (interstitialAd != null)
+    {
+        interstitialAd.LoadAd();
+    }
 }
 
 private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
@@ -141,6 +152,10 @@ public void LoadLevel(int levelIndex)
     levelsPanel.SetActive(false);
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
     childCanvasImage.gameObject.SetActive(false);
+       if (interstitialAd != null)
+    {
+        interstitialAd.LoadAd();
+    }
 }
     public void EliminatedPlayer()
     {
@@ -256,6 +271,11 @@ gameControlsUI.SetActive(false);
     progressManager.FinishLevel(currentLevelIndex, raceTimer);
     SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
     childCanvasImage.gameObject.SetActive(true);
+        // Mostra l'annuncio interstiziale quando finisci il livello
+    if (interstitialAd != null)
+    {
+        interstitialAd.ShowAd();
+    }
 
 }
 
