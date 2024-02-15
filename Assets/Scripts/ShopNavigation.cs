@@ -9,9 +9,12 @@ using UnityEngine.UI;
 public class ShopNavigation : MonoBehaviour
 {
     public GameObject shopPanel; // Pannello principale dello shop
+    public GameObject realShopPanel;
     public GameObject carPanel;   // Pannello per le macchine
     public GameObject skillPanel; // Pannello per le abilità
     public GameObject customPanel; // Pannello personalizzazione
+    public GameObject parameterPanel; 
+
      public GameObject raceCarPanel;
      public GameObject prometheusPanel;
      public GameObject monstertruckPanel;
@@ -60,24 +63,55 @@ public Animator transitionAnimator;
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
         customPanel.SetActive(false);
+                parameterPanel.SetActive(false);
+                realShopPanel.SetActive(false);
+
+    }
+        public void ShowRealShopPanel()
+    {
+        shopPanel.SetActive(false);
+        realShopPanel.SetActive(true);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+       parameterPanel.SetActive(false);
+
+    }
+    public void ShowParameterPanel()
+    {
+                        realShopPanel.SetActive(false);
+
+        shopPanel.SetActive(false);
+        carPanel.SetActive(false);
+        skillPanel.SetActive(false);
+        customPanel.SetActive(false);
+        parameterPanel.SetActive(true);
     }
 
     // Metodo per mostrare il pannello delle macchine
     public void ShowCarPanel()
     {
+                        realShopPanel.SetActive(false);
+
         shopPanel.SetActive(false);
         carPanel.SetActive(true);
         skillPanel.SetActive(false);
         customPanel.SetActive(false);
+                parameterPanel.SetActive(false);
+
     }
 
     // Metodo per mostrare il pannello delle abilità
     public void ShowSkillPanel()
     {
+                        realShopPanel.SetActive(false);
+
         shopPanel.SetActive(false);
         carPanel.SetActive(false);
         skillPanel.SetActive(true);
         customPanel.SetActive(false);
+                parameterPanel.SetActive(false);
+
     }
         public void ShowCustomPanel()
     {
@@ -92,12 +126,16 @@ public Animator transitionAnimator;
         BusPanel.SetActive(false);
         RubyPanel.SetActive(false);
         JeepPanel.SetActive(false);
+                        realShopPanel.SetActive(false);
+
         FiretruckPanel.SetActive(false);
         MicraRiccioPanel.SetActive(false);
         shopPanel.SetActive(false);
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
         customPanel.SetActive(true);
+                parameterPanel.SetActive(false);
+
            foreach (var button in carButtons)
     {
         button.SetActive(false);
