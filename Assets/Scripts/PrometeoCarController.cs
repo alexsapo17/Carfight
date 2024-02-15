@@ -1,11 +1,8 @@
 /*
-MESSAGE FROM CREATOR: This script was coded by Mena. You can use it in your games either these are commercial or
-personal projects. You can even add or remove functions as you wish. However, you cannot sell copies of this
-script by itself, since it is originally distributed as a free product.
-I wish you the best for your project. Good luck!
+MESSAGE FROM CREATOR: The physics was coded by Mena. You can use it in your games either these are commercial or
+personal projects.
 
-P.S: If you need more cars, you can check my other vehicle assets on the Unity Asset Store, perhaps you could find
-something useful for your game. Best regards, Mena.
+
 */
 
 using System;
@@ -255,7 +252,7 @@ public GameObject cameraPrefab;
             RLWParticleSystem.Stop();
           }
           if(RRWParticleSystem != null){
-            RRWParticleSystem.Stop();
+            RRWParticleSystem.Stop(); 
           }
           if(RLWTireSkid != null){
             RLWTireSkid.emitting = false;

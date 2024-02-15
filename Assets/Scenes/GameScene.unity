@@ -491,7 +491,7 @@ MonoBehaviour:
   handbrakeButton: {fileID: 1944465081}
   throttleButton: {fileID: 2032418187}
   reverseButton: {fileID: 1176987381}
-  abilityButtons: {fileID: 0}
+  abilityButtons: {fileID: 1086357317}
   horizontalJoystick: {fileID: 421249299}
   button1RectTransform: {fileID: 1176987380}
   button2RectTransform: {fileID: 2032418185}
@@ -4622,7 +4622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!95 &1833762036
 Animator:
   serializedVersion: 5

@@ -1357,6 +1357,7 @@ GameObject:
   - component: {fileID: 3003197371481816387}
   - component: {fileID: -8462021364801686889}
   - component: {fileID: 3582940447370829174}
+  - component: {fileID: -582039434849058421}
   m_Layer: 0
   m_Name: sportCar
   m_TagString: Player
@@ -1555,6 +1556,18 @@ MonoBehaviour:
   controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+--- !u!114 &-582039434849058421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8968474430482601261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &24125126494107662
 PrefabInstance:
   m_ObjectHideFlags: 0

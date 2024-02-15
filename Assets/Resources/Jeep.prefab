@@ -1152,6 +1152,7 @@ GameObject:
   - component: {fileID: 1738341089636453443}
   - component: {fileID: 7913376105863472777}
   - component: {fileID: 5969270404302788803}
+  - component: {fileID: -2181179214720962329}
   m_Layer: 0
   m_Name: Jeep
   m_TagString: Player
@@ -1308,8 +1309,6 @@ MonoBehaviour:
   controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
-  shockwaveRadius: 5
-  shockwaveForce: 1000
 --- !u!65 &7913376105863472777
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1352,6 +1351,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.4849606, y: 1.9051883, z: 6.4311056}
   m_Center: {x: -0.02262986, y: 4.887997, z: -1.8103687}
+--- !u!114 &-2181179214720962329
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2256690188107784849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2274084195185044859
 GameObject:
   m_ObjectHideFlags: 0

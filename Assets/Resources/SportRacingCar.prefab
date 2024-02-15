@@ -1909,6 +1909,7 @@ GameObject:
   - component: {fileID: 9003726877204694324}
   - component: {fileID: 4788957813608539324}
   - component: {fileID: 5560490197467491627}
+  - component: {fileID: -6656418175195521810}
   m_Layer: 0
   m_Name: SportRacingCar
   m_TagString: Player
@@ -2087,6 +2088,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: -8890598164268038138, guid: f9d1db90fd363ff4cbe9c9cc9d695439, type: 3}
+--- !u!114 &-6656418175195521810
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6637994253096685755}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7185009337162595404
 GameObject:
   m_ObjectHideFlags: 0

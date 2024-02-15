@@ -415,6 +415,7 @@ GameObject:
   - component: {fileID: 4154575162031043463}
   - component: {fileID: 7538540072426747019}
   - component: {fileID: 469180326451009028}
+  - component: {fileID: 5314419717516801959}
   m_Layer: 0
   m_Name: raceCar
   m_TagString: Player
@@ -575,8 +576,6 @@ MonoBehaviour:
   controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
-  shockwaveRadius: 5
-  shockwaveForce: 1000
 --- !u!65 &4154575162031043463
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -640,6 +639,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.3620375, y: 0.17901194, z: 2.4865816}
   m_Center: {x: -0.0038916222, y: 0.94649315, z: 0.7432894}
+--- !u!114 &5314419717516801959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538136458312656504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1660037796603768812
 GameObject:
   m_ObjectHideFlags: 0

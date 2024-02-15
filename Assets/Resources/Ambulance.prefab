@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 2325543317712937288}
   - component: {fileID: 345022231544353507}
   - component: {fileID: 362385322006756527}
+  - component: {fileID: 3376374366122962122}
   m_Layer: 0
   m_Name: Ambulance
   m_TagString: Player
@@ -263,6 +264,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 2.472248, y: 2.444963, z: 5.612442}
   m_Center: {x: -0.0017080307, y: 1.0345795, z: -0.28403342}
+--- !u!114 &3376374366122962122
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1169414741479667885}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1275147674847366503
 GameObject:
   m_ObjectHideFlags: 0

@@ -13,7 +13,6 @@ public class ShopNavigation : MonoBehaviour
     public GameObject carPanel;   // Pannello per le macchine
     public GameObject skillPanel; // Pannello per le abilità
     public GameObject customPanel; // Pannello personalizzazione
-    public GameObject parameterPanel; 
 
      public GameObject raceCarPanel;
      public GameObject prometheusPanel;
@@ -63,7 +62,6 @@ public Animator transitionAnimator;
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
         customPanel.SetActive(false);
-                parameterPanel.SetActive(false);
                 realShopPanel.SetActive(false);
 
     }
@@ -74,18 +72,7 @@ public Animator transitionAnimator;
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
         customPanel.SetActive(false);
-       parameterPanel.SetActive(false);
 
-    }
-    public void ShowParameterPanel()
-    {
-                        realShopPanel.SetActive(false);
-
-        shopPanel.SetActive(false);
-        carPanel.SetActive(false);
-        skillPanel.SetActive(false);
-        customPanel.SetActive(false);
-        parameterPanel.SetActive(true);
     }
 
     // Metodo per mostrare il pannello delle macchine
@@ -97,7 +84,6 @@ public Animator transitionAnimator;
         carPanel.SetActive(true);
         skillPanel.SetActive(false);
         customPanel.SetActive(false);
-                parameterPanel.SetActive(false);
 
     }
 
@@ -110,7 +96,6 @@ public Animator transitionAnimator;
         carPanel.SetActive(false);
         skillPanel.SetActive(true);
         customPanel.SetActive(false);
-                parameterPanel.SetActive(false);
 
     }
         public void ShowCustomPanel()
@@ -134,7 +119,6 @@ public Animator transitionAnimator;
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
         customPanel.SetActive(true);
-                parameterPanel.SetActive(false);
 
            foreach (var button in carButtons)
     {
@@ -278,8 +262,8 @@ void LoadOnlineScene()
                 foreach (DataSnapshot car in snapshot.Children)
                 {
                     string carName = car.Key;
-                    bool isOwned = (bool)car.Value;
-                    if (isOwned)
+                    bool isOwned = (bool)car.Value; 
+                    if (isOwned) 
                     {
                         EnableCarButton(carName);
                     }

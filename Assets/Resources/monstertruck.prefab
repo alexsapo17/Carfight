@@ -1091,6 +1091,7 @@ GameObject:
   - component: {fileID: 166127625928683837}
   - component: {fileID: 397324606465609871}
   - component: {fileID: 2105650253888232106}
+  - component: {fileID: 8721788105801202203}
   m_Layer: 0
   m_Name: monstertruck
   m_TagString: Player
@@ -1290,6 +1291,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.05037167, y: 0.011476513, z: 0.053808592}
   m_Center: {x: -0.0002684423, y: 0.0125544565, z: -0.0048431396}
+--- !u!114 &8721788105801202203
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6556457136227218487}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6596237029668186798
 GameObject:
   m_ObjectHideFlags: 0
