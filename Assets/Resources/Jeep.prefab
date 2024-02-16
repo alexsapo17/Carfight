@@ -1153,7 +1153,6 @@ GameObject:
   - component: {fileID: 7913376105863472777}
   - component: {fileID: 5969270404302788803}
   - component: {fileID: -2181179214720962329}
-  - component: {fileID: -799780505729500550}
   m_Layer: 0
   m_Name: Jeep
   m_TagString: Player
@@ -1364,19 +1363,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-799780505729500550
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2256690188107784849}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothingDelay: 5
 --- !u!1 &2274084195185044859
 GameObject:
   m_ObjectHideFlags: 0

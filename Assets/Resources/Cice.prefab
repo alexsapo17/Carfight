@@ -566,7 +566,6 @@ GameObject:
   - component: {fileID: 7079673978037517084}
   - component: {fileID: 6529547547810681818}
   - component: {fileID: -971032871882706191}
-  - component: {fileID: -5404471497466430427}
   m_Layer: 0
   m_Name: Cice
   m_TagString: Player
@@ -800,19 +799,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-5404471497466430427
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4599030220371932789}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SmoothingDelay: 5
 --- !u!1 &4618476528223131813
 GameObject:
   m_ObjectHideFlags: 0
