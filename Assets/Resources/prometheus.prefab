@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: -1154159410248921022}
   - component: {fileID: 1240689442633784209}
   - component: {fileID: 6661686100636363796}
+  - component: {fileID: -7905618991671099911}
   m_Layer: 0
   m_Name: prometheus
   m_TagString: Player
@@ -241,6 +242,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-7905618991671099911
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642287924342879162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35144820bcc25444bb8f0fd767d9423e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SmoothingDelay: 5
 --- !u!1 &869153669409036604
 GameObject:
   m_ObjectHideFlags: 0
