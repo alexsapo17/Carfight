@@ -61,6 +61,7 @@ MonoBehaviour:
   - SendClientMessageRPC
   - SendCollisionRPC
   - SendServerMessageRPC
+  - ReceiveInputRPC
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -125,12 +125,12 @@ public GameObject cameraPrefab;
        private bool isFrictionIncreased = false;
     private WheelFrictionCurve originalFrictionCurve;
    [SerializeField]
-    private HorizontalJoystick horizontalJoystick;
-
+private HorizontalJoystick horizontalJoystick;
     private Rigidbody rb;  // Dichiarazione di rb come variabile di classe
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
+
 
  public bool controlsEnabled = true; // Variabile per controllare se i controlli sono abilitati
 
@@ -178,9 +178,8 @@ public GameObject cameraPrefab;
     {
  controlsEnabled = false;
 
-              horizontalJoystick = FindObjectOfType<HorizontalJoystick>();
 
-
+horizontalJoystick = FindObjectOfType<HorizontalJoystick>();
    
       photonView = GetComponent<PhotonView>();
       //In this part, we set the 'carRigidbody' value with the Rigidbody attached to this
@@ -507,6 +506,21 @@ void UpdateNetworkedPlayerPositionAndRotation()
 
     }
 }
+
+public void ApplyInput(PlayerSyncStructs.Inputs inputs)
+{
+    // Converti gli input ricevuti in azioni del tuo veicolo
+    // Ad esempio:
+    if(inputs.stickMove.x < 0) TurnLeft(Mathf.Abs(inputs.stickMove.x));
+    else if(inputs.stickMove.x > 0) TurnRight(inputs.stickMove.x);
+
+    if(inputs.stickMove.y > 0) GoForward();
+    else if(inputs.stickMove.y < 0) GoReverse();
+
+    if(inputs.submitButon == 1) Handbrake();
+}
+
+
     public void SetKinematic(bool isKinematic)
     {
         carRigidbody.isKinematic = isKinematic;

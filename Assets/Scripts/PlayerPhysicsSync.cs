@@ -21,7 +21,8 @@ public class PlayerPhysicsSync : MonoBehaviourPun
     private Queue<PlayerSyncStructs.StateMessage> client_state_msgs;
     public GameObject playerPrefab;
     private Rigidbody proxy_client_player;
-
+private HorizontalJoystick horizontalJoystick;
+PrometeoTouchInput handbrakePTI;
     private uint client_tick_accumulator; 
 
     // server specific
@@ -42,6 +43,10 @@ public class PlayerPhysicsSync : MonoBehaviourPun
         this.server_tick_number = 0;
         this.server_tick_accumulator = 0;
         this.server_input_msgs = new Queue<PlayerSyncStructs.InputMessage>();
+              horizontalJoystick = FindObjectOfType<HorizontalJoystick>();
+       GameObject handbrakeButton = GameObject.Find("HandbrakeButton");
+        if (handbrakeButton != null)
+            handbrakePTI = handbrakeButton.GetComponent<PrometeoTouchInput>();
 
         Application.targetFrameRate = 100; //limit frame rate to 100 when in online so we don't overdue our message limits since the snapshot rate is related to frame rate
         // THIS CAN AND SHOULD BE FRAME INDEPENDENT TO REMOVE THIS RESTRICTION OTHERWISE YOU WILL OVERUSE YOUR NETWORK BANDWITH
@@ -310,7 +315,42 @@ public class PlayerPhysicsSync : MonoBehaviourPun
 
         this.server_tick_number = server_tick_number;
         this.server_tick_accumulator = server_tick_accumulator;
+
+if (photonView.IsMine)
+{
+    // Raccogli input da inviare
+    PlayerSyncStructs.Inputs inputs = new PlayerSyncStructs.Inputs
+    {
+        stickMove = new Vector2(horizontalJoystick.GetHorizontal(), horizontalJoystick.GetVertical()),
+        submitButon = handbrakePTI.buttonPressed ? 1 : 0,
+    };
+
+    // Invia gli input raccolti
+    SendInput(inputs);
+}
+
+
     }
+ void SendInput(PlayerSyncStructs.Inputs inputs)
+{
+    photonView.RPC("ReceiveInputRPC", RpcTarget.All, inputs.stickMove, inputs.submitButon);
+}
+
+[PunRPC]
+void ReceiveInputRPC(Vector2 stickMove, int submitButton)
+{
+    // Converti gli input ricevuti in un oggetto Inputs
+    PlayerSyncStructs.Inputs receivedInputs = new PlayerSyncStructs.Inputs
+    {
+        stickMove = stickMove,
+        submitButon = submitButton,
+    };
+
+    // Applica gli input ricevuti
+    GetComponent<PrometeoCarController>().ApplyInput(receivedInputs);
+}
+
+
 
     private void OnDisable()
     {
