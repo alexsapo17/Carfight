@@ -64,9 +64,7 @@ public class PrometeoCarController : MonoBehaviour
       [Space(10)]
       public GameObject rearRightMesh;
       public WheelCollider rearRightCollider;
-         public float positionLerpRate = 5f;
-    public float rotationLerpRate = 10f;
-
+    
 public GameObject cameraPrefab;
  
 
@@ -131,6 +129,9 @@ private HorizontalJoystick horizontalJoystick;
     private Vector3 targetPosition;
     private Quaternion targetRotation;
 
+public float positionLerpRate = 15;
+public float rotationLerpRate = 10;
+public bool applyVelocityPrediction = true;
 
  public bool controlsEnabled = true; // Variabile per controllare se i controlli sono abilitati
 
@@ -325,26 +326,7 @@ public void DestroyCameraInstance() {
 }
 
 
- public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
-{
-    if (stream.IsWriting)
-    {
-        stream.SendNext(rb.position);
-        stream.SendNext(rb.rotation);
-        stream.SendNext(rb.velocity);
-        stream.SendNext(rb.angularVelocity);
-    }
-    else
-    {
-        targetPosition = (Vector3)stream.ReceiveNext();
-        targetRotation = (Quaternion)stream.ReceiveNext();
-        rb.velocity = (Vector3)stream.ReceiveNext();
-        rb.angularVelocity = (Vector3)stream.ReceiveNext();
-
-        float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-        targetPosition += rb.velocity * lag;
-    }
-}
+ 
 
   void FixedUpdate()
 {
@@ -480,7 +462,11 @@ if(Input.GetKey(KeyCode.D)){
       AnimateWheelMeshes();
 
     }
-     
+         if (!photonView.IsMine) {
+        // Interpola verso la posizione e rotazione target ricevute dalla rete
+        rb.position = Vector3.Lerp(rb.position, targetPosition, Time.fixedDeltaTime * positionLerpRate);
+        rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, Time.fixedDeltaTime * rotationLerpRate);
+    }
 
 }
 void Update()
@@ -489,23 +475,35 @@ void Update()
     {
         HandleHandbrakeInput();
     }
-        else
-    {
-        UpdateNetworkedPlayerPositionAndRotation();
-    }
+
 
 }
-void UpdateNetworkedPlayerPositionAndRotation()
-{
-    // Assicurati che questo codice venga eseguito solo per i giocatori non locali
-   if (!photonView.IsMine)
-    {
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+    if (stream.IsWriting) {
+        // Invia i dati locali agli altri giocatori
+        stream.SendNext(rb.position);
+        stream.SendNext(rb.rotation);
+        stream.SendNext(rb.velocity);
+        stream.SendNext(rb.angularVelocity);
+    } else {
+        // Riceve i dati dagli altri giocatori
+        targetPosition = (Vector3)stream.ReceiveNext();
+        targetRotation = (Quaternion)stream.ReceiveNext();
+        Vector3 velocity = (Vector3)stream.ReceiveNext();
+        Vector3 angularVelocity = (Vector3)stream.ReceiveNext();
 
-    rb.position = Vector3.MoveTowards(rb.position, targetPosition, Time.fixedDeltaTime);
-    rb.rotation = Quaternion.RotateTowards(rb.rotation, targetRotation, Time.fixedDeltaTime * 100.0f);
+        // Aggiustamento per la latenza di rete
+        float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+        targetPosition += velocity * lag;
 
+        // Opzionale: applica la velocità e la velocità angolare per predire il movimento
+        if (applyVelocityPrediction) {
+            rb.velocity = velocity;
+            rb.angularVelocity = angularVelocity;
+        }
     }
 }
+
 
 public void ApplyInput(PlayerSyncStructs.Inputs inputs)
 {

@@ -25,40 +25,49 @@ public class AbilityButton : MonoBehaviour
         }
     }
 
-    public void PurchaseAbility()
+   public void PurchaseAbility()
+{
+    if (!isUnlocked)
     {
-        // Verifica se il pulsante è già stato sbloccato
-        if (!isUnlocked)
+        if (CurrencyManager.Instance.HasEnoughCoins(coinsCost) && CurrencyManager.Instance.HasEnoughGems(gemsCost))
         {
-            // Verifica se il giocatore ha abbastanza monete o gemme per l'acquisto
-            if (CurrencyManager.Instance.HasEnoughCoins(coinsCost) && CurrencyManager.Instance.HasEnoughGems(gemsCost))
+            CurrencyManager.Instance.ModifyCoins(-coinsCost);
+            CurrencyManager.Instance.ModifyGems(-gemsCost);
+
+            blockedImage.SetActive(false);
+            buyButton.gameObject.SetActive(false);
+            GetComponent<Button>().interactable = true;
+
+            PlayerPrefs.SetInt(GetButtonUnlockKey(), 1);
+            PlayerPrefs.Save();
+
+            Debug.Log("Pulsante abilità acquistato con successo!");
+            isUnlocked = true;
+
+            // Istanzia il prefab come figlio del GameObject attuale e con la stessa posizione del buyButton
+            GameObject animatedImagePrefab = Resources.Load<GameObject>("GoldExplosionAnim");
+            if (animatedImagePrefab != null)
             {
-                // Sottrai il costo dall'inventario del giocatore
-                CurrencyManager.Instance.ModifyCoins(-coinsCost);
-                CurrencyManager.Instance.ModifyGems(-gemsCost);
-
-                // Disattiva l'immagine bloccata e abilita il pulsante
-                blockedImage.SetActive(false);
-                buyButton.gameObject.SetActive(false);
-                GetComponent<Button>().interactable = true;
-
-                // Salva lo sblocco del pulsante nelle PlayerPrefs
-                PlayerPrefs.SetInt(GetButtonUnlockKey(), 1);
-                PlayerPrefs.Save();
-
-                Debug.Log("Pulsante abilità acquistato con successo!");
-                isUnlocked = true;
+                GameObject animatedImageInstance = Instantiate(animatedImagePrefab, buyButton.transform.position, Quaternion.identity, this.transform);
+                Destroy(animatedImageInstance, 1f);
+                // Aggiusta la posizione locale se necessario, come nel caso del ParameterSliderUnlocker
             }
             else
             {
-                Debug.Log("Fondi insufficienti per l'acquisto del pulsante abilità!");
+                Debug.LogError("Il prefab AnimatedImagePrefab non è stato trovato nella cartella Resources.");
             }
         }
         else
         {
-            Debug.Log("Il pulsante abilità è già stato sbloccato!");
+            Debug.Log("Fondi insufficienti per l'acquisto del pulsante abilità!");
         }
     }
+    else
+    {
+        Debug.Log("Il pulsante abilità è già stato sbloccato!");
+    }
+}
+
 
     private bool IsButtonUnlocked()
     {
