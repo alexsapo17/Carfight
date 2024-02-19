@@ -278,6 +278,7 @@ if (abilityRectTransform != null)
 {
     abilityRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
+ShowEliminatedText();
     }
         
 
@@ -412,7 +413,7 @@ if (rbRectTransform != null)
 {
     rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-
+ShowWinText();
 
             }
             else
@@ -439,9 +440,69 @@ if (rbRectTransform != null)
             }
 
             // Inizia il processo di ritorno alla lobby dopo un breve ritardo
-            StartCoroutine(ReturnToLobbyAfterDelay(5)); // Ritardo di 5 secondi
+            StartCoroutine(ReturnToLobbyAfterDelay(10)); // Ritardo di 5 secondi
         }
     }
+private void ShowEliminatedText()
+{
+    var eliminatedTextPrefab = Resources.Load<GameObject>("2DEliminatedAnimation");
+    if (eliminatedTextPrefab != null)
+    {
+        var canvas = GameObject.Find("Canvas"); // Trova il Canvas nella scena
+        if (canvas != null)
+        {
+            // Istanziare il prefab come figlio del Canvas
+            var instance = Instantiate(eliminatedTextPrefab);
+            instance.transform.SetParent(canvas.transform, false); // Imposta il Canvas come genitore
+
+            // Imposta la posizione usando RectTransform
+            var rectTransform = instance.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(-200, 20); // Centrato e leggermente a sinistra
+
+            // Distruggere il prefab dopo un certo numero di secondi
+            Destroy(instance, 5); // Regolabile
+        }
+        else
+        {
+            Debug.LogError("Canvas non trovato.");
+        }
+    }
+    else
+    {
+        Debug.LogError("Prefab 2DEliminatedAnimation non trovato.");
+    }
+}
+
+private void ShowWinText()
+{
+    var winTextPrefab = Resources.Load<GameObject>("YouWinAnimation");
+    if (winTextPrefab != null)
+    {
+        var canvas = GameObject.Find("Canvas"); // Trova il Canvas nella scena
+        if (canvas != null)
+        {
+            // Istanziare il prefab come figlio del Canvas
+            var instance = Instantiate(winTextPrefab);
+            instance.transform.SetParent(canvas.transform, false); // Imposta il Canvas come genitore
+
+            // Imposta la posizione usando RectTransform
+            var rectTransform = instance.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(-200, 20); // Centrato e leggermente a sinistra
+
+            // Distruggere il prefab dopo un certo numero di secondi
+            Destroy(instance, 5); // Regolabile
+        }
+        else
+        {
+            Debug.LogError("Canvas non trovato.");
+        }
+    }
+    else
+    {
+        Debug.LogError("Prefab YouWinAnimation non trovato.");
+    }
+}
+
 
     IEnumerator ReturnToLobbyAfterDelay(float delay)
     {

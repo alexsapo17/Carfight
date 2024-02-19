@@ -10,7 +10,9 @@ public class DailyRewardButton : MonoBehaviour
     private Text countdownText; // Modifica per trovare automaticamente il componente
     private CurrencyManager currencyManager; // Modifica per trovare automaticamente il componente
     private DatabaseReference databaseReference;
-    private const int RewardAmount = 100;
+    private const int RewardAmount = 500;
+        private const int GemsRewardAmount = 5;
+
     private string userId;
     private DateTime? nextClaimTime;
  private Animator buttonAnimator;
@@ -30,6 +32,7 @@ public class DailyRewardButton : MonoBehaviour
         if (currencyManager == null) return;
 
         currencyManager.ModifyCoins(RewardAmount);
+        currencyManager.ModifyGems(GemsRewardAmount);
         await SaveLastClaimedTimeAsync(DateTime.UtcNow);
         await UpdateButtonStateAsync();
     }

@@ -46,7 +46,7 @@ public class ParameterSliderUnlocker : MonoBehaviour
         isUnlocked = true;
 
         // Istanzia il prefab come figlio del GameObject attuale e con la stessa posizione del buyButton
-        GameObject animatedImagePrefab = Resources.Load<GameObject>("GoldExplosionAnim");
+        GameObject animatedImagePrefab = Resources.Load<GameObject>("Line2DChargerBlue");
         if (animatedImagePrefab != null)
         {
             // Nota: Qui viene usata la posizione globale del buyButton per istanziare il prefab, ma poi il prefab diventa figlio di this.transform
