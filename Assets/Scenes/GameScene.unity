@@ -497,6 +497,9 @@ MonoBehaviour:
   button1RectTransform: {fileID: 1176987380}
   button2RectTransform: {fileID: 2032418185}
   transitionAnimator: {fileID: 1833762036}
+  eliminatedTextPrefab: {fileID: 2857141868016958497, guid: 9aad86183693d6a42a015d97803d3f30, type: 3}
+  winTextPrefab: {fileID: 7743785319762742595, guid: 98f2456ba45ff414298576f3b4a04d54, type: 3}
+  canvas: {fileID: 1144274277}
   rewardTiers:
   - playerCount: 1
     rewards: 96000000

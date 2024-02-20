@@ -44,8 +44,9 @@ public HorizontalJoystick horizontalJoystick;
  // public ArrowDirection arrowScript;
 public Animator transitionAnimator;
     public Dictionary<string, GameObject> carPrefabs;
-
-
+    public GameObject eliminatedTextPrefab;
+    public GameObject winTextPrefab;
+public Canvas canvas;
 
     [System.Serializable]
     public class RewardTier
@@ -278,6 +279,7 @@ if (abilityRectTransform != null)
 {
     abilityRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
+ShowEliminatedText();
     }
         
 
@@ -412,7 +414,7 @@ if (rbRectTransform != null)
 {
     rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-
+ShowWinText();
 
             }
             else
@@ -439,9 +441,49 @@ if (rbRectTransform != null)
             }
 
             // Inizia il processo di ritorno alla lobby dopo un breve ritardo
-            StartCoroutine(ReturnToLobbyAfterDelay(5)); // Ritardo di 5 secondi
+            StartCoroutine(ReturnToLobbyAfterDelay(10)); // Ritardo di 5 secondi
         }
     }
+private void ShowEliminatedText()
+    {
+        if (eliminatedTextPrefab != null && canvas != null)
+        {
+            // Istanziare il prefab come figlio del Canvas
+            GameObject instance = Instantiate(eliminatedTextPrefab, canvas.transform, false);
+
+            // Imposta la posizione usando RectTransform
+            RectTransform rectTransform = instance.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(-200, 20); // Centrato e leggermente a sinistra
+
+            // Distruggere il prefab dopo un certo numero di secondi
+            Destroy(instance, 5); // Regolabile
+        }
+        else
+        {
+            Debug.LogError("Prefab o Canvas non assegnati correttamente.");
+        }
+    }
+
+    private void ShowWinText()
+    {
+        if (winTextPrefab != null && canvas != null)
+        {
+            // Istanziare il prefab come figlio del Canvas
+            GameObject instance = Instantiate(winTextPrefab, canvas.transform, false);
+
+            // Imposta la posizione usando RectTransform
+            RectTransform rectTransform = instance.GetComponent<RectTransform>();
+            rectTransform.anchoredPosition = new Vector2(-200, 20); // Centrato e leggermente a sinistra
+
+            // Distruggere il prefab dopo un certo numero di secondi
+            Destroy(instance, 5); // Regolabile
+        }
+        else
+        {
+            Debug.LogError("Prefab o Canvas non assegnati correttamente.");
+        }
+    }
+
 
     IEnumerator ReturnToLobbyAfterDelay(float delay)
     {
