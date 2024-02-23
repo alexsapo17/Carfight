@@ -581,8 +581,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4599030220371932789}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -383.38, y: -7.5118, z: -234.11}
+  m_LocalRotation: {x: 0.38437587, y: 0, z: 0, w: 0.9231767}
+  m_LocalPosition: {x: -383.38, y: 1.19, z: -234.11}
   m_LocalScale: {x: 0.59453285, y: 0.59453285, z: 0.59453285}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -591,7 +591,7 @@ Transform:
   - {fileID: 4879369363316422989}
   - {fileID: 2361718038092764257}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 45.21, y: 0, z: 0}
 --- !u!54 &1580982233380448162
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -687,8 +687,6 @@ MonoBehaviour:
   rearLeftCollider: {fileID: 1410156770917329205}
   rearRightMesh: {fileID: 8552203107629032170}
   rearRightCollider: {fileID: 305309226601012347}
-  positionLerpRate: 5
-  rotationLerpRate: 10
   cameraPrefab: {fileID: 5669091085780957010, guid: bd1b4bff519834e42a6718eabc7fe46d, type: 3}
   useEffects: 0
   RLWParticleSystem: {fileID: 0}
@@ -702,6 +700,9 @@ MonoBehaviour:
   tireScreechSound: {fileID: 0}
   useTouchControls: 1
   horizontalJoystick: {fileID: 0}
+  positionLerpRate: 5
+  rotationLerpRate: 10
+  applyVelocityPrediction: 1
   controlsEnabled: 1
   carSpeed: 0
   isDrifting: 0

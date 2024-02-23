@@ -474,8 +474,6 @@ MonoBehaviour:
   rearLeftCollider: {fileID: 1384076766356197378}
   rearRightMesh: {fileID: 7645324899639279037}
   rearRightCollider: {fileID: 4586715436969962058}
-  positionLerpRate: 5
-  rotationLerpRate: 10
   cameraPrefab: {fileID: 5669091085780957010, guid: bd1b4bff519834e42a6718eabc7fe46d, type: 3}
   useEffects: 1
   RLWParticleSystem: {fileID: 4703572857644809641}
@@ -489,6 +487,9 @@ MonoBehaviour:
   tireScreechSound: {fileID: 2329328475731222078, guid: 01cde7a9b611b394cb4e15727171c432, type: 3}
   useTouchControls: 1
   horizontalJoystick: {fileID: 0}
+  positionLerpRate: 5
+  rotationLerpRate: 10
+  applyVelocityPrediction: 1
   controlsEnabled: 1
   carSpeed: 0
   isDrifting: 0

@@ -47,12 +47,16 @@ public GameObject ConnectingPanel;
     public Button SinglePlayerButton;
     public Button LoginButton;
     public GameObject TutorialPanel;
+public GameObject Interactable1Panel;
+public GameObject Interactable2Panel;
+
+public GameObject Interactable3Panel;
 
 public Animator transitionAnimator;
 
 public GameObject NoCoinsPanel;
 public GameObject NoCarSelectedPanel;
-
+public GameObject tutorial2Panel;
 
         private Dictionary<string, RoomInfo> cachedRoomList;
         private Dictionary<string, GameObject> roomListEntries;
@@ -85,6 +89,15 @@ public void Awake()
 }
 public void Start()
 {
+        // Controlla se dobbiamo mostrare il pannello speciale
+    if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorial2Panel.SetActive(true);
+
+
+    }
+
     UpdateCurrencyUI();
 }
 
@@ -217,6 +230,11 @@ public void Start()
             PlayerNameInput.gameObject.SetActive(true);
             PlayerNameInput.text = "";
     TutorialPanel.SetActive(true);
+    Interactable1Panel.SetActive(true);
+        Interactable2Panel.SetActive(true);
+
+    Interactable3Panel.SetActive(true);
+
             // Nascondi i pulsanti Shop e SinglePlayer
             ShopButton.gameObject.SetActive(false);
             SinglePlayerButton.gameObject.SetActive(false);
@@ -314,11 +332,13 @@ private void SaveNickname(string nickname)
         {
             // Nascondi l'input field del nickname
             PlayerNameInput.gameObject.SetActive(false);
-                        // Controlla se è la prima volta che l'utente accede al gioco
+            // Controlla se è la prima volta che l'utente accede al gioco
             if (!PlayerPrefs.HasKey("FirstTimeLoginCompleted"))
             {
                 // Imposta il flag per indicare che il primo login è stato completato
                 PlayerPrefs.SetInt("FirstTimeLoginCompleted", 1);
+                // Imposta il flag per mostrare il pannello speciale dopo il riavvio
+                PlayerPrefs.SetInt("ShowTutorial2Panel", 1);
 
                 // Ricarica la scena
                 SceneManager.LoadScene(SceneManager.GetActiveScene().name);
@@ -328,10 +348,10 @@ private void SaveNickname(string nickname)
                 // Se non è la prima volta, connetti a Photon
                 ConnectToPhoton();
             }
-
         }
     });
 }
+
    public override void OnConnectedToMaster()
 {
  

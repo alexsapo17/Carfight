@@ -10,6 +10,9 @@ public class HomeNavigation : MonoBehaviour
     public GameObject missionsPanel; // Riferimento al MissionsPanel
     public GameObject gameControlsUI; // UI per il controllo del gioco
     public LevelManager levelManager; // Riferimento a LevelManager
+        public GameObject TutorialSingleplayerPanel;
+    public GameObject TutorialSingleplayer2Panel;
+
 public GameObject finishPanel; 
     void Start()
     {
@@ -19,6 +22,13 @@ public GameObject finishPanel;
         levelsPanel.SetActive(false);
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
+                 if (PlayerPrefs.GetInt("ShowTutorialSingleplayerPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        TutorialSingleplayerPanel.SetActive(true);
+       
+
+    }
     }
 
     public void OpenLevelsPanel()
@@ -29,7 +39,14 @@ public GameObject finishPanel;
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
         LeaderboardPanel.SetActive(false);
+         if (PlayerPrefs.GetInt("ShowTutorialSingleplayerPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        TutorialSingleplayer2Panel.SetActive(true);
+               TutorialSingleplayerPanel.SetActive(false);
 
+
+    }
     }
 
     // Chiamato quando un pulsante del livello è premuto

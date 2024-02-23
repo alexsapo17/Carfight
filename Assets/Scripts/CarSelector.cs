@@ -13,7 +13,8 @@ public class CarSelector : MonoBehaviour
 {
     public CarPrefabMapping[] carMappings;
     private GameObject currentCarInstance;
-
+private float angularVelocity; // Velocità di rotazione
+private float rotationDecay = 0.95f;
     void Start()
     {
         string selectedCarName = PlayerPrefs.GetString("SelectedCar", "");
@@ -76,15 +77,38 @@ public class CarSelector : MonoBehaviour
 
 void Update()
 {
-    if (Input.touchCount > 0 && currentCarInstance != null)
+    if (currentCarInstance != null)
     {
-        Touch touch = Input.GetTouch(0);
-        
-        if (touch.phase == TouchPhase.Moved)
+        if (Input.touchCount > 0)
         {
-            float rotationSpeed = 50.0f;
-            float touchDeltaX = touch.deltaPosition.x * rotationSpeed * Time.deltaTime;
-            currentCarInstance.transform.Rotate(Vector3.up, -touchDeltaX);
+            Touch touch = Input.GetTouch(0);
+
+            // Considera di utilizzare Screen.dpi per adattare la velocità di rotazione alla densità di pixel del dispositivo
+            float dpiFactor = (Screen.dpi > 0) ? Screen.dpi / 160f : 1f; // 160 è il dpi base per un dispositivo Android
+            float rotationSensitivity = 0.3f; // Regola questo valore per aumentare o diminuire la sensibilità
+
+            if (touch.phase == TouchPhase.Moved)
+            {
+                // Usa dpiFactor per normalizzare la velocità di rotazione
+                float touchDeltaX = touch.deltaPosition.x / dpiFactor * rotationSensitivity;
+                angularVelocity = -touchDeltaX;
+            }
+        }
+        else if (angularVelocity != 0)
+        {
+            // Rallenta gradualmente la velocità di rotazione
+            angularVelocity *= rotationDecay;
+            // Se la velocità di rotazione è molto piccola, fermati per evitare un'inerzia infinita
+            if (Mathf.Abs(angularVelocity) < 0.01f)
+            {
+                angularVelocity = 0;
+            }
+        }
+
+        // Applica la rotazione
+        if (angularVelocity != 0)
+        {
+            currentCarInstance.transform.Rotate(Vector3.up, angularVelocity, Space.World);
         }
     }
 }

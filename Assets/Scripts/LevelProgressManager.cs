@@ -13,7 +13,7 @@ public class LevelProgress
     public float bestTime;
     public int stars;
     public bool isUnlocked;
-            public bool coinsAwarded;
+public int[] coinsAwardedForStars;
             public bool gemsAwarded;
 
     public LevelProgress()
@@ -21,7 +21,7 @@ public class LevelProgress
         bestTime = float.MaxValue;
         stars = 0;
         isUnlocked = false;
-        coinsAwarded = false;
+        coinsAwardedForStars = new int[3]; // Inizializza per 3 possibili quantità di stelle
         gemsAwarded = false;
 
     }
@@ -47,6 +47,7 @@ public class LevelProgressManager : MonoBehaviour
     public static LevelProgressManager Instance;
 public Text coinsText;
 public Text gemsText;
+public Text coinsToAwardText;
     public Dictionary<int, LevelProgress> levelsProgress = new Dictionary<int, LevelProgress>();
 public Text bestTimeText;
     public GameObject levelUIPrefab; // Prefab per UI del livello
@@ -97,51 +98,46 @@ private void SavePlayerCoins() {
     UpdateCoinsUI(); // Aggiorna l'UI ogni volta che salvi le monete
 }
 
-private void AwardCoinsForLevel(int levelId, int starsEarned) {
-    if (!levelsProgress.ContainsKey(levelId)) return;
+    private void AwardCoinsForLevel(int levelId, int starsEarned) {
+        if (!levelsProgress.ContainsKey(levelId)) return;
 
-    var levelProgress = levelsProgress[levelId];
+        var levelProgress = levelsProgress[levelId];
 
-    if (levelProgress.coinsAwarded) return;
+        // Definisce le monete da assegnare per ogni quantità di stelle
+        int[] coinsForStars = new int[] { 50, 100, 150 }; // Monete aggiuntive per 1, 2 e 3 stelle
+        int coinsToAward = 0;
 
-    int coinsToAward = 0;
-    switch (starsEarned) {
-        case 1:
-            coinsToAward = 50;
-            break;
-        case 2:
-            coinsToAward = 150;
-            break;
-        case 3:
-            coinsToAward = 300;
-            break;
-        default:
-            return;
+        for (int i = 0; i < starsEarned; i++) {
+            if (levelProgress.coinsAwardedForStars[i] == 0) {
+                coinsToAward += coinsForStars[i];
+                levelProgress.coinsAwardedForStars[i] = coinsForStars[i]; // Segna come assegnate
+            }
+        }
+
+        if (coinsToAward > 0) {
+            int startValue = playerCoins;
+            playerCoins += coinsToAward;
+            SavePlayerCoins(); // Aggiorna le monete del giocatore
+
+            // Aggiorna il testo UI con il nuovo totale di monete
+            if (coinsToAwardText != null) {
+    coinsToAwardText.text = coinsToAward.ToString();
+            }
+
+            // Animazione e aggiornamento UI
+            if (coinsAnimator != null) {
+                coinsAnimator.SetTrigger("AddedCoins");
+            }
+
+            if (slotMachineEffect != null) {
+                slotMachineEffect.AnimateText(startValue, playerCoins); // Aggiorna con il nuovo totale
+            }
+
+            SaveLevelData(levelId); // Non dimenticare di salvare i progressi aggiornati
+        }
     }
 
-    int startValue = playerCoins; // Definisci startValue qui
-    int endValue = playerCoins + coinsToAward; // Definisci endValue qui
 
-    playerCoins += coinsToAward;
-    SavePlayerCoins();
-
-    // Imposta il trigger AddedCoins sull'Animator, utilizzando il nome corretto della variabile
-    if (coinsAnimator != null) {
-        coinsAnimator.SetTrigger("AddedCoins");
-    } else {
-        Debug.LogWarning("Animator per le monete non impostato");
-    }
-
-    // Attiva l'animazione del testo delle monete
-    if (slotMachineEffect != null) {
-        slotMachineEffect.AnimateText(startValue, endValue);
-    } else {
-        Debug.LogWarning("SlotMachineEffect non trovato sul componente Text delle monete");
-    }
-
-    levelProgress.coinsAwarded = true;
-    SaveLevelData(levelId);
-}
 
 
   

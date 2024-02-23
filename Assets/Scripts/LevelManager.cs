@@ -28,13 +28,18 @@ public class LevelManager : MonoBehaviour
     public LevelProgressManager progressManager;
     public GameObject gameControlsUI;
     public GameObject levelLockedPanel; 
+    public Canvas canvas;
     public Image imageOnCanvas; // Aggiungi questa per l'immagine nel canvas
-    public Image childCanvasImage;
+public Image[] childCanvasImages; // Array di immagini nel canvas
     public Image[] starImages; // Array di immagini delle stelle
     public Sprite fullStarSprite; // Sprite per la stella piena
 public Sprite emptyStarSprite; // Sprite per la stella vuota
 public Text gemsText;
 public Animator transitionAnimator;
+        public GameObject TutorialSingleplayer2Panel;
+
+        public GameObject TutorialSingleplayer3Panel;
+
 private InterstitialAd interstitialAd;
 
 
@@ -45,6 +50,7 @@ private InterstitialAd interstitialAd;
 
              // Crea una stanza offline
     PhotonNetwork.CreateRoom("OfflineRoom");
+
 
         // Esempio di come impostare la mappa
         levelCarMap = new Dictionary<int, int>
@@ -66,18 +72,26 @@ private InterstitialAd interstitialAd;
 
     }
 
-    public void RestartLevel()
-    {
-        LoadLevel(currentLevelIndex); // Ricarica il livello corrente
-        finishPanel.SetActive(false); // Nasconde il pannello di fine livello
-        gameControlsUI.SetActive(true);
+public void RestartLevel()
+{
+canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+    LoadLevel(currentLevelIndex); // Ricarica il livello corrente
+    finishPanel.SetActive(false); // Nasconde il pannello di fine livello
+    gameControlsUI.SetActive(true);
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
-    childCanvasImage.gameObject.SetActive(false);
-       if (interstitialAd != null)
+
+    // Disattiva ogni GameObject associato a ciascuna Image nell'array
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(false);
+    }
+
+    if (interstitialAd != null)
     {
         interstitialAd.LoadAd();
     }
-    }
+}
+
 
 public void LoadNextLevel()
 {
@@ -89,12 +103,16 @@ public void LoadNextLevel()
 
     if (progressManager.levelsProgress[nextLevelIndex].isUnlocked)
     {
+canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         LoadLevel(nextLevelIndex);
         finishPanel.SetActive(false);
         gameControlsUI.SetActive(true);
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
-    childCanvasImage.gameObject.SetActive(false);
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(false);
     }
+        }
     else
     {
         levelLockedPanel.SetActive(true);
@@ -126,7 +144,16 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
 
 public void LoadLevel(int levelIndex)
 {
-        
+                 if (PlayerPrefs.GetInt("ShowTutorialSingleplayerPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        TutorialSingleplayer3Panel.SetActive(true);
+               TutorialSingleplayer2Panel.SetActive(false);
+       PlayerPrefs.SetInt("ShowTutorialSingleplayerPanel", 0);
+
+
+    }
+
     currentLevelIndex = levelIndex;
     Debug.Log($"Caricamento del livello {levelIndex}");
 
@@ -148,21 +175,53 @@ public void LoadLevel(int levelIndex)
     countdownText.gameObject.SetActive(true);
     raceTimerText.gameObject.SetActive(false);
     raceStarted = false;
-
+canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     levelsPanel.SetActive(false);
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
-    childCanvasImage.gameObject.SetActive(false);
-       if (interstitialAd != null)
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(false);
+    }       if (interstitialAd != null)
     {
         interstitialAd.LoadAd();
     }
 }
     public void EliminatedPlayer()
     {
+                    // Verifica se il pannello TutorialSingleplayer3Panel è attivo
+        if (TutorialSingleplayer3Panel.activeSelf)
+        {
+            // Disattiva il pannello se è attivo
+            TutorialSingleplayer3Panel.SetActive(false);
+        }
     if (carController != null)
     {
         carController.SetKinematic(true);
-    }
+    } 
+   if (canvas != null)
+        {
+            // Distruggi la camera correntemente in uso se non è null
+            if (canvas.worldCamera != null)
+            {
+                Destroy(canvas.worldCamera.gameObject);
+            }
+
+            // Trova e assegna la camera chiamata "Main Camera"
+            Camera mainCamera = GameObject.Find("Main Camera")?.GetComponent<Camera>();
+            if (mainCamera != null)
+            {
+                canvas.worldCamera = mainCamera;
+                // Assicurati che la camera "Main Camera" sia attiva
+                mainCamera.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("No camera named 'Main Camera' found in the scene.");
+            }
+
+            canvas.renderMode = RenderMode.ScreenSpaceCamera; // Cambia la modalità del Canvas
+        }
+
   gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
@@ -170,8 +229,10 @@ public void LoadLevel(int levelIndex)
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
 isLevelReady = false;
     SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
-    childCanvasImage.gameObject.SetActive(true);
-
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(true);
+    }
     UpdateStarDisplay(0);
     }
 void Update()
@@ -253,10 +314,39 @@ void LoadShopScene()
 }
 public void FinishRace()
 {
+            // Verifica se il pannello TutorialSingleplayer3Panel è attivo
+        if (TutorialSingleplayer3Panel.activeSelf)
+        {
+            // Disattiva il pannello se è attivo
+            TutorialSingleplayer3Panel.SetActive(false);
+        }
         if (carController != null)
     {
         carController.SetKinematic(true);
     }
+  if (canvas != null)
+        {
+            // Distruggi la camera correntemente in uso se non è null
+            if (canvas.worldCamera != null)
+            {
+                Destroy(canvas.worldCamera.gameObject);
+            }
+
+            // Trova e assegna la camera chiamata "Main Camera"
+            Camera mainCamera = GameObject.Find("Main Camera")?.GetComponent<Camera>();
+            if (mainCamera != null)
+            {
+                canvas.worldCamera = mainCamera;
+                // Assicurati che la camera "Main Camera" sia attiva
+                mainCamera.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("No camera named 'Main Camera' found in the scene.");
+            }
+
+            canvas.renderMode = RenderMode.ScreenSpaceCamera; // Cambia la modalità del Canvas
+        }
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
@@ -270,8 +360,10 @@ gameControlsUI.SetActive(false);
     progressManager.UpdateLevelProgress(currentLevelIndex, raceTimer);
     progressManager.FinishLevel(currentLevelIndex, raceTimer);
     SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
-    childCanvasImage.gameObject.SetActive(true);
-        // Mostra l'annuncio interstiziale quando finisci il livello
+   foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(true);
+    }        // Mostra l'annuncio interstiziale quando finisci il livello
     if (interstitialAd != null)
     {
         interstitialAd.ShowAd();

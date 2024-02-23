@@ -25,6 +25,8 @@ public Vector3 rotationSpeed = new Vector3(0, 100, 0); // Velocità di rotazione
 public float moveUpSpeed = 1f; // Velocità di movimento verso l'alto
 public float destructionDelay = 2f; // Tempo dopo il quale il prefab verrà distrutto
 public LootBox[] lootBoxes;
+public GameObject tutorial3Panel;
+public GameObject tutorial4Panel;
 
 [System.Serializable]
 public class LootBox
@@ -59,6 +61,13 @@ public class CarProbability
 
 public void OpenLootBox(int lootBoxIndex)
 {
+                if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorial3Panel.SetActive(false);
+
+
+    }
     LootBox selectedBox = lootBoxes[lootBoxIndex];
     
     bool canOpen = false;
@@ -177,6 +186,13 @@ private void SpawnCarPrefab(string carName, CarProbability[] carProbabilities)
 
     StartCoroutine(MoveAndRotate(carInstance, carData.customRotationSpeed));
     Destroy(carInstance, destructionDelay);
+                if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorial4Panel.SetActive(true);
+PlayerPrefs.SetInt("ShowTutorial2Panel", 0);
+PlayerPrefs.SetInt("ShowTutorialCustomPanel", 1);
+    }
 }
 
 private IEnumerator MoveAndRotate(GameObject carInstance, Vector3 rotationSpeed)

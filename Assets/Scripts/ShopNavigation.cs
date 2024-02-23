@@ -25,6 +25,12 @@ public class ShopNavigation : MonoBehaviour
      public GameObject BusPanel;
      public GameObject RubyPanel;
      public GameObject JeepPanel;
+     public GameObject tutorial2Panel;
+     public GameObject tutorial3Panel;
+     public GameObject tutorialCustomPanel;
+     public GameObject tutorialCustom2Panel;
+     public GameObject tutorialCustom3Panel;
+     public GameObject tutorialSingleplayerPanel;
      public GameObject FiretruckPanel;
      public GameObject sportCarPanel;
     public GameObject[] carButtons;
@@ -33,6 +39,15 @@ public Text gemsText;
 public Animator transitionAnimator; 
     void Start()
     {
+                // Controlla se dobbiamo mostrare il pannello speciale
+    if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorial2Panel.SetActive(true);
+
+
+    }
+
         UpdateCoinsUI();
         UpdateGemsUI();
     }
@@ -58,6 +73,18 @@ public Animator transitionAnimator;
     // Metodo per mostrare il pannello principale dello shop
     public void ShowShopPanel()
     {
+                        if (PlayerPrefs.GetInt("ShowTutorialCustomPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorialCustomPanel.SetActive(true);
+
+    }
+         if (PlayerPrefs.GetInt("ShowTutorialSingleplayerPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorialSingleplayerPanel.SetActive(true);
+
+    }
         shopPanel.SetActive(true);
         carPanel.SetActive(false);
         skillPanel.SetActive(false);
@@ -75,9 +102,17 @@ public Animator transitionAnimator;
 
     }
 
-    // Metodo per mostrare il pannello delle macchine
+    // Metodo per mostrare il pannello dei bauli
     public void ShowCarPanel()
     {
+            if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorial3Panel.SetActive(true);
+        tutorial2Panel.SetActive(false);
+
+
+    }
                         realShopPanel.SetActive(false);
 
         shopPanel.SetActive(false);
@@ -100,6 +135,15 @@ public Animator transitionAnimator;
     }
         public void ShowCustomPanel()
     {
+                        if (PlayerPrefs.GetInt("ShowTutorialCustomPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorialCustom2Panel.SetActive(true);
+       tutorialCustomPanel.SetActive(false);
+              
+
+    }
+    tutorialCustom3Panel.SetActive(false);
         raceCarPanel.SetActive(false);
         prometheusPanel.SetActive(false);
         monstertruckPanel.SetActive(false);
@@ -220,10 +264,6 @@ public void ShowraceCarPanel()
         customPanel.SetActive(false);
     }
 
-        public void OnShopButtonClicked()
-{
-    UnityEngine.SceneManagement.SceneManager.LoadScene("ShopScene");
-}
 public void OnSinglePlayerButtonClicked()
 {
     transitionAnimator.SetTrigger("Start"); // Avvia l'animazione di transizione
@@ -296,6 +336,15 @@ public void SelectCar(string carName)
 
     // Aggiorna i pulsanti delle macchine per riflettere la selezione corrente
     UpdateCarButtons();
+
+     if (PlayerPrefs.GetInt("ShowTutorialCustomPanel", 0) == 1)
+    {
+        // Mostra il pannello speciale
+        tutorialCustom3Panel.SetActive(true);
+       tutorialCustom2Panel.SetActive(false);
+       PlayerPrefs.SetInt("ShowTutorialCustomPanel", 0);
+PlayerPrefs.SetInt("ShowTutorialSingleplayerPanel", 1);
+    }
 
     // Trova l'istanza di AbilitySelection e chiama UpdateButtonColors
     AbilitySelection abilitySelection = FindObjectOfType<AbilitySelection>();

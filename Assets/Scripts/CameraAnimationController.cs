@@ -6,6 +6,8 @@ public class CameraAnimationController : MonoBehaviour
     public Animator cameraAnimator;
     public float moveSpeed = 1f; // Velocità di spostamento della camera
     public Vector3 moveOffset = new Vector3(1f, 0f, 0f); // Quanto spostarsi verso destra
+    public float aspectRatioThreshold = 1.5f; // Soglia del rapporto di aspetto (ad esempio 1.5 per 3:2)
+    public float additionalBackOffset = 5.0f; // Quanto spostarsi indietro sull'asse Z se la soglia è superata
 
     private Vector3 originalPosition;
 
@@ -173,15 +175,7 @@ public void PlayPrometheusAnimation()
         cameraAnimator.Play("FiretruckAnimationBack", 0, 0f);
         cameraAnimator.speed = 1;
     }
- IEnumerator MoveCameraRightCoroutine()
-{
-    Vector3 targetPosition = transform.position + moveOffset;
-    while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
-    {
-        transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
-        yield return null;
-    }
-}
+
 
 public void MoveCameraRight()
 {
@@ -189,14 +183,39 @@ public void MoveCameraRight()
     StartCoroutine(MoveCameraRightCoroutine());
 }
 
-IEnumerator MoveCameraBackCoroutine()
-{
-    while (Vector3.Distance(transform.position, originalPosition) > 0.01f)
+ IEnumerator MoveCameraRightCoroutine()
     {
-        transform.position = Vector3.MoveTowards(transform.position, originalPosition, moveSpeed * Time.deltaTime);
-        yield return null;
+        Vector3 targetPosition = transform.position + moveOffset;
+
+        // Calcola l'offset in base al rapporto di aspetto
+        if ((float)Screen.width / Screen.height < aspectRatioThreshold)
+        {
+            targetPosition.z -= additionalBackOffset; // Sposta la camera più indietro sull'asse Z
+        }
+
+        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
     }
-}
+
+    IEnumerator MoveCameraBackCoroutine()
+    {
+        Vector3 targetPosition = originalPosition;
+
+        // Calcola l'offset in base al rapporto di aspetto
+        if ((float)Screen.width / Screen.height < aspectRatioThreshold)
+        {
+            targetPosition.z -= additionalBackOffset; // Sposta la camera più indietro sull'asse Z
+        }
+
+        while (Vector3.Distance(transform.position, targetPosition) > 0.01f)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+            yield return null;
+        }
+    }
 
 public void MoveCameraBack()
 {
