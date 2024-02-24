@@ -115,11 +115,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fefceefe666bb4682b272ec8c5bdd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 100
+  maxSpeed: 60
   maxReverseSpeed: 90
   accelerationMultiplier: 13
-  maxSteeringAngle: 35
-  steeringSpeed: 0.303
+  maxSteeringAngle: 17
+  steeringSpeed: 0.1
+  TurnLeftXEditor: 1
+  TurnRightXEditor: -1
   brakeForce: 505
   decelerationMultiplier: 3
   handbrakeDriftMultiplier: 6
@@ -173,7 +175,6 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: -1154159410248921022}
-  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0

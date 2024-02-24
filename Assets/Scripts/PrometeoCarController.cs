@@ -31,6 +31,8 @@ public class PrometeoCarController : MonoBehaviour
       public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
       [Range(0.1f, 1f)]
       public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
+      public float TurnLeftXEditor= 1f;
+      public float TurnRightXEditor= -1f;
       [Space(10)]
       [Range(100, 600)]
       public int brakeForce = 350; // The strength of the wheel brakes.
@@ -173,6 +175,9 @@ public bool applyVelocityPrediction = true;
       float RLWextremumSlip;
       WheelFrictionCurve RRwheelFriction;
       float RRWextremumSlip;
+
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -367,11 +372,11 @@ float turnValue = horizontalJoystick.GetHorizontal();
 
             
 
-if (turnValue < 0.3) 
+if (turnValue < TurnLeftXEditor) 
 {
     TurnLeft(turnValue); // Passa il valore del joystick
 }
-else if (turnValue > -0.3)
+else if (turnValue > TurnRightXEditor)
 {
     TurnRight(turnValue); // Passa il valore del joystick
 }

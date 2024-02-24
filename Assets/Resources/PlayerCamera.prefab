@@ -106,5 +106,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  offset: {x: 0, y: 15, z: -33.8}
-  fixedYPosition: 14
+  offset: {x: 0, y: 18.6, z: -29.2}
+  fixedYPosition: 13.88
+  smoothSpeed: 7
+  tiltAngleX: -5.56

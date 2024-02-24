@@ -26,8 +26,8 @@ public class PrometeoEditor : Editor{
   private SerializedProperty decelerationMultiplier;
   private SerializedProperty handbrakeDriftMultiplier;
   private SerializedProperty bodyMassCenter;
-
-  //
+private SerializedProperty TurnLeftXEditor;
+private SerializedProperty TurnRightXEditor;
   //
   //WHEELS VARIABLES
   //
@@ -86,7 +86,8 @@ public class PrometeoEditor : Editor{
     decelerationMultiplier = SO.FindProperty("decelerationMultiplier");
     handbrakeDriftMultiplier = SO.FindProperty("handbrakeDriftMultiplier");
     bodyMassCenter = SO.FindProperty("bodyMassCenter");
-
+    TurnRightXEditor = SO.FindProperty("TurnRightXEditor");
+TurnLeftXEditor= SO.FindProperty("TurnLeftXEditor");
     frontLeftMesh = SO.FindProperty("frontLeftMesh");
     frontLeftCollider = SO.FindProperty("frontLeftCollider");
     frontRightMesh = SO.FindProperty("frontRightMesh");
@@ -129,6 +130,9 @@ cameraPrefab = SO.FindProperty("cameraPrefab");
     //
     //
     maxSpeed.intValue = EditorGUILayout.IntSlider("Max Speed:", maxSpeed.intValue, 20, 1000);
+        TurnLeftXEditor.floatValue = EditorGUILayout.Slider("Max TurnLeftXEditor:", TurnLeftXEditor.floatValue, -100, 100);
+        TurnRightXEditor.floatValue = EditorGUILayout.Slider("Max TurnRightXEditor:", TurnRightXEditor.floatValue, -100, 100);
+
     maxReverseSpeed.intValue = EditorGUILayout.IntSlider("Max Reverse Speed:", maxReverseSpeed.intValue, 10, 1200);
     accelerationMultiplier.intValue = EditorGUILayout.IntSlider("Acceleration Multiplier:", accelerationMultiplier.intValue, 1, 100);
     maxSteeringAngle.intValue = EditorGUILayout.IntSlider("Max Steering Angle:", maxSteeringAngle.intValue, 10, 45);

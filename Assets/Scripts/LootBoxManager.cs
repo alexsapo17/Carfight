@@ -27,6 +27,8 @@ public float destructionDelay = 2f; // Tempo dopo il quale il prefab verrà dist
 public LootBox[] lootBoxes;
 public GameObject tutorial3Panel;
 public GameObject tutorial4Panel;
+[SerializeField]
+private List<GameObject> objectsToToggle = new List<GameObject>();
 
 [System.Serializable]
 public class LootBox
@@ -102,8 +104,11 @@ public void OpenLootBox(int lootBoxIndex)
         Debug.Log("Non hai abbastanza risorse per aprire questa cassa.");
         return;
     }
-    // Disattiva il canvas e avvia l'animazione
-    lootBoxCanvas.enabled = false;
+        // Disattiva i GameObject specificati
+    foreach (GameObject obj in objectsToToggle)
+    {
+        obj.SetActive(false);
+    }
     selectedBox.lootBoxAnimator.SetTrigger("OpenChest");
     string selectedCar = SelectRandomCar(selectedBox.carProbabilities);
     SaveCar(selectedCar);
@@ -116,17 +121,23 @@ public void OpenLootBox(int lootBoxIndex)
 }
 
 
-private IEnumerator WaitAndReactivateCanvas(Animator animator)
+
+
+private IEnumerator WaitAndReactivateCanvas(Animator animator) 
 {
     // Attendi la fine dell'animazione 
     yield return new WaitForSeconds(4.5f);
     
-    // Riattiva il canvas
-    lootBoxCanvas.enabled = true;
-    
+    // Riattiva gli oggetti specificati
+    foreach (GameObject obj in objectsToToggle)
+    {
+        obj.SetActive(true);
+    }
+
     // Resetta l'animazione della cassa
     animator.SetTrigger("ResetChest");
 }
+
 
     private string SelectRandomCar(CarProbability[] carProbabilities)
     {

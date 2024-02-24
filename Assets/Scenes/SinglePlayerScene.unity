@@ -261,7 +261,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coinsText: {fileID: 436436921}
   gemsText: {fileID: 0}
-  coinsToAwardText: {fileID: 0}
+  coinsToAwardText: {fileID: 1547404223}
   bestTimeText: {fileID: 2114052345}
   levelUIPrefab: {fileID: 9156961599058493060, guid: e6c50f4bb4f546c459def9613e1720b7, type: 3}
   levelsContainer: {fileID: 1226172831}
@@ -1447,7 +1447,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -217.0196, y: -46.754166}
+  m_AnchoredPosition: {x: -217.01959, y: -46.754166}
   m_SizeDelta: {x: 434.0392, y: 292.4917}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &362378502
@@ -1646,7 +1646,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 23232
+  m_Text: 0
 --- !u!114 &436436922
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6046,7 +6046,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -216.43285, y: -219.52908}
+  m_AnchoredPosition: {x: -216.43286, y: -219.52908}
   m_SizeDelta: {x: 257.2748, y: 165.09698}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &971574330
@@ -6667,7 +6667,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -227, y: 65.401985}
+  m_AnchoredPosition: {x: -227, y: 65.40198}
   m_SizeDelta: {x: 229.2, y: 25.6391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1144307336
@@ -7092,7 +7092,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -128.63632, y: 72.51672}
+  m_AnchoredPosition: {x: -128.63632, y: 72.516716}
   m_SizeDelta: {x: 238.18, y: 40}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1226172832

@@ -57,7 +57,7 @@ public Animator transitionAnimator;
 public GameObject NoCoinsPanel;
 public GameObject NoCarSelectedPanel;
 public GameObject tutorial2Panel;
-
+ public GameObject[] objectsToDisable;
         private Dictionary<string, RoomInfo> cachedRoomList;
         private Dictionary<string, GameObject> roomListEntries;
         private Dictionary<int, GameObject> playerListEntries;
@@ -83,7 +83,14 @@ public void Awake()
         SetActivePanel(LoginPanel.name);
         PlayerNameInput.text = "Player " + Random.Range(1000, 10000);
     }
-
+           if (!PlayerPrefs.HasKey("FirstTimeLoginCompleted"))
+            {
+            // Disattiva tutti gli oggetti nell'array
+            foreach (GameObject obj in objectsToDisable)
+            {
+                obj.SetActive(false);
+            }
+                }
     // Trova il CurrencyManager e aggiorna l'UI delle monete
     UpdateCurrencyUI();
 }
@@ -94,9 +101,14 @@ public void Start()
     {
         // Mostra il pannello speciale
         tutorial2Panel.SetActive(true);
-
+     // Disattiva tutti gli oggetti nell'array
+            foreach (GameObject obj in objectsToDisable)
+            {
+                obj.SetActive(false);
+            }
 
     }
+             
 
     UpdateCurrencyUI();
 }
@@ -462,8 +474,9 @@ UpdateCurrencyUI();
             foreach (Player p in PhotonNetwork.PlayerList)
             {
                 GameObject entry = Instantiate(PlayerListEntryPrefab);
-                entry.transform.SetParent(InsideRoomPanel.transform);
-                entry.transform.localScale = Vector3.one;
+  entry.transform.SetParent(InsideRoomPanel.transform, false);
+entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
+entry.transform.localScale = Vector3.one; 
                 entry.GetComponent<PlayerListEntry>().Initialize(p.ActorNumber, p.NickName);
 
                 object isPlayerReady;
@@ -500,8 +513,9 @@ UpdateCurrencyUI();
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             GameObject entry = Instantiate(PlayerListEntryPrefab);
-            entry.transform.SetParent(InsideRoomPanel.transform);
-            entry.transform.localScale = Vector3.one;
+ entry.transform.SetParent(InsideRoomPanel.transform, false);
+entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
+entry.transform.localScale = Vector3.one; 
             entry.GetComponent<PlayerListEntry>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
 
             playerListEntries.Add(newPlayer.ActorNumber, entry);

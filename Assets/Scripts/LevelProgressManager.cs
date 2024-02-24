@@ -60,9 +60,16 @@ public Animator coinsAnimator;
 private SlotMachineEffect slotMachineEffect;
     void Awake()
     {
+
+          CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+        if (currencyManager != null && coinsText != null)
+        {
+            currencyManager.coinsText = coinsText;
+            currencyManager.UpdateCoinsUI();
+        }
             levelManager = FindObjectOfType<LevelManager>();
     slotMachineEffect = coinsText.GetComponent<SlotMachineEffect>();
-
+ 
  
             databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 

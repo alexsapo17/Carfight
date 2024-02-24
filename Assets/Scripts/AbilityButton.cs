@@ -25,7 +25,7 @@ public class AbilityButton : MonoBehaviour
         }
     }
 
-   public void PurchaseAbility()
+ public void PurchaseAbility()
 {
     if (!isUnlocked)
     {
@@ -44,13 +44,18 @@ public class AbilityButton : MonoBehaviour
             Debug.Log("Pulsante abilità acquistato con successo!");
             isUnlocked = true;
 
-            // Istanzia il prefab come figlio del GameObject attuale e con la stessa posizione del buyButton
             GameObject animatedImagePrefab = Resources.Load<GameObject>("GoldExplosionAnim");
             if (animatedImagePrefab != null)
             {
-                GameObject animatedImageInstance = Instantiate(animatedImagePrefab, buyButton.transform.position, Quaternion.identity, this.transform);
+                Canvas canvas = FindObjectOfType<Canvas>();
+                Camera camera = canvas.worldCamera; // Ottieni la camera usata dal Canvas
+                
+                // Calcola la rotazione per far sì che il prefab guardi verso la camera.
+                Quaternion rotationTowardsCamera = Quaternion.LookRotation(camera.transform.forward);
+
+                // Istanzia il prefab con la rotazione calcolata
+                GameObject animatedImageInstance = Instantiate(animatedImagePrefab, buyButton.transform.position, rotationTowardsCamera, this.transform);
                 Destroy(animatedImageInstance, 1f);
-                // Aggiusta la posizione locale se necessario, come nel caso del ParameterSliderUnlocker
             }
             else
             {
