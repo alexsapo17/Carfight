@@ -416,6 +416,7 @@ GameObject:
   - component: {fileID: 7538540072426747019}
   - component: {fileID: 469180326451009028}
   - component: {fileID: 5314419717516801959}
+  - component: {fileID: 3321702552382807902}
   m_Layer: 0
   m_Name: raceCar
   m_TagString: Player
@@ -462,6 +463,8 @@ MonoBehaviour:
   accelerationMultiplier: 17
   maxSteeringAngle: 30
   steeringSpeed: 0.527
+  TurnLeftXEditor: 1
+  TurnRightXEditor: -1
   brakeForce: 503
   decelerationMultiplier: 3
   handbrakeDriftMultiplier: 5
@@ -557,8 +560,8 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 6368071779081088158}
   - {fileID: 5304541668279264443}
-  - {fileID: 0}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -653,6 +656,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &3321702552382807902
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1538136458312656504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc28e3878ff3750439b28f8a21b71e55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nicknameUIPrefab: {fileID: 3603452520599583184, guid: 42c594287ca8c0746b2941c983a78b15, type: 3}
 --- !u!1 &1660037796603768812
 GameObject:
   m_ObjectHideFlags: 0

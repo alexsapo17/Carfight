@@ -183,6 +183,7 @@ GameObject:
   - component: {fileID: 3029872680722482119}
   - component: {fileID: 3725570224171309432}
   - component: {fileID: 8328856361103693669}
+  - component: {fileID: -2759745290971735935}
   m_Layer: 0
   m_Name: Ruby
   m_TagString: Player
@@ -271,6 +272,7 @@ MonoBehaviour:
   observableSearch: 2
   ObservedComponents:
   - {fileID: 4956382625928907805}
+  - {fileID: 5938968418011546619}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
@@ -291,6 +293,8 @@ MonoBehaviour:
   accelerationMultiplier: 13
   maxSteeringAngle: 30
   steeringSpeed: 0.574
+  TurnLeftXEditor: 1
+  TurnRightXEditor: -1
   brakeForce: 350
   decelerationMultiplier: 13
   handbrakeDriftMultiplier: 7
@@ -303,8 +307,6 @@ MonoBehaviour:
   rearLeftCollider: {fileID: 5581923703553399085}
   rearRightMesh: {fileID: 8438402137582726082}
   rearRightCollider: {fileID: 2361339276218497625}
-  positionLerpRate: 5
-  rotationLerpRate: 10
   cameraPrefab: {fileID: 5669091085780957010, guid: bd1b4bff519834e42a6718eabc7fe46d, type: 3}
   useEffects: 1
   RLWParticleSystem: {fileID: 7677865378367045545}
@@ -318,6 +320,9 @@ MonoBehaviour:
   tireScreechSound: {fileID: 2329328475731222078, guid: 01cde7a9b611b394cb4e15727171c432, type: 3}
   useTouchControls: 1
   horizontalJoystick: {fileID: 0}
+  positionLerpRate: 5
+  rotationLerpRate: 10
+  applyVelocityPrediction: 1
   controlsEnabled: 1
   carSpeed: 0
   isDrifting: 0
@@ -393,6 +398,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: edffe294debc88f4a9d7c4c8d3798eed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &-2759745290971735935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2070556020812293416}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc28e3878ff3750439b28f8a21b71e55, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nicknameUIPrefab: {fileID: 3603452520599583184, guid: 42c594287ca8c0746b2941c983a78b15, type: 3}
 --- !u!1 &2921049572021263852
 GameObject:
   m_ObjectHideFlags: 0
