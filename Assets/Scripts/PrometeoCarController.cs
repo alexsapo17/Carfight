@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class PrometeoCarController : MonoBehaviour
+public class PrometeoCarController : MonoBehaviour,IPunObservable
 {
 
     //CAR SETUP
@@ -331,7 +331,15 @@ public void DestroyCameraInstance() {
 }
 
 
- 
+ void OnDrawGizmos()
+{
+    if (!photonView.IsMine)
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawSphere(targetPosition, 0.5f); // Disegna una sfera rossa nella posizione target
+    }
+}
+
 
   void FixedUpdate()
 {
@@ -480,13 +488,15 @@ void Update()
     {
         HandleHandbrakeInput();
     }
-    if (!photonView.IsMine)
-    {
-        // Interpola verso la posizione e rotazione target ricevute dalla rete
-        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * positionLerpRate);
-        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationLerpRate);
-    }
 
+        if (!photonView.IsMine)
+    {
+        Debug.DrawLine(transform.position, targetPosition, Color.blue); // Disegna una linea blu
+                if (Time.frameCount % 60 == 0) 
+        {
+            Debug.Log("Target Position: " + targetPosition + ", Current Position: " + transform.position);
+        }
+    }
 }
 public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
     if (stream.IsWriting) {
@@ -496,37 +506,39 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         stream.SendNext(rb.velocity);
         stream.SendNext(rb.angularVelocity);
     } else {
+        // Log per mostrare la targetPosition e la current position prima di ricevere l'aggiornamento
+        Debug.Log($"[Ricezione] Prima dell'aggiornamento - Target Position: {targetPosition}, Current Position: {rb.position}");
+
         // Riceve i dati dagli altri giocatori
-        targetPosition = (Vector3)stream.ReceiveNext();
-        targetRotation = (Quaternion)stream.ReceiveNext();
-        Vector3 velocity = (Vector3)stream.ReceiveNext();
-        Vector3 angularVelocity = (Vector3)stream.ReceiveNext();
+        Vector3 receivedTargetPosition = (Vector3)stream.ReceiveNext();
+        Quaternion receivedTargetRotation = (Quaternion)stream.ReceiveNext();
+        Vector3 receivedVelocity = (Vector3)stream.ReceiveNext();
+        Vector3 receivedAngularVelocity = (Vector3)stream.ReceiveNext();
 
         // Aggiustamento per la latenza di rete
         float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
-        targetPosition += velocity * lag;
+        Vector3 adjustedPosition = receivedTargetPosition + (receivedVelocity * lag);
 
-        // Opzionale: applica la velocità e la velocità angolare per predire il movimento
+        // Log per mostrare la targetPosition ricevuta e dopo l'aggiustamento per la latenza
+        Debug.Log($"[Ricezione] Dati ricevuti - Received Target Position: {receivedTargetPosition}, Adjusted Position with lag: {adjustedPosition}");
+
+        // Aggiorna targetPosition e targetRotation con i nuovi valori ricevuti e aggiustati
+        targetPosition = adjustedPosition;
+        targetRotation = receivedTargetRotation;
+
+        // Applica la velocità e la velocità angolare per predire il movimento, se necessario
         if (applyVelocityPrediction) {
-            rb.velocity = velocity;
-            rb.angularVelocity = angularVelocity;
+            rb.velocity = receivedVelocity;
+            rb.angularVelocity = receivedAngularVelocity;
         }
+
+        // Log finale per confermare l'aggiornamento della targetPosition
+        Debug.Log($"[Ricezione] Dopo l'aggiornamento - Target Position aggiornata: {targetPosition}, Current Position: {rb.position}");
     }
 }
 
 
-public void ApplyInput(PlayerSyncStructs.Inputs inputs)
-{
-    // Converti gli input ricevuti in azioni del tuo veicolo
-    // Ad esempio:
-    if(inputs.stickMove.x < 0) TurnLeft(Mathf.Abs(inputs.stickMove.x));
-    else if(inputs.stickMove.x > 0) TurnRight(inputs.stickMove.x);
 
-    if(inputs.stickMove.y > 0) GoForward();
-    else if(inputs.stickMove.y < 0) GoReverse();
-
-    if(inputs.submitButon == 1) Handbrake();
-}
 
 
     public void SetKinematic(bool isKinematic)

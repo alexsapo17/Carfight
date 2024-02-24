@@ -156,6 +156,8 @@ MonoBehaviour:
   accelerationMultiplier: 10
   maxSteeringAngle: 29
   steeringSpeed: 0.5
+  TurnLeftXEditor: 1
+  TurnRightXEditor: -1
   brakeForce: 350
   decelerationMultiplier: 5
   handbrakeDriftMultiplier: 5
@@ -224,6 +226,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
+  - {fileID: 4356671514159796028}
   - {fileID: 3167637215189848620}
   sceneViewId: 0
   InstantiationId: 0

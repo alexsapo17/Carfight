@@ -2018,6 +2018,8 @@ MonoBehaviour:
   accelerationMultiplier: 12
   maxSteeringAngle: 29
   steeringSpeed: 0.5
+  TurnLeftXEditor: 1
+  TurnRightXEditor: -1
   brakeForce: 350
   decelerationMultiplier: 4
   handbrakeDriftMultiplier: 6
