@@ -480,7 +480,12 @@ void Update()
     {
         HandleHandbrakeInput();
     }
-
+    if (!photonView.IsMine)
+    {
+        // Interpola verso la posizione e rotazione target ricevute dalla rete
+        transform.position = Vector3.Lerp(transform.position, targetPosition, Time.deltaTime * positionLerpRate);
+        transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * rotationLerpRate);
+    }
 
 }
 public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
