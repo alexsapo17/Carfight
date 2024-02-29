@@ -8,6 +8,9 @@ public class PlayerJump : MonoBehaviourPun
     public Button jumpButton; // Assegna questo nell'Inspector
     public float jumpForce = 10f; // Potenza del salto, regolabile dall'Inspector
     public float cooldownDuration = 10f; // Durata del cooldown prima che il pulsante possa essere riattivato
+    public GameObject jumpEffectPrefab; // Prefab dell'effetto di salto
+    public Vector3 jumpEffectScale = Vector3.one; // Scala dell'effetto di salto
+    public Vector3 jumpEffectRotation = new Vector3(90f, 0f, 0f); // Rotazione dell'effetto di salto
 
     private bool isCooldown = false; // Flag per controllare lo stato del cooldown
 
@@ -20,21 +23,34 @@ public class PlayerJump : MonoBehaviourPun
     {
         if (isCooldown) return;
 
-        // Cerca tra tutti i PhotonView presenti nella scena
         foreach (var pv in FindObjectsOfType<PhotonView>())
         {
-            // Controlla se il PhotonView appartiene al giocatore locale e ha un componente PlayerEffects
             if (pv.IsMine && pv.gameObject.GetComponent<PlayerEffects>())
             {
-                // Ottieni il componente PlayerEffects
                 var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();
-
-                // Chiama il metodo per attivare il salto, assicurandosi che esista nel componente PlayerEffects
                 playerEffects.StartJump(jumpForce);
-                StartCooldown(); // Inizia il cooldown dopo aver attivato il salto
-                StartCoroutine(FadeButton(0f, 1f)); // Inizia l'animazione di fading
-                break; // Interrompe il ciclo una volta trovato e attivato il salto
+
+                // Passa la posizione del player al metodo TriggerJumpEffect
+                TriggerJumpEffect(pv.transform.position);
+
+                StartCooldown();
+                StartCoroutine(FadeButton(0f, 1f));
+                break;
             }
+        }
+    }
+
+    void TriggerJumpEffect(Vector3 position)
+    {
+        if (jumpEffectPrefab != null)
+        {
+            // Istanza l'effetto di salto con la rotazione e scala specificate
+            GameObject effect = Instantiate(jumpEffectPrefab, position, Quaternion.Euler(jumpEffectRotation));
+            effect.transform.localScale = jumpEffectScale;
+        }
+        else
+        {
+            Debug.LogError("Jump effect prefab is not assigned!");
         }
     }
 
@@ -60,19 +76,12 @@ public class PlayerJump : MonoBehaviourPun
 
         while (elapsedTime < cooldownDuration)
         {
-            // Calcola l'opacità in base al tempo trascorso rispetto alla durata del cooldown
             float alpha = Mathf.Lerp(startAlpha, targetAlpha, elapsedTime / cooldownDuration);
-            
-            // Imposta il colore con l'opacità calcolata
             graphic.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
-
-            // Aggiorna il tempo trascorso
             elapsedTime += Time.deltaTime;
-
             yield return null;
         }
 
-        // Assicurati di impostare il valore finale
         graphic.color = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
     }
 }
