@@ -15,25 +15,17 @@ public class GameManager : MonoBehaviourPunCallbacks
 {
     public GameObject carPrefab; // Prefab della macchina
     public static GameObject selectedCarPrefab;
-
-    public Text countdownText;
     public float preRaceTimer = 7.0f; // Tempo prima dell'inizio della gara
-    public float startRaceTimer = 5.0f; // Timer per l'inizio della gara
-       public Text preRaceCountdownText; 
-    public Text startRaceCountdownText;
-    
-      public Transform[] spawnPoints; // Punti di spawn delle macchine
+    public Transform[] spawnPoints; // Punti di spawn delle macchine
     public Transform[] startLineSpawnPoints;
-    
+    public float startRaceTimer = 5.0f; // Timer per l'inizio della gara
     public GameObject resultsPanel; // Pannello per i risultati
     public Text resultsText;
     public Button returnToLobbyButton; // Pulsante per tornare alla lobby
-    
+    public Text countdownText;
     public GameObject brickWallPrefab; // Prefab del muro di mattoni
     public Transform[] brickWallSpawnPoints; // Punti di spawn del muro di mattoni
-
 public Camera mainCamera;
-
 public Image handbrakeButton; 
 public Image throttleButton;
 public Image reverseButton;
@@ -41,7 +33,6 @@ public RectTransform abilityButtons;
 public HorizontalJoystick horizontalJoystick;
     public RectTransform button1RectTransform; // Assicurati di assegnare questi nel Unity Inspector
     public RectTransform button2RectTransform;
-
     private List<GameObject> instantiatedCars = new List<GameObject>(); // Lista delle macchine istanziate
     private List<GameObject> finishedCars = new List<GameObject>(); // Macchine che hanno finito la gara
     private Dictionary<GameObject, float> carFinishTimes = new Dictionary<GameObject, float>(); // Tempi di arrivo delle macchine
@@ -139,54 +130,49 @@ if (arrowScript != null)
             Debug.LogError("Non è stato possibile trovare l'auto con nome: " + carName);
         }
     }
-   IEnumerator PreRaceCountdown()
+    IEnumerator PreRaceCountdown()
     {
-                            countdownText.text = "Attendendo altri giocatori...";
-
-         // Attendi che tutte le auto siano istanziate.
+        // Attendi che tutte le auto siano istanziate.
+        countdownText.text = "Attendendo altri giocatori...";
         while (PhotonNetwork.CurrentRoom != null && instantiatedCars != null && PhotonNetwork.CurrentRoom.PlayerCount != instantiatedCars.Count)
         {
-
             yield return null; // Aspetta un frame prima di controllare nuovamente.
         }
-countdownText.gameObject.SetActive(false);
+
         if (PhotonNetwork.CurrentRoom == null)
         {
             countdownText.text = ""; // Pulisci il testo se la stanza non esiste più.
             yield break; // Fermati se la stanza non esiste più.
         }
 
-        preRaceCountdownText.text = "Preparati";
-        float preRaceTimer = this.preRaceTimer;
-        while (preRaceTimer > 0)
+        countdownText.text = "Preparati!";
+
+        // Countdown prima dell'inizio della gara.
+        float timer = preRaceTimer;
+        while (timer > 0)
         {
-            preRaceCountdownText.text = Mathf.RoundToInt(preRaceTimer).ToString();
-            preRaceTimer -= Time.deltaTime;
+            countdownText.text = $"{timer:F2}";
+            timer -= Time.deltaTime;
             yield return null;
         }
-                preRaceCountdownText.gameObject.SetActive(false); // Opzionale: nascondi il testo del pre-race timer
 
-        yield return new WaitForSeconds(1f); // Breve pausa prima di iniziare il countdown della gara
+        countdownText.text = "Via!";
+        yield return new WaitForSeconds(1f); // Breve pausa prima di iniziare la gara.
 
+   // Sincronizza le posizioni di partenza prima di iniziare la gara.
+    photonView.RPC("SyncStartPosition", RpcTarget.All);
 
-        startRaceCountdownText.gameObject.SetActive(true);
-         Animator startTextAnimator = startRaceCountdownText.GetComponent<Animator>();
-        if (startTextAnimator != null)
+        // Aggiungi il countdown per l'inizio della gara
+        float startTimer = startRaceTimer;
+        while (startTimer > 0)
         {
-                 startTextAnimator.SetTrigger("Enable"); // Attiva il trigger "Enable"
-        }
-
-            float startTimer = startRaceTimer;
-
-         while (startTimer > 0)
-        {
-            startRaceCountdownText.text = Mathf.RoundToInt(startTimer).ToString();
+            countdownText.text = $"{startTimer:F2}";
             startTimer -= Time.deltaTime;
             yield return null;
         }
-        
-         startRaceCountdownText.text = ""; // Nascondi il testo del countdown di inizio gara
-         photonView.RPC("StartRaceSync", RpcTarget.All);
+
+        countdownText.text = ""; // Nasconde il countdown una volta che la gara inizia.
+        photonView.RPC("StartRaceSync", RpcTarget.All);
     }
     public void SetCarPrefab(string carName)
     {
@@ -293,14 +279,6 @@ if (abilityRectTransform != null)
 {
     abilityRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
 }
-    RectTransform joystickRectTransform = horizontalJoystick.GetComponent<RectTransform>();
-    
-    if (joystickRectTransform != null)
-    {
-        // Sposta il joystick fuori dallo schermo aggiungendo un valore grande abbastanza all'anchoredPosition
-        joystickRectTransform.anchoredPosition += new Vector2(2000, 0); // Modifica questo valore in base alle tue necessità
-    }
-
 ShowEliminatedText();
     }
         
@@ -341,7 +319,7 @@ ShowEliminatedText();
             if (eliminatedPlayerView.IsMine)
             {
                 string playerName = eliminatedPlayerView.Owner.NickName;
-                string results = $" {place}  .  {playerName}--{carFinishTimes[eliminatedPlayer]:F2}";
+                string results = $" Posizione: {place}. {playerName} - Tempo: {carFinishTimes[eliminatedPlayer]:F2}";
                 resultsText.text = results;
                 resultsPanel.SetActive(true);
                 returnToLobbyButton.gameObject.SetActive(true);
