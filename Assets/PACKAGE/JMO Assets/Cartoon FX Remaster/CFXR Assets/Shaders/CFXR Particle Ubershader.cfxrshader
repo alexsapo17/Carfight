@@ -14,7 +14,7 @@ Shader "Cartoon FX/Remaster/Particle Ubershader"
 		[KeywordEnumNoPrefix(Alpha Blending, _ALPHABLEND_ON, Alpha Blending Premultiplied, _ALPHAPREMULTIPLY_ON, Multiplicative, _ALPHAMODULATE_ON, Additive, _CFXR_ADDITIVE)] _BlendingType ("Blending Type", Float) = 0
 
 	//# 
-		[ToggleNoKeyword] _ZWrite ("Depth Write", Float) = 0
+		[ToggleNoKeyword] _ZWrite ("Depth Write", Float) = 1
 		[Toggle(_ALPHATEST_ON)] _UseAlphaClip ("Alpha Clipping (Cutout)", Float) = 0
 	//# IF_KEYWORD _ALPHATEST_ON
 		_Cutoff ("Cutoff Threshold", Range(0.001,1)) = 0.1

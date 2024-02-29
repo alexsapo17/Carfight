@@ -8,8 +8,6 @@ TagManager:
   - FxTemporaire
   - SFX
   - Music
-  - Wall
-  - AbilityButton
   layers:
   - Default
   - TransparentFX
