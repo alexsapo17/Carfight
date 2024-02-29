@@ -35,15 +35,15 @@ public void ShowRewardPanel(int coins, int gems)
 
     GameObject rewardPanelInstance = Instantiate(rewardPanelPrefab);
 
-    // Utilizza GameObject.Find per trovare specificamente il Canvas desiderato per nome
-    Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+    // Trova il Canvas nella scena e imposta come genitore del pannello
+    Canvas canvas = FindObjectOfType<Canvas>();
     if (canvas != null)
     {
         rewardPanelInstance.transform.SetParent(canvas.transform, false);
     }
     else
     {
-        Debug.LogError("Canvas named 'Canvas' not found in the scene!");
+        Debug.LogError("Canvas not found in the scene!");
         return;
     }
 
@@ -51,7 +51,7 @@ public void ShowRewardPanel(int coins, int gems)
     Text gemsText = rewardPanelInstance.transform.Find("GemsText").GetComponent<Text>();
     Button closeButton = rewardPanelInstance.transform.Find("CloseButton").GetComponent<Button>();
 
-    coinsText.text = coins.ToString(); 
+     coinsText.text = coins.ToString(); 
     gemsText.text = gems.ToString(); 
 
     closeButton.onClick.AddListener(() => Destroy(rewardPanelInstance));

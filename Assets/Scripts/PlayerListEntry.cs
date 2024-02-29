@@ -36,30 +36,33 @@ namespace Photon.Pun.Demo.Asteroids
             PlayerNumbering.OnPlayerNumberingChanged += OnPlayerNumberingChanged;
         }
 
-       public void Start()
-{
-    if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
-    {
-        PlayerReadyButton.gameObject.SetActive(false);
-    }
-    else
-    {
-        // Imposta il giocatore locale come pronto automaticamente
-        isPlayerReady = true; // Imposta su true per indicare che il giocatore è pronto
-        SetPlayerReady(isPlayerReady); // Aggiorna l'UI per riflettere lo stato "pronto"
-
-        Hashtable props = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}};
-        PhotonNetwork.LocalPlayer.SetCustomProperties(props); // Comunica lo stato "pronto" agli altri giocatori
-
-        if (PhotonNetwork.IsMasterClient)
+        public void Start()
         {
-            FindObjectOfType<LobbyMainPanel>().LocalPlayerPropertiesUpdated();
-        }
+            if (PhotonNetwork.LocalPlayer.ActorNumber != ownerId)
+            {
+                PlayerReadyButton.gameObject.SetActive(false);
+            }
+            else
+            {
+                Hashtable initialProps = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}, {AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES}};
+                PhotonNetwork.LocalPlayer.SetCustomProperties(initialProps);
+                PhotonNetwork.LocalPlayer.SetScore(0);
 
-        // Poiché il giocatore è già pronto, nascondi il pulsante
-        PlayerReadyButton.gameObject.SetActive(false);
-    }
-}
+                PlayerReadyButton.onClick.AddListener(() =>
+                {
+                    isPlayerReady = !isPlayerReady;
+                    SetPlayerReady(isPlayerReady);
+
+                    Hashtable props = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}};
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+
+                    if (PhotonNetwork.IsMasterClient)
+                    {
+                        FindObjectOfType<LobbyMainPanel>().LocalPlayerPropertiesUpdated();
+                    }
+                });
+            }
+        }
 
         public void OnDisable()
         {

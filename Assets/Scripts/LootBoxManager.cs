@@ -27,7 +27,6 @@ public float destructionDelay = 2f; // Tempo dopo il quale il prefab verrà dist
 public LootBox[] lootBoxes;
 public GameObject tutorial3Panel;
 public GameObject tutorial4Panel;
-
 [SerializeField]
 private List<GameObject> objectsToToggle = new List<GameObject>();
 
@@ -38,9 +37,8 @@ public class LootBox
     public int boxCostGems; // Costo in gemme per aprire questa cassa
     public CurrencyType currencyType; // Tipo di valuta richiesta
     public Animator lootBoxAnimator;
-    public CarProbability[] carProbabilities; 
+    public CarProbability[] carProbabilities;
     public int experienceGain;
-    public ParticleSystem particleSystemToStop;
 }
 
 
@@ -116,7 +114,7 @@ public void OpenLootBox(int lootBoxIndex)
     SaveCar(selectedCar);
     CurrencyManager.Instance.UpdateCoinsUI(); // Assicurati che questa funzione aggiorni anche l'UI delle gemme se necessario
     // Avvia la coroutine per gestire il flusso
-StartCoroutine(WaitAndReactivateCanvas(selectedBox.lootBoxAnimator, selectedBox));
+    StartCoroutine(WaitAndReactivateCanvas(selectedBox.lootBoxAnimator));  
     // Avvia la coroutine per spawnare la macchina dopo l'animazione
     StartCoroutine(SpawnCarAfterAnimation(selectedCar, selectedBox.carProbabilities));
     ExperienceManager.Instance.AddExperience(selectedBox.experienceGain);
@@ -125,7 +123,7 @@ StartCoroutine(WaitAndReactivateCanvas(selectedBox.lootBoxAnimator, selectedBox)
 
 
 
-private IEnumerator WaitAndReactivateCanvas(Animator animator, LootBox lootBox) 
+private IEnumerator WaitAndReactivateCanvas(Animator animator) 
 {
     // Attendi la fine dell'animazione 
     yield return new WaitForSeconds(4.5f);
@@ -135,17 +133,10 @@ private IEnumerator WaitAndReactivateCanvas(Animator animator, LootBox lootBox)
     {
         obj.SetActive(true);
     }
-    
-    // Controlla e ferma il sistema di particelle per la cassa specificata
-    if (lootBox.particleSystemToStop != null)
-    {
-        lootBox.particleSystemToStop.Stop();
-    }
 
     // Resetta l'animazione della cassa
     animator.SetTrigger("ResetChest");
 }
-
 
 
     private string SelectRandomCar(CarProbability[] carProbabilities)

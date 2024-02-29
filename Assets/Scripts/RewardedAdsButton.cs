@@ -88,7 +88,7 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
         if (lastClaimed.HasValue)
         {
             nextClaimTime = lastClaimed.Value.Add(rewardCooldown);
-            TimeSpan timeUntilNextClaim = nextClaimTime.Value - DateTime.UtcNow; 
+            TimeSpan timeUntilNextClaim = nextClaimTime.Value - DateTime.UtcNow;
 
             if (timeUntilNextClaim > TimeSpan.Zero)
             {
@@ -97,15 +97,11 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
             else
             {
                 _showAdButton.interactable = true;
-                                countdownText.text = "Ready!";
-
             }
         }
         else
         {
             _showAdButton.interactable = true;
-                            countdownText.text = "Ready!";
-
         }
     }
 void Update()
@@ -124,6 +120,7 @@ void Update()
             if (timeUntilNextClaim <= TimeSpan.Zero)
             {
                 _showAdButton.interactable = true;
+                countdownText.text = "Ready!";
                 UpdateButtonStateAsync();
             }
             else
@@ -142,14 +139,12 @@ void TryAssignReferences()
     if (countdownTextObject != null && countdownText == null)
     {
         countdownText = countdownTextObject.GetComponent<Text>();
-        UpdateButtonStateAsync();
     }
 
     GameObject showAdButtonObject = GameObject.Find("ButtonAdsReward");
     if (showAdButtonObject != null && _showAdButton == null)
     {
         _showAdButton = showAdButtonObject.GetComponent<Button>();
-        UpdateButtonStateAsync();
     }
 }
 

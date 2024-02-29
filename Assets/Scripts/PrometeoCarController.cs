@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class PrometeoCarController : MonoBehaviour
+public class PrometeoCarController : MonoBehaviour,IPunObservable
 {
 
     //CAR SETUP
@@ -475,11 +475,11 @@ if(Input.GetKey(KeyCode.D)){
       AnimateWheelMeshes();
 
     }
-       /*  if (!photonView.IsMine) {
+         if (!photonView.IsMine) {
         // Interpola verso la posizione e rotazione target ricevute dalla rete
         rb.position = Vector3.Lerp(rb.position, targetPosition, Time.fixedDeltaTime * positionLerpRate);
         rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, Time.fixedDeltaTime * rotationLerpRate);
-    }*/
+    }
 
 }
 void Update()
@@ -498,7 +498,7 @@ void Update()
         }
     }
 }
-/*public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
     if (stream.IsWriting) {
         // Invia i dati locali agli altri giocatori
         stream.SendNext(rb.position);
@@ -538,7 +538,7 @@ void Update()
 }
 
 
-*/
+
 
 
     public void SetKinematic(bool isKinematic)

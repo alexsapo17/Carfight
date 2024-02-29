@@ -198,59 +198,29 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     {
         carController.SetKinematic(true);
     } 
- // Trova i canvas nella scena
-Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-Canvas canvas2 = GameObject.Find("Canvas2").GetComponent<Canvas>();
-
-// Assicurati che canvas sia quello desiderato e non null
-if (canvas != null)
-{
-
-    // Trova tutte le camere nella scena, comprese quelle disattivate
-    Camera[] cameras = FindObjectsOfType<Camera>(true); // true per includere oggetti disattivati
-foreach (Camera cam in cameras)
-{
-    if (cam.gameObject.name == "PlayerCamera(Clone)")
-    {
-        Destroy(cam.gameObject);
-        break; // Interrompe il ciclo una volta trovata e distrutta la PlayerCamera(Clone)
-    }
-}
-
-    Camera mainCamera = null;
-
-    foreach (Camera cam in cameras)
-    {
-        if (cam.gameObject.name == "Main Camera")
+   if (canvas != null)
         {
-            mainCamera = cam;
-            break; // Interrompe il ciclo una volta trovata la Main Camera
+            // Distruggi la camera correntemente in uso se non è null
+            if (canvas.worldCamera != null)
+            {
+                Destroy(canvas.worldCamera.gameObject);
+            }
+
+            // Trova e assegna la camera chiamata "Main Camera"
+            Camera mainCamera = GameObject.Find("Main Camera")?.GetComponent<Camera>();
+            if (mainCamera != null)
+            {
+                canvas.worldCamera = mainCamera;
+                // Assicurati che la camera "Main Camera" sia attiva
+                mainCamera.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("No camera named 'Main Camera' found in the scene.");
+            }
+
+            canvas.renderMode = RenderMode.ScreenSpaceCamera; // Cambia la modalità del Canvas
         }
-  
-    }
-
-    if (mainCamera != null)
-    {
-        // Assicurati di assegnare la main camera al Canvas corretto
-        canvas.worldCamera = mainCamera;
-        
-        // Attiva la Main Camera in caso fosse disattivata
-        mainCamera.gameObject.SetActive(true);
-        
-        // Cambia la modalità del Canvas
-        canvas.renderMode = RenderMode.ScreenSpaceCamera;
-    }
-    else
-    {
-        Debug.LogError("No camera named 'Main Camera' found in the scene.");
-    }
-}
-else
-{
-    Debug.LogError("Canvas not found in the scene.");
-}
-
-
 
   gameControlsUI.SetActive(false);
     raceStarted = false;
@@ -354,59 +324,29 @@ public void FinishRace()
     {
         carController.SetKinematic(true);
     }
- // Trova i canvas nella scena
-Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-Canvas canvas2 = GameObject.Find("Canvas2").GetComponent<Canvas>();
-
-// Assicurati che canvas sia quello desiderato e non null
-if (canvas != null)
-{
-
-    // Trova tutte le camere nella scena, comprese quelle disattivate
-    Camera[] cameras = FindObjectsOfType<Camera>(true); // true per includere oggetti disattivati
-foreach (Camera cam in cameras)
-{
-    if (cam.gameObject.name == "PlayerCamera(Clone)")
-    {
-        Destroy(cam.gameObject);
-        break; // Interrompe il ciclo una volta trovata e distrutta la PlayerCamera(Clone)
-    }
-}
-
-    Camera mainCamera = null;
-
-    foreach (Camera cam in cameras)
-    {
-        if (cam.gameObject.name == "Main Camera")
+  if (canvas != null)
         {
-            mainCamera = cam;
-            break; // Interrompe il ciclo una volta trovata la Main Camera
+            // Distruggi la camera correntemente in uso se non è null
+            if (canvas.worldCamera != null)
+            {
+                Destroy(canvas.worldCamera.gameObject);
+            }
+
+            // Trova e assegna la camera chiamata "Main Camera"
+            Camera mainCamera = GameObject.Find("Main Camera")?.GetComponent<Camera>();
+            if (mainCamera != null)
+            {
+                canvas.worldCamera = mainCamera;
+                // Assicurati che la camera "Main Camera" sia attiva
+                mainCamera.gameObject.SetActive(true);
+            }
+            else
+            {
+                Debug.LogError("No camera named 'Main Camera' found in the scene.");
+            }
+
+            canvas.renderMode = RenderMode.ScreenSpaceCamera; // Cambia la modalità del Canvas
         }
-  
-    }
-
-    if (mainCamera != null)
-    {
-        // Assicurati di assegnare la main camera al Canvas corretto
-        canvas.worldCamera = mainCamera;
-        
-        // Attiva la Main Camera in caso fosse disattivata
-        mainCamera.gameObject.SetActive(true);
-        
-        // Cambia la modalità del Canvas
-        canvas.renderMode = RenderMode.ScreenSpaceCamera;
-    }
-    else
-    {
-        Debug.LogError("No camera named 'Main Camera' found in the scene.");
-    }
-}
-else
-{
-    Debug.LogError("Canvas not found in the scene.");
-}
-
-
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;

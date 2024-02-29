@@ -11,22 +11,19 @@ public class PlayerNicknameDisplay : MonoBehaviourPunCallbacks
     private Text nicknameText;
 
     private DatabaseReference databaseReference;
-void Start()
-{
-    if (photonView.IsMine)
+
+    void Start()
     {
-        // Ottieni il riferimento al database di Firebase
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-
-        // Crea l'UI del nickname per questo giocatore
-        nicknameUIInstance = Instantiate(nicknameUIPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
-        nicknameText = nicknameUIInstance.GetComponentInChildren<Text>();
-
-        // Assicurati di essere autenticato e di usare l'ID utente corretto
-        Firebase.Auth.FirebaseAuth auth = Firebase.Auth.FirebaseAuth.DefaultInstance;
-        if (auth.CurrentUser != null)
+        if (photonView.IsMine)
         {
-            string userId = auth.CurrentUser.UserId; // Usa l'ID utente autenticato
+            // Ottieni il riferimento al database di Firebase
+            databaseReference = FirebaseDatabase.DefaultInstance.RootReference; 
+
+            // Crea l'UI del nickname per questo giocatore
+            nicknameUIInstance = Instantiate(nicknameUIPrefab, transform.position + Vector3.up * 2, Quaternion.identity);
+            nicknameText = nicknameUIInstance.GetComponentInChildren<Text>();
+
+            string userId = "userId"; // Sostituisci con il metodo per ottenere l'ID utente corretto
             databaseReference.Child("users").Child(userId).Child("nickname").GetValueAsync().ContinueWithOnMainThread(task =>
             {
                 if (task.IsCompleted && !task.IsFaulted)
@@ -38,15 +35,13 @@ void Start()
             });
         }
     }
-}
-
 
     void Update()
     {
         if (nicknameUIInstance != null)
         {
             // Aggiorna la posizione del nickname UI per seguirlo sopra la macchina
-            nicknameUIInstance.transform.position = transform.position + Vector3.up * 4;
+            nicknameUIInstance.transform.position = transform.position + Vector3.up * 3;
             // Opzionalmente, ruota l'UI per farlo sempre guardare verso la camera
             nicknameUIInstance.transform.rotation = Camera.main.transform.rotation;
         }

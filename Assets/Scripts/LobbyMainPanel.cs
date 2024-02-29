@@ -51,7 +51,7 @@ public GameObject Interactable1Panel;
 public GameObject Interactable2Panel;
 
 public GameObject Interactable3Panel;
-public Text startGameTimerText;
+
 public Animator transitionAnimator;
 
 public GameObject NoCoinsPanel;
@@ -63,8 +63,6 @@ public GameObject tutorial2Panel;
         private Dictionary<int, GameObject> playerListEntries;
         private FirebaseAuth auth;
         private DatabaseReference databaseReference;
-        private bool isRandomRoom = false;
-    private Coroutine startGameCoroutine;
 
         #region UNITY
 
@@ -460,6 +458,108 @@ UpdateCurrencyUI();
 
         }
 
+        public override void OnJoinedRoom()
+        {
+            // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
+            cachedRoomList.Clear();
+UpdateCurrencyUI();
+
+            SetActivePanel(InsideRoomPanel.name);
+
+            if (playerListEntries == null)
+            {
+                playerListEntries = new Dictionary<int, GameObject>();
+            }
+
+            foreach (Player p in PhotonNetwork.PlayerList)
+            {
+                GameObject entry = Instantiate(PlayerListEntryPrefab);
+  entry.transform.SetParent(InsideRoomPanel.transform, false);
+entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
+entry.transform.localScale = Vector3.one; 
+                entry.GetComponent<PlayerListEntry>().Initialize(p.ActorNumber, p.NickName);
+
+                object isPlayerReady;
+                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_READY, out isPlayerReady))
+                {
+                    entry.GetComponent<PlayerListEntry>().SetPlayerReady((bool)isPlayerReady);
+                }
+
+                playerListEntries.Add(p.ActorNumber, entry);
+            }
+
+            StartGameButton.gameObject.SetActive(CheckPlayersReady());
+
+            Hashtable props = new Hashtable
+            {
+                {AsteroidsGame.PLAYER_LOADED_LEVEL, false}
+            };
+            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+        }
+
+        public override void OnLeftRoom()
+        {
+            SetActivePanel(SelectionPanel.name);
+
+            foreach (GameObject entry in playerListEntries.Values)
+            {
+                Destroy(entry.gameObject);
+            }
+UpdateCurrencyUI();
+            playerListEntries.Clear();
+            playerListEntries = null;
+        }
+
+        public override void OnPlayerEnteredRoom(Player newPlayer)
+        {
+            GameObject entry = Instantiate(PlayerListEntryPrefab);
+ entry.transform.SetParent(InsideRoomPanel.transform, false);
+entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
+entry.transform.localScale = Vector3.one; 
+            entry.GetComponent<PlayerListEntry>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
+
+            playerListEntries.Add(newPlayer.ActorNumber, entry);
+
+            StartGameButton.gameObject.SetActive(CheckPlayersReady());
+        }
+
+        public override void OnPlayerLeftRoom(Player otherPlayer)
+        {
+            Destroy(playerListEntries[otherPlayer.ActorNumber].gameObject);
+            playerListEntries.Remove(otherPlayer.ActorNumber);
+
+            StartGameButton.gameObject.SetActive(CheckPlayersReady());
+            UpdateCurrencyUI();
+        }
+
+        public override void OnMasterClientSwitched(Player newMasterClient)
+        {
+            if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
+            {
+                StartGameButton.gameObject.SetActive(CheckPlayersReady());
+            }
+        }
+
+        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
+        {
+            if (playerListEntries == null)
+            {
+                playerListEntries = new Dictionary<int, GameObject>();
+            }
+
+            GameObject entry;
+            if (playerListEntries.TryGetValue(targetPlayer.ActorNumber, out entry))
+            {
+                object isPlayerReady;
+                if (changedProps.TryGetValue(AsteroidsGame.PLAYER_READY, out isPlayerReady))
+                {
+                    entry.GetComponent<PlayerListEntry>().SetPlayerReady((bool)isPlayerReady);
+                }
+            }
+
+            StartGameButton.gameObject.SetActive(CheckPlayersReady());
+        }
+
         #endregion
 
         #region UI CALLBACKS
@@ -484,7 +584,6 @@ PhotonNetwork.Disconnect();
 
         public void OnCreateRoomButtonClicked()
         {
-            isRandomRoom = false;
             string roomName = RoomNameInputField.text;
             roomName = (roomName.Equals(string.Empty)) ? "Room " + Random.Range(1000, 10000) : roomName;
 
@@ -534,7 +633,6 @@ NoCarSelectedPanel.SetActive(true);
     {
         SetActivePanel(JoinRandomRoomPanel.name);
         PhotonNetwork.JoinRandomRoom();
-        isRandomRoom = true;
     }
     else
     {
@@ -574,14 +672,9 @@ void StartGame()
 
             if (currencyManager.TrySpendCoins(entryCost))
             {
-                    // Assicurati che solo il Master Client avvii la partita per evitare avvii multipli
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel("GameScene");
-        }
- 
+                PhotonNetwork.CurrentRoom.IsOpen = false;
+                PhotonNetwork.CurrentRoom.IsVisible = false;
+                PhotonNetwork.LoadLevel("GameScene");
             }
             else
             {
@@ -619,204 +712,6 @@ void StartGame()
         }
 
 
-
-        public override void OnJoinedRoom()
-        {
-            // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
-            cachedRoomList.Clear();
-UpdateCurrencyUI();
-
-            SetActivePanel(InsideRoomPanel.name);
-
-            if (playerListEntries == null)
-            {
-                playerListEntries = new Dictionary<int, GameObject>();
-            }
-
-            foreach (Player p in PhotonNetwork.PlayerList)
-            {
-                GameObject entry = Instantiate(PlayerListEntryPrefab);
-  entry.transform.SetParent(InsideRoomPanel.transform, false);
-entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
-entry.transform.localScale = Vector3.one; 
-                entry.GetComponent<PlayerListEntry>().Initialize(p.ActorNumber, p.NickName);
-
-                object isPlayerReady;
-                if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_READY, out isPlayerReady))
-                {
-                    entry.GetComponent<PlayerListEntry>().SetPlayerReady((bool)isPlayerReady);
-                }
-
-                playerListEntries.Add(p.ActorNumber, entry);
-            }
-
- // Controlla se la stanza è casuale e aggiorna di conseguenza
-    if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }
-            Hashtable props = new Hashtable
-            {
-                {AsteroidsGame.PLAYER_LOADED_LEVEL, false}
-            };
-            PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-        }
-
-        public override void OnLeftRoom()
-        {
-            SetActivePanel(SelectionPanel.name);
-
-            foreach (GameObject entry in playerListEntries.Values)
-            {
-                Destroy(entry.gameObject);
-            }
-UpdateCurrencyUI();
-            playerListEntries.Clear();
-            playerListEntries = null;
-        }
-
-        public override void OnPlayerEnteredRoom(Player newPlayer)
-        {
-            GameObject entry = Instantiate(PlayerListEntryPrefab);
- entry.transform.SetParent(InsideRoomPanel.transform, false);
-entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
-entry.transform.localScale = Vector3.one; 
-            entry.GetComponent<PlayerListEntry>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
-
-            playerListEntries.Add(newPlayer.ActorNumber, entry);
-     if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }
-        }
-
-        public override void OnPlayerLeftRoom(Player otherPlayer)
-        {
-            Destroy(playerListEntries[otherPlayer.ActorNumber].gameObject);
-            playerListEntries.Remove(otherPlayer.ActorNumber);
-     if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }
-            UpdateCurrencyUI();
-        }
-
- private void UpdateGameStartCondition()
-    {
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-        {
-            // Se non c'è già un timer in corso, inizialo
-            if (startGameCoroutine == null)
-            {
-                startGameCoroutine = StartCoroutine(StartGameTimer());
-            }
-        }
-        else
-        {
-            // Se c'è meno di due giocatori, ferma il timer e resetta la coroutine
-            if (startGameCoroutine != null)
-            {
-                StopCoroutine(startGameCoroutine);
-                startGameCoroutine = null;
-               startGameTimerText.text = "";            }
-        }
-    }
-private System.Collections.IEnumerator StartGameTimer()
-{
-    
-        int timeLeft = 10; // Imposta il timer a 10 secondi
-
-        while (timeLeft > 0)
-        {
-            startGameTimerText.text = "Inizio in: " + timeLeft; // Aggiorna il testo del timer
-            yield return new WaitForSeconds(1); // Aspetta un secondo
-            timeLeft--; // Decrementa il timer
-        }
-
-        startGameTimerText.text = ""; // Pulisci il testo del timer o imposta un messaggio finale se desiderato
-
-        // Avvia la partita
-        StartGame();
-    }
-
-        public override void OnMasterClientSwitched(Player newMasterClient)
-        {
-            if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
-            {
-    if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }
-                }
-        }
-
-        public override void OnPlayerPropertiesUpdate(Player targetPlayer, Hashtable changedProps)
-        {
-            if (playerListEntries == null)
-            {
-                playerListEntries = new Dictionary<int, GameObject>();
-            }
-
-            GameObject entry;
-            if (playerListEntries.TryGetValue(targetPlayer.ActorNumber, out entry))
-            {
-                object isPlayerReady;
-                if (changedProps.TryGetValue(AsteroidsGame.PLAYER_READY, out isPlayerReady))
-                {
-                    entry.GetComponent<PlayerListEntry>().SetPlayerReady((bool)isPlayerReady);
-                }
-            }
-
-    if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }
-            }
 
         #endregion
 
@@ -858,19 +753,8 @@ private System.Collections.IEnumerator StartGameTimer()
 
         public void LocalPlayerPropertiesUpdated()
         {
-    if (isRandomRoom)
-    {
-        // Nascondi il pulsante "Start Game" nelle stanze casuali
-        StartGameButton.gameObject.SetActive(false);
-        
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
-    }
-    else
-    {
-        // Mostra il pulsante "Start Game" nelle stanze private
-        StartGameButton.gameObject.SetActive(CheckPlayersReady());
-    }        }
+            StartGameButton.gameObject.SetActive(CheckPlayersReady());
+        }
 
         private void SetActivePanel(string activePanel)
         {
