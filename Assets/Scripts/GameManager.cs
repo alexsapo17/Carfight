@@ -170,11 +170,6 @@ countdownText.gameObject.SetActive(false);
 
 
         startRaceCountdownText.gameObject.SetActive(true);
-         Animator startTextAnimator = startRaceCountdownText.GetComponent<Animator>();
-        if (startTextAnimator != null)
-        {
-                 startTextAnimator.SetTrigger("Enable"); // Attiva il trigger "Enable"
-        }
 
             float startTimer = startRaceTimer;
 
