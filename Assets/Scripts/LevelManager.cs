@@ -4,8 +4,6 @@ using Photon.Pun;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
-using Firebase.Database;
-using Firebase.Extensions;
 
 public class LevelManager : MonoBehaviour
 {
@@ -49,7 +47,6 @@ public Animator transitionAnimator;
         public Transform survivalSpawnPoint;
         public GameObject retryButton;
 private InterstitialAd interstitialAd;
-    private DatabaseReference databaseReference;
     private float survivalTime = 0f;
     private bool gameIsOver = false;
 
@@ -79,7 +76,6 @@ private InterstitialAd interstitialAd;
         };
         UpdateGemsUI();
             interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
-        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 
     }
 
@@ -485,8 +481,6 @@ else
                 pickupsManager.EndRace(); // Termina lo spawn e pulisce i pickup
 
     }
-        // Salva il tempo di sopravvivenza su Firebase
-        SaveSurvivalTime(survivalTime);
     }
     
 
@@ -495,11 +489,7 @@ else
         survivalTimerText.text = $"Survival Time: {time.ToString("F2")}";
     }
 
-    void SaveSurvivalTime(float time)
-    {
-        string userId = "UserID"; // Ottieni l'ID utente da qualche parte
-        databaseReference.Child("users").Child(userId).Child("survivalTime").SetValueAsync(time);
-    }
+
 
 private void UpdateStarDisplay(int starsEarned)
 {
