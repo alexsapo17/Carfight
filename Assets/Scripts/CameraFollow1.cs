@@ -7,6 +7,8 @@ public class CameraFollow : MonoBehaviour
     public Vector3 offset = new Vector3(0, 5, -10);
     public float fixedYPosition = 10.0f;
     public float smoothSpeed = 5.0f;
+        public float smoothSpeedY = 0.5f; // Velocità di interpolazione per l'asse Y, molto più lenta
+
     public float tiltAngleX = 20.0f;
 public float touchSensitivity = 0.5f; // Regola questa variabile per controllare la sensibilità del trascinamento
 
@@ -132,19 +134,31 @@ if (touch.phase == TouchPhase.Moved)
 }
 
  
-    void LateUpdate()
+ void LateUpdate()
+{
+    if (target != null)
     {
-        if (target != null)
-        {
-            Vector3 offsetRotated = target.TransformDirection(offset);
-            Vector3 desiredPosition = target.position + offsetRotated;
-            Vector3 smoothedPosition = Vector3.Lerp(transform.position, new Vector3(desiredPosition.x, desiredPosition.y, desiredPosition.z), smoothSpeed * Time.deltaTime);
-            transform.position = smoothedPosition;
-            transform.LookAt(target);
-            Vector3 currentRotation = transform.eulerAngles;
-            transform.rotation = Quaternion.Euler(currentRotation.x + tiltAngleX, currentRotation.y, currentRotation.z);
-        }
+        Vector3 offsetRotated = target.TransformDirection(offset);
+        Vector3 desiredPosition = target.position + offsetRotated;
+
+        // Usa smoothSpeed per le componenti X e Z, e smoothSpeedY per la componente Y
+        float smoothedPositionX = Mathf.Lerp(transform.position.x, desiredPosition.x, smoothSpeed * Time.deltaTime);
+        float smoothedPositionY = Mathf.Lerp(transform.position.y, desiredPosition.y, smoothSpeedY * Time.deltaTime);
+        float smoothedPositionZ = Mathf.Lerp(transform.position.z, desiredPosition.z, smoothSpeed * Time.deltaTime);
+
+        // Applica la posizione interpolata alla camera
+        transform.position = new Vector3(smoothedPositionX, smoothedPositionY, smoothedPositionZ);
+
+        // Mantieni la camera rivolta verso il target
+        transform.LookAt(target);
+
+        // Applica l'inclinazione sull'asse X aggiuntiva, se desiderato
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.rotation = Quaternion.Euler(currentRotation.x + tiltAngleX, currentRotation.y, currentRotation.z);
     }
+}
+
+
    private bool IsPointerOverUIObject(Vector2 touchPos)
     {
         PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);

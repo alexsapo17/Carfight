@@ -4,8 +4,8 @@ using Photon.Pun;
 using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.SceneManagement;
-
-
+using Firebase.Database;
+using Firebase.Extensions;
 
 public class LevelManager : MonoBehaviour
 {
@@ -20,6 +20,7 @@ public class LevelManager : MonoBehaviour
     private float raceTimer; // Timer della gara
     private bool raceStarted = false;
     public Text raceTimerText; // Riferimento al testo del timer nel UI
+    public Text survivalTimerText;
     public PrometeoCarController carController; // Riferimento al controller della macchina
     public Text finishTimeText; 
     public Text countdownText;
@@ -28,6 +29,12 @@ public class LevelManager : MonoBehaviour
     public LevelProgressManager progressManager;
     public GameObject gameControlsUI;
     public GameObject levelLockedPanel; 
+        public GameObject firstPanel; 
+                public GameObject quitSurvivalButton; 
+                public GameObject quitButton; 
+
+public GameObject gameOverPanel;
+
     public Canvas canvas;
     public Image imageOnCanvas; // Aggiungi questa per l'immagine nel canvas
 public Image[] childCanvasImages; // Array di immagini nel canvas
@@ -39,9 +46,12 @@ public Animator transitionAnimator;
         public GameObject TutorialSingleplayer2Panel;
 
         public GameObject TutorialSingleplayer3Panel;
-
+        public Transform survivalSpawnPoint;
+        public GameObject retryButton;
 private InterstitialAd interstitialAd;
-
+    private DatabaseReference databaseReference;
+    private float survivalTime = 0f;
+    private bool gameIsOver = false;
 
 
     void Start()
@@ -69,6 +79,7 @@ private InterstitialAd interstitialAd;
         };
         UpdateGemsUI();
             interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
+        databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
 
     }
 
@@ -78,6 +89,8 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     LoadLevel(currentLevelIndex); // Ricarica il livello corrente
     finishPanel.SetActive(false); // Nasconde il pannello di fine livello
     gameControlsUI.SetActive(true);
+            retryButton.gameObject.SetActive(true);
+
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
 
     // Disattiva ogni GameObject associato a ciascuna Image nell'array
@@ -107,6 +120,8 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         LoadLevel(nextLevelIndex);
         finishPanel.SetActive(false);
         gameControlsUI.SetActive(true);
+                    retryButton.gameObject.SetActive(true);
+
     SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
     foreach (Image img in childCanvasImages)
     {
@@ -162,6 +177,9 @@ public void LoadLevel(int levelIndex)
     if (currentCar != null)
         PhotonNetwork.Destroy(currentCar);
     gameControlsUI.SetActive(true);
+                retryButton.gameObject.SetActive(true);
+   quitSurvivalButton.gameObject.SetActive(true);
+    quitButton.gameObject.SetActive(false);
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);
     int carIndex = levelCarMap[levelIndex];
     currentCar = PhotonNetwork.Instantiate(carPrefabs[carIndex].name, new Vector3(0, 1, 0), Quaternion.identity);
@@ -284,8 +302,205 @@ void Update()
         UpdateRaceTimer(); 
     }
 
-
+        if (!gameIsOver)
+        {
+            survivalTime += Time.deltaTime;
+            UpdateTimerUI(survivalTime);
+        }
 }
+ public void StartSurvivalLevel()
+{
+    // Assicurati che il gioco sia in modalità offline se stai lavorando in singleplayer
+    PhotonNetwork.OfflineMode = true;
+
+
+        gameOverPanel.SetActive(false);
+
+    // Distruggi il livello e la macchina correnti se presenti
+    if (currentLevel != null)
+        PhotonNetwork.Destroy(currentLevel);
+    if (currentCar != null)
+        PhotonNetwork.Destroy(currentCar);
+
+    // Carica il nome della macchina selezionata dalle PlayerPrefs
+    string selectedCarName = PlayerPrefs.GetString("SelectedCar");
+        retryButton.gameObject.SetActive(false);
+
+gameControlsUI.SetActive(true);
+    quitSurvivalButton.gameObject.SetActive(true);
+    quitButton.gameObject.SetActive(false);
+
+    // Istanza la macchina selezionata al punto di spawn del livello di sopravvivenza
+    currentCar = PhotonNetwork.Instantiate(selectedCarName, survivalSpawnPoint.position, survivalSpawnPoint.rotation);
+    
+    // Ottieni il componente PrometeoCarController dalla macchina appena istanziata
+    carController = currentCar.GetComponent<PrometeoCarController>();
+
+        
+    
+    
+    // Prepara la scena per il livello di sopravvivenza
+    Camera.main.gameObject.SetActive(false);
+
+    canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+    firstPanel.SetActive(false);
+    SetImageTransparency(imageOnCanvas, 0); // Rendi trasparente l'immagine
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(false);
+    }
+
+    // Carica l'annuncio pubblicitario, se disponibile
+    if (interstitialAd != null)
+    {
+        interstitialAd.LoadAd();
+    }
+// Assumi che EnemyManager sia assegnato tramite l'Inspector o trovalo qui
+EnemyManager enemyManager = FindObjectOfType<EnemyManager>();
+if (enemyManager != null)
+{
+    enemyManager.BeginEnemySpawn();
+}
+else
+{
+    Debug.LogError("EnemyManager non trovato.");
+}
+
+       survivalTime = 0f;
+        gameIsOver = false;
+        // Trova il SurvivalPickupsManager nella scena
+    SurvivalPickupsManager pickupsManager = FindObjectOfType<SurvivalPickupsManager>();
+    if (pickupsManager != null)
+    {
+        
+                pickupsManager.StartRace(); // Termina lo spawn e pulisce i pickup
+
+    }
+    // Qui potresti voler avviare logiche specifiche per il livello di sopravvivenza,
+    // come timer, spawn di nemici, ecc.
+    StartCoroutine(EnableControlsAfterDelay(5f));
+}
+
+
+    IEnumerator EnableControlsAfterDelay(float delay)
+    {
+        // Mostra il countdown all'utente
+        while (delay > 0)
+        {
+                countdownText.gameObject.SetActive(true);
+
+            countdownText.text = "" + delay;
+            yield return new WaitForSeconds(1);
+            delay--;
+        }
+
+        // Azioni finali prima di abilitare i controlli
+        countdownText.text = "";
+
+        yield return new WaitForSeconds(0); // Opzionale: attendi un altro secondo prima di nascondere il testo
+        
+        countdownText.gameObject.SetActive(false); // Nasconde il testo del countdown
+
+        carController.EnableControls(); // Abilita i controlli
+    }
+
+
+     public void FinishSurvivalGame()
+    {
+    
+        gameIsOver = true;
+        gameOverPanel.SetActive(true);
+        gameControlsUI.SetActive(false);
+    if (currentCar != null)
+        PhotonNetwork.Destroy(currentCar);
+ 
+    SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
+    foreach (Image img in childCanvasImages)
+    {
+        img.gameObject.SetActive(true);
+    }
+        // Distruggi tutti i nemici
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        foreach (GameObject enemy in enemies)
+        {
+            Destroy(enemy);
+        }
+
+        // Trova i canvas nella scena
+Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+Canvas canvas2 = GameObject.Find("Canvas2").GetComponent<Canvas>();
+
+// Assicurati che canvas sia quello desiderato e non null
+if (canvas != null)
+{
+
+    // Trova tutte le camere nella scena, comprese quelle disattivate
+    Camera[] cameras = FindObjectsOfType<Camera>(true); // true per includere oggetti disattivati
+foreach (Camera cam in cameras)
+{
+    if (cam.gameObject.name == "PlayerCamera(Clone)")
+    {
+        Destroy(cam.gameObject);
+        break; // Interrompe il ciclo una volta trovata e distrutta la PlayerCamera(Clone)
+    }
+}
+
+    Camera mainCamera = null;
+
+    foreach (Camera cam in cameras)
+    {
+        if (cam.gameObject.name == "Main Camera")
+        {
+            mainCamera = cam;
+            break; // Interrompe il ciclo una volta trovata la Main Camera
+        }
+  
+    }
+
+    if (mainCamera != null)
+    {
+        // Assicurati di assegnare la main camera al Canvas corretto
+        canvas.worldCamera = mainCamera;
+        
+        // Attiva la Main Camera in caso fosse disattivata
+        mainCamera.gameObject.SetActive(true);
+        
+        // Cambia la modalità del Canvas
+        canvas.renderMode = RenderMode.ScreenSpaceCamera;
+    }
+    else
+    {
+        Debug.LogError("No camera named 'Main Camera' found in the scene.");
+    }
+}
+else
+{
+    Debug.LogError("Canvas not found in the scene.");
+}
+// Trova il SurvivalPickupsManager nella scena
+    SurvivalPickupsManager pickupsManager = FindObjectOfType<SurvivalPickupsManager>();
+    if (pickupsManager != null)
+    {
+        pickupsManager.AssignCollectedItems();
+                pickupsManager.EndRace(); // Termina lo spawn e pulisce i pickup
+
+    }
+        // Salva il tempo di sopravvivenza su Firebase
+        SaveSurvivalTime(survivalTime);
+    }
+    
+
+    void UpdateTimerUI(float time)
+    {
+        survivalTimerText.text = $"Survival Time: {time.ToString("F2")}";
+    }
+
+    void SaveSurvivalTime(float time)
+    {
+        string userId = "UserID"; // Ottieni l'ID utente da qualche parte
+        databaseReference.Child("users").Child(userId).Child("survivalTime").SetValueAsync(time);
+    }
+
 private void UpdateStarDisplay(int starsEarned)
 {
     for (int i = 0; i < starImages.Length; i++)

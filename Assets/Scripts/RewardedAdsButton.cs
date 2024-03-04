@@ -5,7 +5,7 @@ using Firebase.Database;
 using System;
 using System.Threading.Tasks;
 using Firebase.Auth;
-
+using UnityEngine.SceneManagement;
 public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowListener
 {
     [SerializeField] Button _showAdButton;
@@ -50,7 +50,22 @@ public class RewardedAdsButton : MonoBehaviour, IUnityAdsLoadListener, IUnityAds
             _showAdButton.interactable = true;
         }
     }
+void OnEnable()
+{
+    SceneManager.sceneLoaded += OnSceneLoaded;
+}
 
+void OnDisable()
+{
+    SceneManager.sceneLoaded -= OnSceneLoaded;
+}
+
+private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+{
+    TryAssignReferences();
+    // Potresti anche voler ricaricare l'annuncio qui, per essere sicuro che sia pronto
+    LoadAd();
+}
     public void ShowAd()
     {
         _showAdButton.interactable = false;

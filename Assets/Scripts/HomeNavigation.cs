@@ -12,6 +12,7 @@ public class HomeNavigation : MonoBehaviour
     public LevelManager levelManager; // Riferimento a LevelManager
         public GameObject TutorialSingleplayerPanel;
     public GameObject TutorialSingleplayer2Panel;
+    public GameObject gameOverPanel;
 
 public GameObject finishPanel; 
     void Start()
@@ -78,6 +79,8 @@ public void OnLevelSelect(int levelIndex)
         missionsPanel.SetActive(false);
         finishPanel.SetActive(false);
      LeaderboardPanel.SetActive(false);
+             gameOverPanel.SetActive(false);
+
 
     }
         public void OpenLeaderBoardPanel()

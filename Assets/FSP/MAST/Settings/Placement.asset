@@ -16,7 +16,7 @@ MonoBehaviour:
   overridePrefabOffset: 0
   offset:
     pos: {x: 0, y: 0, z: 0}
-  overridePrefabRotation: 0
+  overridePrefabRotation: 1
   rotation:
     step: {x: 0, y: 90, z: 0}
   overridePrefabRaycast: 0

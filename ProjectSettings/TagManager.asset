@@ -8,6 +8,10 @@ TagManager:
   - FxTemporaire
   - SFX
   - Music
+  - Wall
+  - MAST_Holder
+  - Enemy
+  - Terrain
   layers:
   - Default
   - TransparentFX

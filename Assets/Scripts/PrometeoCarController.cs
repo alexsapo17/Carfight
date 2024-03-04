@@ -12,7 +12,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Photon.Pun;
 
-public class PrometeoCarController : MonoBehaviour
+public class PrometeoCarController : MonoBehaviour,IPunObservable
 {
 
     //CAR SETUP
@@ -331,16 +331,6 @@ public void DestroyCameraInstance() {
 }
 
 
- void OnDrawGizmos()
-{
-    if (!photonView.IsMine)
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawSphere(targetPosition, 0.5f); // Disegna una sfera rossa nella posizione target
-    }
-}
-
-
   void FixedUpdate()
 {
    if (!controlsEnabled)
@@ -475,11 +465,11 @@ if(Input.GetKey(KeyCode.D)){
       AnimateWheelMeshes();
 
     }
-       /*  if (!photonView.IsMine) {
+        if (!photonView.IsMine) {
         // Interpola verso la posizione e rotazione target ricevute dalla rete
         rb.position = Vector3.Lerp(rb.position, targetPosition, Time.fixedDeltaTime * positionLerpRate);
         rb.rotation = Quaternion.Lerp(rb.rotation, targetRotation, Time.fixedDeltaTime * rotationLerpRate);
-    }*/
+    }
 
 }
 void Update()
@@ -498,7 +488,14 @@ void Update()
         }
     }
 }
-/*public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
+
+    // Se vuoi, puoi anche aggiungere un metodo per verificare lo stato dei controlli
+    public bool AreControlsEnabled()
+    {
+        return controlsEnabled;
+    }
+
+public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
     if (stream.IsWriting) {
         // Invia i dati locali agli altri giocatori
         stream.SendNext(rb.position);
@@ -538,7 +535,7 @@ void Update()
 }
 
 
-*/
+
 
 
     public void SetKinematic(bool isKinematic)
@@ -562,6 +559,8 @@ void HandleHandbrakeInput()
 public void EnableControls()
 {
     controlsEnabled = true;
+            Debug.Log("Controlli abilitati nel PrometeoCarController.");
+
 }
 
 // Metodo per disabilitare i controlli del veicolo
@@ -569,7 +568,10 @@ public void DisableControls()
 {
     controlsEnabled = false;
     StopCar();
+            Debug.Log("Controlli disabilitati nel PrometeoCarController."); 
+
 }
+
 private void StopCar()
 {
     frontLeftCollider.motorTorque = 0;
