@@ -230,7 +230,7 @@ public void StartJump(float jumpForce)
   bool IsGrounded()
 {
     WheelCollider[] wheelColliders = GetComponentsInChildren<WheelCollider>();
-    float groundCheckDistance = 0.5f; // Distanza di controllo dal suolo, regolabile a seconda delle esigenze
+    float groundCheckDistance = 2f; // Distanza di controllo dal suolo, regolabile a seconda delle esigenze
 
     foreach (var wheel in wheelColliders)
     {

@@ -24,25 +24,12 @@ public float maxZOffset = 5f; // Limite massimo di spostamento sull'asse Z
     private Vector2 lastTouchPosition; // Aggiunto per tenere traccia dell'ultima posizione del touch
     private int dragFingerId = -1; // Aggiungi questa variabile per tenere traccia dell'ID del tocco
 
-    void Start()
-    {
-        initialOffset = offset;
-        GameObject inputPanel = GameObject.Find("InputPanel");
-        if (inputPanel != null)
-        {
-            EventTrigger trigger = inputPanel.GetComponent<EventTrigger>();
-            if (trigger != null)
-            {
-                EventTrigger.Entry entryDown = new EventTrigger.Entry { eventID = EventTriggerType.PointerDown };
-                entryDown.callback.AddListener((data) => { OnPointerDown((PointerEventData)data); });
-                trigger.triggers.Add(entryDown);
+void Start()
+{
+    initialOffset = offset;
+    // Rimozione del codice relativo a InputPanel
+}
 
-                EventTrigger.Entry entryUp = new EventTrigger.Entry { eventID = EventTriggerType.PointerUp };
-                entryUp.callback.AddListener((data) => { OnPointerUp((PointerEventData)data); });
-                trigger.triggers.Add(entryUp);
-            }
-        }
-    }
 
     public void SetTarget(GameObject target)
     {
@@ -98,7 +85,7 @@ if (touch.phase == TouchPhase.Moved)
 
     // Assicurati che il movimento sia proporzionale e coerente in entrambe le direzioni
     Vector3 touchMovement = new Vector3(
-        deltaTouch.x * touchSensitivity,
+        -deltaTouch.x * touchSensitivity,
         -Mathf.Abs(deltaTouch.x) * yTouchSensitivity, // Usa Mathf.Abs per mantenere la direzione
         -Mathf.Abs(deltaTouch.x) * zTouchSensitivity
     );

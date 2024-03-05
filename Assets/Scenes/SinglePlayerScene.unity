@@ -469,7 +469,7 @@ MonoBehaviour:
   - {fileID: 2222111361404534124, guid: 88f2fd29f58b9734683512546acec310, type: 3}
   - {fileID: 9069115365609291303, guid: 60f79905accf3b24fa0114b941f1aac0, type: 3}
   - {fileID: 2807449429036958551, guid: f0c16f0ea935ea64297ca1d4d55d9746, type: 3}
-  numberOfTrees: 100
+  numberOfTrees: 3000
   terrain: {fileID: 77728268}
   margin: 100
 --- !u!1 &79306898
@@ -29980,13 +29980,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1950115181}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 423, y: 5, z: 519}
+  m_LocalRotation: {x: -0, y: -0.76287824, z: -0, w: 0.64654225}
+  m_LocalPosition: {x: 456, y: 5, z: 534.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 77728269}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -99.437, z: 0}
 --- !u!1 &1978212346
 GameObject:
   m_ObjectHideFlags: 0

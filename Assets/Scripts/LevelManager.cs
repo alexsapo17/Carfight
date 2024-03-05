@@ -174,8 +174,8 @@ public void LoadLevel(int levelIndex)
         PhotonNetwork.Destroy(currentCar);
     gameControlsUI.SetActive(true);
                 retryButton.gameObject.SetActive(true);
-   quitSurvivalButton.gameObject.SetActive(true);
-    quitButton.gameObject.SetActive(false);
+   quitSurvivalButton.gameObject.SetActive(false);
+    quitButton.gameObject.SetActive(true);
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);
     int carIndex = levelCarMap[levelIndex];
     currentCar = PhotonNetwork.Instantiate(carPrefabs[carIndex].name, new Vector3(0, 1, 0), Quaternion.identity);
