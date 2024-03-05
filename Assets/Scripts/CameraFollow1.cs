@@ -146,13 +146,17 @@ if (touch.phase == TouchPhase.Moved)
 }
 
 
-   private bool IsPointerOverUIObject(Vector2 touchPos)
-    {
-        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
-        eventDataCurrentPosition.position = new Vector2(touchPos.x, touchPos.y);
-        List<RaycastResult> results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
-        return results.Count > 0;
-    }
+ private bool IsPointerOverUIObject(Vector2 touchPos)
+{
+    PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+    eventDataCurrentPosition.position = touchPos;
+    List<RaycastResult> results = new List<RaycastResult>();
+    EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+    
+
+    
+    return results.Count > 0;
+}
+
 
 }
