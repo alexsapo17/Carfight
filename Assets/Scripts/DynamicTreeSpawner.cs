@@ -1,37 +1,62 @@
+using System;
 using UnityEngine;
+
+[Serializable]
+public class SpawnableItem
+{
+    public GameObject prefab;
+    public float minIncline;
+    public float maxIncline;
+}
 
 public class DynamicTreeSpawner : MonoBehaviour
 {
-    public GameObject[] treePrefabs; // Usa un array per memorizzare più prefab
-    public int numberOfTrees = 10; // Numero di alberi da spawnare
-    public Terrain terrain; // Riferimento al Terrain
-    public float margin = 10f; // Margine dai bordi del terreno
+    public SpawnableItem[] itemsToSpawn;
+    public int numberOfItems = 10; // Numero totale di oggetti da spawnare
+    public Terrain terrain;
+    public float margin = 10f;
 
     void Start()
     {
-        SpawnTrees();
-    }
-
-    void SpawnTrees()
-    {
-        for (int i = 0; i < numberOfTrees; i++)
+        foreach (var item in itemsToSpawn)
         {
-            Vector3 spawnPosition = GetRandomPositionOnTerrainWithMargin();
-            GameObject treePrefab = treePrefabs[Random.Range(0, treePrefabs.Length)];
-            Instantiate(treePrefab, spawnPosition, Quaternion.identity, transform);
+            SpawnItem(item);
         }
     }
 
-    Vector3 GetRandomPositionOnTerrainWithMargin()
+    void SpawnItem(SpawnableItem item)
+    {
+        for (int i = 0; i < numberOfItems; i++)
+        {
+            Vector3 spawnPosition = GetRandomPositionOnTerrainWithMargin(item.minIncline, item.maxIncline);
+            if (spawnPosition != Vector3.zero) // Verifica che una posizione valida sia stata trovata
+            {
+                Instantiate(item.prefab, spawnPosition, Quaternion.identity, transform);
+            }
+        }
+    }
+
+    Vector3 GetRandomPositionOnTerrainWithMargin(float minIncline, float maxIncline)
     {
         Vector3 terrainSize = terrain.terrainData.size;
         Vector3 terrainPos = terrain.transform.position;
 
-        // Assicurati di usare lo stesso margine qui che usi per i pickup
-        float randomX = Random.Range(margin, terrainSize.x - margin) + terrainPos.x;
-        float randomZ = Random.Range(margin, terrainSize.z - margin) + terrainPos.z;
-        float y = terrain.SampleHeight(new Vector3(randomX, 0, randomZ)) + terrainPos.y;
+        for (int attempts = 0; attempts < 100; attempts++) // Tentativi limitati per evitare loop infiniti
+        {
+ float randomX = UnityEngine.Random.Range(margin, terrainSize.x - margin) + terrainPos.x;
+float randomZ = UnityEngine.Random.Range(margin, terrainSize.z - margin) + terrainPos.z;
 
-        return new Vector3(randomX, y, randomZ);
+            float y = terrain.SampleHeight(new Vector3(randomX, 0, randomZ)) + terrainPos.y;
+            Vector3 position = new Vector3(randomX, y, randomZ);
+            Vector3 normal = terrain.terrainData.GetInterpolatedNormal((randomX - terrainPos.x) / terrainSize.x, (randomZ - terrainPos.z) / terrainSize.z);
+            float angle = Vector3.Angle(normal, Vector3.up);
+
+            if (angle >= minIncline && angle <= maxIncline)
+            {
+                return position; // La posizione soddisfa i criteri di inclinazione
+            }
+        }
+
+        return Vector3.zero; // Indica che non è stata trovata una posizione valida
     }
 }
