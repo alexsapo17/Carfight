@@ -120,30 +120,30 @@ if (touch.phase == TouchPhase.Moved)
     }
 }
 
-void LateUpdate() {
-    if (target != null) {
-        // Utilizza il metodo originale per calcolare la posizione desiderata, inclusa la rotazione
+ 
+ void LateUpdate()
+{
+    if (target != null)
+    {
         Vector3 offsetRotated = target.TransformDirection(offset);
         Vector3 desiredPosition = target.position + offsetRotated;
 
-        // Ora, sovrascrivi solamente la componente Y della posizione desiderata con un calcolo che ignora la rotazione verticale del target
-        desiredPosition.y = Mathf.Lerp(transform.position.y, target.position.y + offset.y, smoothSpeedY * Time.deltaTime);
-
-        // Applica un Lerp alle componenti X e Z per un movimento liscio, mantenendo la nuova componente Y calcolata sopra
+        // Usa smoothSpeed per le componenti X e Z, e smoothSpeedY per la componente Y
         float smoothedPositionX = Mathf.Lerp(transform.position.x, desiredPosition.x, smoothSpeed * Time.deltaTime);
+        float smoothedPositionY = Mathf.Lerp(transform.position.y, desiredPosition.y, smoothSpeedY * Time.deltaTime);
         float smoothedPositionZ = Mathf.Lerp(transform.position.z, desiredPosition.z, smoothSpeed * Time.deltaTime);
 
         // Applica la posizione interpolata alla camera
-        transform.position = new Vector3(smoothedPositionX, desiredPosition.y, smoothedPositionZ);
+        transform.position = new Vector3(smoothedPositionX, smoothedPositionY, smoothedPositionZ);
 
-        // Mantieni la camera rivolta verso il target, utilizzando la rotazione originale
-        transform.LookAt(target.position + Vector3.up * offset.y);
+        // Mantieni la camera rivolta verso il target
+        transform.LookAt(target);
 
-        // Applica l'inclinazione sull'asse X aggiuntiva, se desiderata
-        transform.rotation = Quaternion.Euler(tiltAngleX + transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
+        // Applica l'inclinazione sull'asse X aggiuntiva, se desiderato
+        Vector3 currentRotation = transform.eulerAngles;
+        transform.rotation = Quaternion.Euler(currentRotation.x + tiltAngleX, currentRotation.y, currentRotation.z);
     }
 }
-
 
 
  private bool IsPointerOverUIObject(Vector2 touchPos)
