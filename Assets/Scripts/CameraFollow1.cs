@@ -122,25 +122,25 @@ if (touch.phase == TouchPhase.Moved)
 
 void LateUpdate() {
     if (target != null) {
-        // Calcola la posizione desiderata del target ignorando l'offset Y per non seguire la rotazione verticale
-        Vector3 desiredPosition = target.position + target.TransformDirection(offset);
-        
-        // Calcola separatamente la posizione Y desiderata per seguire solo i movimenti verticali del target
-        float desiredYPosition = Mathf.Lerp(transform.position.y, target.position.y + offset.y, smoothSpeedY * Time.deltaTime);
+        // Utilizza il metodo originale per calcolare la posizione desiderata, inclusa la rotazione
+        Vector3 offsetRotated = target.TransformDirection(offset);
+        Vector3 desiredPosition = target.position + offsetRotated;
 
-        // Applica smoothSpeed per interpolare verso la posizione desiderata su X e Z
+        // Ora, sovrascrivi solamente la componente Y della posizione desiderata con un calcolo che ignora la rotazione verticale del target
+        desiredPosition.y = Mathf.Lerp(transform.position.y, target.position.y + offset.y, smoothSpeedY * Time.deltaTime);
+
+        // Applica un Lerp alle componenti X e Z per un movimento liscio, mantenendo la nuova componente Y calcolata sopra
         float smoothedPositionX = Mathf.Lerp(transform.position.x, desiredPosition.x, smoothSpeed * Time.deltaTime);
         float smoothedPositionZ = Mathf.Lerp(transform.position.z, desiredPosition.z, smoothSpeed * Time.deltaTime);
 
         // Applica la posizione interpolata alla camera
-        transform.position = new Vector3(smoothedPositionX, desiredYPosition, smoothedPositionZ);
+        transform.position = new Vector3(smoothedPositionX, desiredPosition.y, smoothedPositionZ);
 
-        // Mantieni la camera rivolta verso il target, ignora la rotazione verticale del target modificando l'angolo di lookAt
-        transform.LookAt(new Vector3(target.position.x, transform.position.y, target.position.z));
+        // Mantieni la camera rivolta verso il target, utilizzando la rotazione originale
+        transform.LookAt(target.position + Vector3.up * offset.y);
 
-        // Applica l'inclinazione sull'asse X aggiuntiva
-        Vector3 currentRotation = transform.eulerAngles;
-        transform.rotation = Quaternion.Euler(tiltAngleX, currentRotation.y, 0);
+        // Applica l'inclinazione sull'asse X aggiuntiva, se desiderata
+        transform.rotation = Quaternion.Euler(tiltAngleX + transform.eulerAngles.x, transform.eulerAngles.y, transform.eulerAngles.z);
     }
 }
 
