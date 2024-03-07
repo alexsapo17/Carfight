@@ -200,7 +200,6 @@ GameObject:
   - component: {fileID: 5096517541735811467}
   - component: {fileID: -378106357760885954}
   - component: {fileID: 1745426744636947102}
-  - component: {fileID: 7084484384534155023}
   m_Layer: 0
   m_Name: Tree_03
   m_TagString: Untagged
@@ -278,7 +277,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6941765000743290380}
   serializedVersion: 4
-  m_Mass: 500
+  m_Mass: 600
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -292,20 +291,8 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &7084484384534155023
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6941765000743290380}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 777aa4f9b5457c4469d15e738f9f7869, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 

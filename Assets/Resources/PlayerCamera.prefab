@@ -108,11 +108,11 @@ MonoBehaviour:
   offset: {x: -1e-45, y: 13, z: -29.199999}
   fixedYPosition: 13.88
   smoothSpeed: 7
-  smoothSpeedY: 7.49
-  tiltAngleX: 16.3
+  smoothSpeedY: 5.01
+  tiltAngleX: -7.29
   touchSensitivity: 15
   yTouchSensitivity: 5
   zTouchSensitivity: -8
   maxXOffset: 30
   maxYOffset: 10
-  maxZOffset: 40
+  maxZOffset: 70
