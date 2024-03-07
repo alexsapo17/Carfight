@@ -60,47 +60,51 @@ void Update()
 {
     if (Input.touchCount > 0)
     {
-        for (int i = 0; i < Input.touchCount; ++i)
+        if (!isDragging)
         {
-            Touch touch = Input.GetTouch(i);
-            Vector2 touchPosition = touch.position;
-
-            if (!IsPointerOverUIObject(touchPosition))
+            // Cerca un tocco che inizi al di fuori degli elementi UI per iniziare il trascinamento
+            foreach (Touch touch in Input.touches)
             {
-                if (touch.phase == TouchPhase.Began)
+                if (touch.phase == TouchPhase.Began && !IsPointerOverUIObject(touch.position))
                 {
-                    if (!isDragging)
-                    {
-                        // Inizia a trascinare solo se non si sta già trascinando con un altro dito
-                        isDragging = true;
-                        dragFingerId = touch.fingerId;
-                        lastTouchPosition = touch.position;
-                    }
+                    dragFingerId = touch.fingerId;
+                    lastTouchPosition = touch.position;
+                    isDragging = true;
+                    break; // Interrompi il ciclo una volta trovato un tocco valido
                 }
-                else if (touch.fingerId == dragFingerId)
-                {
-                    if (touch.phase == TouchPhase.Moved)
-                    {
-                        Vector2 deltaTouch = touch.position - lastTouchPosition;
-                        Vector3 touchMovement = new Vector3(
-                            -deltaTouch.x * touchSensitivity,
-                            -Mathf.Abs(deltaTouch.x) * yTouchSensitivity,
-                            -Mathf.Abs(deltaTouch.x) * zTouchSensitivity);
-                        
-                        Vector3 potentialOffset = offset + touchMovement * Time.deltaTime;
-                        offset = new Vector3(
-                            Mathf.Clamp(potentialOffset.x, initialOffset.x - maxXOffset, initialOffset.x + maxXOffset),
-                            Mathf.Clamp(potentialOffset.y, initialOffset.y - maxYOffset, initialOffset.y + maxYOffset),
-                            Mathf.Clamp(potentialOffset.z, initialOffset.z - maxZOffset, initialOffset.z + maxZOffset));
-                        
-                        lastTouchPosition = touch.position;
-                    }
-                    else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
-                    {
-                        isDragging = false;
-                        dragFingerId = -1;
-                    }
-                }
+            }
+        }
+        else
+        {
+            // Gestisci il tocco che sta trascinando la camera
+            Touch touch = Input.touches.FirstOrDefault(t => t.fingerId == dragFingerId);
+if (touch.phase == TouchPhase.Moved)
+{
+    Vector2 deltaTouch = touch.position - lastTouchPosition;
+    lastTouchPosition = touch.position;
+
+    // Assicurati che il movimento sia proporzionale e coerente in entrambe le direzioni
+    Vector3 touchMovement = new Vector3(
+        -deltaTouch.x * touchSensitivity,
+        -Mathf.Abs(deltaTouch.x) * yTouchSensitivity, // Usa Mathf.Abs per mantenere la direzione
+        -Mathf.Abs(deltaTouch.x) * zTouchSensitivity
+    );
+
+    // Calcola il nuovo offset considerando i limiti
+    Vector3 potentialOffset = offset + touchMovement * Time.deltaTime;
+    offset = new Vector3(
+        Mathf.Clamp(potentialOffset.x, initialOffset.x - maxXOffset, initialOffset.x + maxXOffset),
+        Mathf.Clamp(potentialOffset.y, initialOffset.y - maxYOffset, initialOffset.y + maxYOffset),
+        Mathf.Clamp(potentialOffset.z, initialOffset.z - maxZOffset, initialOffset.z + maxZOffset)
+    );
+}
+
+
+
+            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            {
+                isDragging = false;
+                dragFingerId = -1;
             }
         }
     }
@@ -117,20 +121,17 @@ void Update()
 }
 
  
-void LateUpdate()
+ void LateUpdate()
 {
     if (target != null)
     {
         Vector3 offsetRotated = target.TransformDirection(offset);
         Vector3 desiredPosition = target.position + offsetRotated;
 
-        // Calcola la posizione interpolata per X e Z usando smoothSpeed
+        // Usa smoothSpeed per le componenti X e Z, e smoothSpeedY per la componente Y
         float smoothedPositionX = Mathf.Lerp(transform.position.x, desiredPosition.x, smoothSpeed * Time.deltaTime);
+        float smoothedPositionY = Mathf.Lerp(transform.position.y, desiredPosition.y, smoothSpeedY * Time.deltaTime);
         float smoothedPositionZ = Mathf.Lerp(transform.position.z, desiredPosition.z, smoothSpeed * Time.deltaTime);
-
-        // Calcola la posizione interpolata per Y usando smoothSpeedY, ma assicurati che non vada sotto fixedYPosition
-        float targetYPosition = Mathf.Max(desiredPosition.y, target.position.y + fixedYPosition);
-        float smoothedPositionY = Mathf.Lerp(transform.position.y, targetYPosition, smoothSpeedY * Time.deltaTime);
 
         // Applica la posizione interpolata alla camera
         transform.position = new Vector3(smoothedPositionX, smoothedPositionY, smoothedPositionZ);
@@ -145,20 +146,17 @@ void LateUpdate()
 }
 
 
-private bool IsPointerOverUIObject(Vector2 touchPos)
+ private bool IsPointerOverUIObject(Vector2 touchPos)
 {
-    // Logica per controllare se il tocco è su un oggetto UI
     PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
     eventDataCurrentPosition.position = touchPos;
     List<RaycastResult> results = new List<RaycastResult>();
     EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
     
-    foreach (var result in results)
-    {
-        Debug.Log("UI Object Hit: " + result.gameObject.name);
-    }
 
+    
     return results.Count > 0;
 }
+
 
 }
