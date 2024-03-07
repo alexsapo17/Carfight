@@ -27,21 +27,11 @@ public class HorizontalJoystick : MonoBehaviour, IDragHandler, IEndDragHandler
         verticalValue = 0; // Aggiunto per resettare il valore verticale
     }
 
-public float GetHorizontal()
-{
-    // Definisce una soglia di tolleranza vicino a 0
-    float deadZone = 0.1f; // Regola questo valore secondo necessità
-
-    // Controlla se horizontalValue è entro la soglia e, in tal caso, ritorna 0
-    if (Mathf.Abs(horizontalValue) < deadZone)
-    {
-        return 0;
-    }
-    else
+    // Metodo per ottenere il valore orizzontale
+    public float GetHorizontal()
     {
         return horizontalValue;
     }
-}
 
     // Metodo per ottenere il valore verticale - Aggiunto
     public float GetVertical()
