@@ -130,8 +130,8 @@ cameraPrefab = SO.FindProperty("cameraPrefab");
     //
     //
     maxSpeed.intValue = EditorGUILayout.IntSlider("Max Speed:", maxSpeed.intValue, 20, 1000);
-        TurnLeftXEditor.floatValue = EditorGUILayout.Slider("Max TurnLeftXEditor:", TurnLeftXEditor.floatValue, -100f, 100f);
-        TurnRightXEditor.floatValue = EditorGUILayout.Slider("Max TurnRightXEditor:", TurnRightXEditor.floatValue, -100f, 100f);
+        TurnLeftXEditor.floatValue = EditorGUILayout.Slider("Max TurnLeftXEditor:", TurnLeftXEditor.floatValue, -100, 100);
+        TurnRightXEditor.floatValue = EditorGUILayout.Slider("Max TurnRightXEditor:", TurnRightXEditor.floatValue, -100, 100);
 
     maxReverseSpeed.intValue = EditorGUILayout.IntSlider("Max Reverse Speed:", maxReverseSpeed.intValue, 10, 1200);
     accelerationMultiplier.intValue = EditorGUILayout.IntSlider("Acceleration Multiplier:", accelerationMultiplier.intValue, 1, 100);
