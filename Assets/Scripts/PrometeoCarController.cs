@@ -658,12 +658,16 @@ private void ApplySteering() {
 }
 
 
- public void ResetSteeringAngle(){
-    if(steeringAxis != 0f){
+public void ResetSteeringAngle(){
+    float snapThreshold = 0.01f; // Soglia per 'snappare' a zero
+    if(Mathf.Abs(steeringAxis) < snapThreshold){
+        steeringAxis = 0f; // Forza a zero se vicino
+    } else {
         steeringAxis = Mathf.MoveTowards(steeringAxis, 0f, Time.deltaTime * 10f * steeringSpeed);
-        ApplySteering();
     }
+    ApplySteering();
 }
+
 
 
 
