@@ -1225,7 +1225,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 0}
   - {fileID: 2900847065024323727}
   sceneViewId: 0
   InstantiationId: 0
@@ -1247,8 +1246,8 @@ MonoBehaviour:
   accelerationMultiplier: 9
   maxSteeringAngle: 30
   steeringSpeed: 0.576
-  TurnLeftXEditor: 1
-  TurnRightXEditor: -1
+  TurnLeftXEditor: -0.1
+  TurnRightXEditor: 0.1
   brakeForce: 350
   decelerationMultiplier: 8
   handbrakeDriftMultiplier: 7

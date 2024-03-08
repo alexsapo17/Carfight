@@ -31,8 +31,10 @@ public class PrometeoCarController : MonoBehaviour,IPunObservable
       public int maxSteeringAngle = 27; // The maximum angle that the tires can reach while rotating the steering wheel.
       [Range(0.1f, 1f)]
       public float steeringSpeed = 0.5f; // How fast the steering wheel turns.
-      public float TurnLeftXEditor= 1f;
-      public float TurnRightXEditor= -1f;
+      [Range(0.1f, 1f)]
+      public float TurnLeftXEditor= -0.1f;
+      [Range(0.1f, 1f)]
+      public float TurnRightXEditor= 0.1f;
       [Space(10)]
       [Range(100, 600)]
       public int brakeForce = 350; // The strength of the wheel brakes.
@@ -329,6 +331,38 @@ public void DestroyCameraInstance() {
         Debug.Log("Camera instance is null");
     }
 }
+ //The following method turns the front car wheels to the left. The speed of this movement will depend on the steeringSpeed variable.
+    public void TurnLeft(float joystickValue){
+    steeringAxis = Mathf.Max(steeringAxis - (Time.deltaTime * 10f * steeringSpeed), joystickValue);
+    ApplySteering();
+}
+
+public void TurnRight(float joystickValue){
+    steeringAxis = Mathf.Min(steeringAxis + (Time.deltaTime * 10f * steeringSpeed), joystickValue);
+    ApplySteering();
+}
+private void ApplySteering() {
+    if(steeringAxis < -1f){
+        steeringAxis = -1f;
+    } else if(steeringAxis > 1f){
+        steeringAxis = 1f;
+    }
+
+    var steeringAngle = steeringAxis * maxSteeringAngle;
+    frontLeftCollider.steerAngle = Mathf.Lerp(frontLeftCollider.steerAngle, steeringAngle, steeringSpeed);
+    frontRightCollider.steerAngle = Mathf.Lerp(frontRightCollider.steerAngle, steeringAngle, steeringSpeed);
+}
+
+
+public void ResetSteeringAngle(){
+    float snapThreshold = 0.1f; // Soglia per 'snappare' a zero
+    if(Mathf.Abs(steeringAxis) < snapThreshold){
+        steeringAxis = 0f; // Forza a zero se vicino
+    } else {
+        steeringAxis = Mathf.MoveTowards(steeringAxis, 0f, Time.deltaTime * 10f * steeringSpeed);
+    }
+    ApplySteering();
+}
 
 
   void FixedUpdate()
@@ -369,17 +403,19 @@ float turnValue = horizontalJoystick.GetHorizontal();
  float moveValue = horizontalJoystick.GetVertical();
 
             
-
 if (turnValue < TurnLeftXEditor) 
 {
+    Debug.Log($"Girando a sinistra con turnValue: {turnValue}");
     TurnLeft(turnValue); // Passa il valore del joystick
 }
 else if (turnValue > TurnRightXEditor)
 {
+    Debug.Log($"Girando a destra con turnValue: {turnValue}");
     TurnRight(turnValue); // Passa il valore del joystick
 }
 else  
 {
+    Debug.Log("Riportando lo sterzo alla posizione neutra");
     ResetSteeringAngle();
 }
 
@@ -631,39 +667,6 @@ private void StopCar()
 
     }
 
-    //
-    //STEERING METHODS
-    //
-
-    //The following method turns the front car wheels to the left. The speed of this movement will depend on the steeringSpeed variable.
-    public void TurnLeft(float joystickValue){
-    steeringAxis = Mathf.Max(steeringAxis - (Time.deltaTime * 10f * steeringSpeed), joystickValue);
-    ApplySteering();
-}
-
-public void TurnRight(float joystickValue){
-    steeringAxis = Mathf.Min(steeringAxis + (Time.deltaTime * 10f * steeringSpeed), joystickValue);
-    ApplySteering();
-}
-private void ApplySteering() {
-    if(steeringAxis < -1f){
-        steeringAxis = -1f;
-    } else if(steeringAxis > 1f){
-        steeringAxis = 1f;
-    }
-
-    var steeringAngle = steeringAxis * maxSteeringAngle;
-    frontLeftCollider.steerAngle = Mathf.Lerp(frontLeftCollider.steerAngle, steeringAngle, steeringSpeed);
-    frontRightCollider.steerAngle = Mathf.Lerp(frontRightCollider.steerAngle, steeringAngle, steeringSpeed);
-}
-
-
- public void ResetSteeringAngle(){
-    if(steeringAxis != 0f){
-        steeringAxis = Mathf.MoveTowards(steeringAxis, 0f, Time.deltaTime * 10f * steeringSpeed);
-        ApplySteering();
-    }
-}
 
 
 
