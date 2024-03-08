@@ -27,12 +27,11 @@ public class HorizontalJoystick : MonoBehaviour, IDragHandler, IEndDragHandler
         verticalValue = 0; // Aggiunto per resettare il valore verticale
     }
 
-public float GetHorizontal()
-{
-   
+    // Metodo per ottenere il valore orizzontale
+    public float GetHorizontal()
+    {
         return horizontalValue;
-    
-}
+    }
 
     // Metodo per ottenere il valore verticale - Aggiunto
     public float GetVertical()
