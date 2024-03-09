@@ -5461,7 +5461,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: TORNA ALLA HOME
+  m_Text: BACK TO HOME
 --- !u!1 &1595568556
 GameObject:
   m_ObjectHideFlags: 0
@@ -6815,7 +6815,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ABBANDONA
+  m_Text: QUIT
 --- !u!1 &1926091643
 GameObject:
   m_ObjectHideFlags: 0

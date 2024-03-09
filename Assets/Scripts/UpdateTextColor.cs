@@ -1,31 +1,42 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
-public class UpdateTextColor : MonoBehaviour
+public class UpdateImageColor : MonoBehaviour
 {
     public string sceneName;
-    private Text buttonText;
-    private Button button;  // Aggiunta variabile per il componente Button
+    private Image buttonImage; // Variabile per il componente Image
 
     void Start()
     {
-        buttonText = GetComponentInChildren<Text>(); // Cambia in GetComponentInChildren<TextMeshProUGUI>() se usi TextMeshPro
-        button = GetComponent<Button>();  // Ottiene il riferimento al componente Button
-        UpdateColor();
+        // Cerca l'immagine con nome specifico tra i figli
+        Image[] images = GetComponentsInChildren<Image>();
+        buttonImage = images.FirstOrDefault(img => img.gameObject.name == "Icon");
+
+        if (buttonImage != null) // Verifica che l'immagine sia stata trovata
+        {
+            UpdateColor();
+        }
+        else
+        {
+            Debug.LogWarning("Image 'Icon' not found!");
+        }
     }
 
     void UpdateColor()
     {
+        Button button = GetComponent<Button>(); // Ottiene il riferimento al componente Button
+
         if (SceneManager.GetActiveScene().name == sceneName)
         {
-            buttonText.color = Color.green;
-            button.interactable = false;  // Disabilita il pulsante
+            buttonImage.color = Color.green; // Cambia il colore dell'immagine
+            button.interactable = false; // Disabilita il pulsante
         }
         else
         {
-            buttonText.color = Color.white;
-            button.interactable = true;   // Abilita il pulsante
+            buttonImage.color = Color.white; // Ripristina il colore originale dell'immagine
+            button.interactable = true; // Abilita il pulsante
         }
     }
 }
