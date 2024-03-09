@@ -659,10 +659,10 @@ private void ApplySteering() {
 
 
  public void ResetSteeringAngle(){
-    if(steeringAxis != 0f){
+    
         steeringAxis = Mathf.MoveTowards(steeringAxis, 0f, Time.deltaTime * 10f * steeringSpeed);
         ApplySteering();
-    }
+    
 }
 
 
