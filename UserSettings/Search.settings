@@ -8,10 +8,10 @@ onBoardingDoNotAskAgain = true
 showPackageIndexes = false
 showStatusBar = false
 scopes = {
-	"last_search.310DEAF1" = "wheel collider"
+	"last_search.310DEAF1" = "playerlistvi"
 	"OpenInspectorPreview.310DEAF1" = "0"
-	"currentGroup.310DEAF1" = "menu"
-	"last_search.3BE40471" = "li"
+	"currentGroup.310DEAF1" = "_group_provider_Files"
+	"last_search.3BE40471" = "playerlistview"
 	"OpenInspectorPreview.3BE40471" = "0"
 	"currentGroup.3BE40471" = "all"
 	"last_search.E8DA15E5" = ""
@@ -68,6 +68,7 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"pl"
 ]
 searchItemFavorites = [
 ]

@@ -21,7 +21,11 @@ public class FinishLine : MonoBehaviour
 void OnTriggerEnter(Collider other)
 {
     Debug.Log("OnTriggerEnter chiamato con: " + other.gameObject.name);
-    if (other.gameObject.tag == "Player")
+    if (other.gameObject.tag == "Player" )
+    {
+gameManager.PlayerEliminated(other.gameObject);
+    }
+        if (other.gameObject.tag == "Enemy" )
     {
 gameManager.PlayerEliminated(other.gameObject);
     }

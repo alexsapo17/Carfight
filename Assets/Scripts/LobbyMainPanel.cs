@@ -51,7 +51,7 @@ public GameObject Interactable1Panel;
 public GameObject Interactable2Panel;
 
 public GameObject Interactable3Panel;
-public Text startGameTimerText;
+
 public Animator transitionAnimator;
 
 public GameObject NoCoinsPanel;
@@ -138,7 +138,7 @@ public void Start()
             if (coinTextComponent != null)
             {
                 currencyManager.coinsText = coinTextComponent;
-                currencyManager.UpdateCoinsUI();
+                currencyManager.UpdateCoinsUI(); 
             }
             else
             {
@@ -529,7 +529,7 @@ NoCarSelectedPanel.SetActive(true);
         return;
     }
 
-    int entryCost = 100; // Costo per unirsi alla stanza
+    int entryCost = 200; // Costo per unirsi alla stanza
     if (currencyManager.HasEnoughCoins(entryCost))
     {
         SetActivePanel(JoinRandomRoomPanel.name);
@@ -575,11 +575,17 @@ void StartGame()
             if (currencyManager.TrySpendCoins(entryCost))
             {
                     // Assicurati che solo il Master Client avvii la partita per evitare avvii multipli
-        if (PhotonNetwork.IsMasterClient)
-        {
-            PhotonNetwork.CurrentRoom.IsOpen = false;
-            PhotonNetwork.CurrentRoom.IsVisible = false;
-            PhotonNetwork.LoadLevel("GameScene");
+  if (PhotonNetwork.IsMasterClient)
+    {
+
+    if (PhotonNetwork.IsMasterClient)
+    {
+  
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.LoadLevel("GameScene");
+    }
+            
         }
  
             }
@@ -619,8 +625,7 @@ void StartGame()
         }
 
 
-
-        public override void OnJoinedRoom()
+public override void OnJoinedRoom()
         {
             // joining (or entering) a room invalidates any cached lobby room list (even if LeaveLobby was not called due to just joining a room)
             cachedRoomList.Clear();
@@ -664,12 +669,111 @@ entry.transform.localScale = Vector3.one;
         // Mostra il pulsante "Start Game" nelle stanze private
         StartGameButton.gameObject.SetActive(CheckPlayersReady());
     }
+      // Controlla se ci sono giocatori finti salvati nelle proprietà della stanza e aggiungili
+    object fakePlayersObject;
+    if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("fakePlayers", out fakePlayersObject) && PhotonNetwork.IsMasterClient)
+    {
+        string[] fakePlayers = (string[])fakePlayersObject;
+        foreach (string fakePlayerName in fakePlayers)
+        {
+            AddFakePlayerToList(fakePlayerName);
+        }
+    }
             Hashtable props = new Hashtable
             {
                 {AsteroidsGame.PLAYER_LOADED_LEVEL, false}
             };
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
+            StartCoroutine(AddFakePlayersDynamically());
         }
+private System.Collections.IEnumerator AddFakePlayersDynamically()
+{
+    if (PhotonNetwork.IsMasterClient)
+    {
+        int fakePlayersAdded = 0;
+        List<string> fakePlayersNames = new List<string>();
+
+        // Lista dei nomi unici e creativi forniti
+        List<string> creativeNicknames = new List<string> {
+            "Fire-Bred", "Titanium", "Hurricane", "Ironsides", "Iron-Cut", "Tempest", "Iron Heart", "Steel Forge",
+            "Pursuit", "Steel Foil", "Sick Rebellious Names", "Upsurge", "Uprising", "Overthrow", "Breaker",
+            "Sabotage", "Dissent", "Subversion", "Rebellion", "Insurgent", "Accidental Genius", "Acid Gosling",
+            "Admiral Tot", "AgentHercules", "Airport Hobo", "Alley Frog", "Alpha", "AlphaReturns", "Angel",
+            "AngelsCreed", "Arsenic Coo", "Atomic Blastoid", "Automatic Slicer", "Baby Brown", "Back Bett",
+            // Aggiungi tutti gli altri nomi qui
+            // Nomi italiani aggiunti
+            "Assassino di patate", "Tubo Nube", "Giocatore di scarto", "Rianimami", "Salvami niubbo",
+            "squadra più perdente", "Pistola stupida", "Noob", "Stabby Mcstabface", "Pew Pew LaserBeam"
+            // Continua ad aggiungere i nomi...
+        };
+
+        while (fakePlayersAdded < 5) // Se vuoi aggiungere 5 giocatori finti
+        {
+            yield return new WaitForSeconds(Random.Range(1, 10)); // Aspetta un periodo casuale tra 2 e 6 secondi
+            int randIndex = UnityEngine.Random.Range(0, creativeNicknames.Count); // Scegli un indice a caso
+            string fakePlayerName = creativeNicknames[randIndex]; // Seleziona un nome casuale dalla lista
+
+            // Assicurati che il nome scelto non sia già stato usato
+            while (fakePlayersNames.Contains(fakePlayerName))
+            {
+                randIndex = UnityEngine.Random.Range(0, creativeNicknames.Count);
+                fakePlayerName = creativeNicknames[randIndex];
+            }
+
+            GlobalGameManager.Instance.AddFakePlayerName(fakePlayerName); // Aggiungi il nome scelto alla lista dei nomi usati
+            fakePlayersNames.Add(fakePlayerName); // Aggiungi il nome alla lista dei giocatori finti
+
+            Hashtable props = new Hashtable { { "fakePlayers", fakePlayersNames.ToArray() } };
+            PhotonNetwork.CurrentRoom.SetCustomProperties(props); // Aggiorna le proprietà della stanza con i nuovi giocatori finti
+
+            photonView.RPC("AddFakePlayerRPC", RpcTarget.All, fakePlayerName, fakePlayersAdded + 1); // Invoca un RPC per aggiungere il giocatore finto a tutti i client
+            fakePlayersAdded++;
+        }
+    }
+}
+
+
+
+
+
+[PunRPC]
+private void AddFakePlayerRPC(string fakePlayerName, int fakePlayerIndex)
+{
+    int fakeActorNumber = -100 - playerListEntries.Count;
+
+    GameObject entry = Instantiate(PlayerListEntryPrefab);
+    entry.transform.SetParent(InsideRoomPanel.transform, false);
+    entry.transform.localPosition = Vector3.zero;
+    entry.transform.localScale = Vector3.one;
+
+    entry.GetComponent<PlayerListEntry>().Initialize(fakeActorNumber, fakePlayerName);
+    entry.GetComponent<PlayerListEntry>().SetPlayerReady(true);
+
+    playerListEntries.Add(fakeActorNumber, entry);
+        // Aggiorna il conteggio dei giocatori finti
+
+    UpdateGameStartCondition();
+}
+
+private void AddFakePlayerToList(string fakePlayerName)
+{
+    int fakeActorNumber = -100 - playerListEntries.Count;
+
+    GameObject entry = Instantiate(PlayerListEntryPrefab);
+    entry.transform.SetParent(InsideRoomPanel.transform, false);
+    entry.transform.localPosition = Vector3.zero;
+    entry.transform.localScale = Vector3.one;
+    entry.GetComponent<PlayerListEntry>().Initialize(fakeActorNumber, fakePlayerName);
+    entry.GetComponent<PlayerListEntry>().SetPlayerReady(true);
+
+    playerListEntries.Add(fakeActorNumber, entry);
+
+
+}
+
+
+
+
 
         public override void OnLeftRoom()
         {
@@ -687,9 +791,9 @@ UpdateCurrencyUI();
         public override void OnPlayerEnteredRoom(Player newPlayer)
         {
             GameObject entry = Instantiate(PlayerListEntryPrefab);
- entry.transform.SetParent(InsideRoomPanel.transform, false);
-entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
-entry.transform.localScale = Vector3.one; 
+            entry.transform.SetParent(InsideRoomPanel.transform, false);
+            entry.transform.localPosition = Vector3.zero; // Imposta la posizione locale a zero per centrarlo nel genitore
+            entry.transform.localScale = Vector3.one; 
             entry.GetComponent<PlayerListEntry>().Initialize(newPlayer.ActorNumber, newPlayer.NickName);
 
             playerListEntries.Add(newPlayer.ActorNumber, entry);
@@ -717,8 +821,7 @@ entry.transform.localScale = Vector3.one;
         // Nascondi il pulsante "Start Game" nelle stanze casuali
         StartGameButton.gameObject.SetActive(false);
         
-        // Avvia il timer solo se ci sono almeno due giocatori
-        UpdateGameStartCondition();
+ 
     }
     else
     {
@@ -727,44 +830,22 @@ entry.transform.localScale = Vector3.one;
     }
             UpdateCurrencyUI();
         }
-
- private void UpdateGameStartCondition()
-    {
-        if (PhotonNetwork.CurrentRoom.PlayerCount >= 2)
-        {
-            // Se non c'è già un timer in corso, inizialo
-            if (startGameCoroutine == null)
-            {
-                startGameCoroutine = StartCoroutine(StartGameTimer());
-            }
-        }
-        else
-        {
-            // Se c'è meno di due giocatori, ferma il timer e resetta la coroutine
-            if (startGameCoroutine != null)
-            {
-                StopCoroutine(startGameCoroutine);
-                startGameCoroutine = null;
-               startGameTimerText.text = "";            }
-        }
-    }
-private System.Collections.IEnumerator StartGameTimer()
+private void UpdateGameStartCondition()
 {
-    
-        int timeLeft = 10; // Imposta il timer a 10 secondi
+    // Conta tutti i giocatori nella stanza, inclusi i finti
+    int totalPlayerCount = playerListEntries.Count;
 
-        while (timeLeft > 0)
-        {
-            startGameTimerText.text = "Inizio in: " + timeLeft; // Aggiorna il testo del timer
-            yield return new WaitForSeconds(1); // Aspetta un secondo
-            timeLeft--; // Decrementa il timer
-        }
-
-        startGameTimerText.text = ""; // Pulisci il testo del timer o imposta un messaggio finale se desiderato
-
-        // Avvia la partita
+    // avviare la partita a 6
+    if (totalPlayerCount == 6)
+    {
+        // Avvia la partita immediatamente senza aspettare ulteriori giocatori o usare un timer
         StartGame();
     }
+}
+
+
+
+
 
         public override void OnMasterClientSwitched(Player newMasterClient)
         {
@@ -871,6 +952,8 @@ private System.Collections.IEnumerator StartGameTimer()
         // Mostra il pulsante "Start Game" nelle stanze private
         StartGameButton.gameObject.SetActive(CheckPlayersReady());
     }        }
+
+
 
         private void SetActivePanel(string activePanel)
         {

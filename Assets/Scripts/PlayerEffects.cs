@@ -78,7 +78,15 @@ IEnumerator SizeMassIncreaseEffect(float duration, float sizeMultiplier, float m
     // Metodo da chiamare alla collisione
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") )
+        {
+            // Ottieni il punto di collisione
+            Vector3 contactPoint = collision.contacts[0].point;
+
+            // Attiva l'effetto FX nel punto di collisione
+            Instantiate(collisionEffectPrefab, contactPoint, Quaternion.identity);
+        }
+                if (collision.gameObject.CompareTag("Enemy") )
         {
             // Ottieni il punto di collisione
             Vector3 contactPoint = collision.contacts[0].point;
@@ -277,18 +285,21 @@ private IEnumerator DisableControlsForDuration(float duration)
     // Funzione da chiamare per attivare l'effetto dell'onda d'urto
     public void StartShockwaveEffect()
     {
-        photonView.RPC("ApplyShockwaveEffect", RpcTarget.All);
+    photonView.RPC("ApplyShockwaveEffect", RpcTarget.All, photonView.ViewID);
     }
 
 [PunRPC]
-void ApplyShockwaveEffect()
-{
+void ApplyShockwaveEffect(int activatorViewID)
+{  
+      GameObject activator = PhotonView.Find(activatorViewID).gameObject;
+
+
     // Ottieni tutti i collider entro il raggio dell'onda d'urto
-    Collider[] hitColliders = Physics.OverlapSphere(transform.position, shockwaveRadius);
+        Collider[] hitColliders = Physics.OverlapSphere(activator.transform.position, shockwaveRadius);
     foreach (var hitCollider in hitColliders)
     {
-        // Controlla se il collider appartiene a un "Player"
-        if (hitCollider.CompareTag("Player") && hitCollider.gameObject != gameObject) // Escludi il giocatore che ha attivato l'onda d'urto
+        // Controlla se il collider appartiene a un "Player" o "Enemy"
+        if ((hitCollider.CompareTag("Player") || hitCollider.CompareTag("Enemy")) && hitCollider.gameObject != gameObject) 
         {
             // Ottieni il componente Rigidbody del giocatore colpito
             Rigidbody rb = hitCollider.GetComponent<Rigidbody>();
