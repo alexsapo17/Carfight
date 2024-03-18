@@ -15,25 +15,26 @@ public class ActivateShockwaveFromButton : MonoBehaviour
     }
 
     public void ActivateShockwave()
+{
+    if (isCooldown) return;
+    // Cerca tra tutti i PhotonView presenti nella scena
+    foreach (var pv in FindObjectsOfType<PhotonView>())
     {
-        if (isCooldown) return;
-        // Cerca tra tutti i PhotonView presenti nella scena
-        foreach (var pv in FindObjectsOfType<PhotonView>())
+        // Controlla se il PhotonView appartiene al giocatore locale, ha un componente PlayerEffects e il tag "Player"
+        if (pv.IsMine && pv.gameObject.GetComponent<PlayerEffects>() && pv.gameObject.tag == "Player")
         {
-            // Controlla se il PhotonView appartiene al giocatore locale e ha un componente PlayerEffects
-            if (pv.IsMine && pv.gameObject.GetComponent<PlayerEffects>())
-            {
-                // Ottieni il componente PlayerEffects e attiva l'effetto
-                var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();
-                playerEffects.StartShockwaveEffect();
+            // Ottieni il componente PlayerEffects e attiva l'effetto
+            var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();
+            playerEffects.StartShockwaveEffect();
 
-                // Istanziare l'effetto visivo nel punto della macchina
-                Instantiate(visualEffectPrefab, pv.transform.position, Quaternion.identity);
-                StartCooldown();
-                break; // Interrompe il ciclo una volta trovato e attivato l'effetto
-            }
+            // Istanziare l'effetto visivo nel punto della macchina
+            Instantiate(visualEffectPrefab, pv.transform.position, Quaternion.identity);
+            StartCooldown();
+            break; // Interrompe il ciclo una volta trovato e attivato l'effetto
         }
     }
+}
+
 
     void StartCooldown()
     {

@@ -296,7 +296,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.005
+  m_SuspensionDistance: 0.003
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -305,13 +305,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -587,7 +587,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.005
+  m_SuspensionDistance: 0.003
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -596,13 +596,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -11452,7 +11452,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.005
+  m_SuspensionDistance: 0.003
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -11461,13 +11461,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -12199,7 +12199,7 @@ Rigidbody:
   m_Mass: 700
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_CenterOfMass: {x: 0, y: 0.5, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -12208,7 +12208,7 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -12296,12 +12296,10 @@ MonoBehaviour:
   - {fileID: 8847946946234978464}
   - {fileID: 9173268395315509959}
   - {fileID: 4833653730471284710}
-  maxMotorTorque: 500
+  maxMotorTorque: 800
   maxSteeringAngle: 30
-  raceStarted: 0
-  avoidanceStrength: 30
-  raycastDistance: 50
   maxSpeed: 20
+  raceStarted: 0
 --- !u!114 &82924478570618923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12314,10 +12312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
 --- !u!1 &7844297033218046298
 GameObject:
   m_ObjectHideFlags: 0
@@ -12658,7 +12654,7 @@ WheelCollider:
     spring: 35000
     damper: 4500
     targetPosition: 0.5
-  m_SuspensionDistance: 0.005
+  m_SuspensionDistance: 0.003
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -12667,13 +12663,13 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.8
     m_AsymptoteValue: 0.5
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_SidewaysFriction:
     m_ExtremumSlip: 0.2
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 3
+    m_Stiffness: 4
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0

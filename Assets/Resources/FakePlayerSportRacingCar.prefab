@@ -43,10 +43,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.06
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0.01
+  m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -61,7 +61,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 5
+    m_Stiffness: 3
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -147,10 +147,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.06
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0.01
+  m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -165,7 +165,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 5
+    m_Stiffness: 3
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -6021,10 +6021,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.06
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0.01
+  m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -6039,7 +6039,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 5
+    m_Stiffness: 3
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -11082,10 +11082,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.06
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0.01
+  m_SuspensionDistance: 0.1
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -11100,7 +11100,7 @@ WheelCollider:
     m_ExtremumValue: 1
     m_AsymptoteSlip: 0.5
     m_AsymptoteValue: 0.75
-    m_Stiffness: 5
+    m_Stiffness: 3
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -11499,6 +11499,7 @@ GameObject:
   - component: {fileID: 4531865446349167526}
   - component: {fileID: 8487554053607249367}
   - component: {fileID: -3727131155245062300}
+  - component: {fileID: -6780927592366576286}
   m_Layer: 0
   m_Name: FakePlayerSportRacingCar
   m_TagString: Enemy
@@ -11545,7 +11546,7 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -11608,7 +11609,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f84994eb4ce1a44f9a60f2668533a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   wheelColliders:
   - {fileID: 2038556068498805285}
   - {fileID: 6483274255347939371}
@@ -11616,12 +11616,8 @@ MonoBehaviour:
   - {fileID: 3273743933171819773}
   maxMotorTorque: 500
   maxSteeringAngle: 30
-  raceStarted: 0
   maxSpeed: 20
-  edgeDetectionDistance: 10
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 0
+  raceStarted: 0
 --- !u!114 &-3727131155245062300
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11634,10 +11630,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
+--- !u!114 &-6780927592366576286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5461143665754824217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc6dcc368ca8c42b7859947e3e7855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  botName: FakePlayerSportRacingCar
+  playerEffects: {fileID: -3727131155245062300}
+  activationDistance: 8
+  cooldownDuration: 5
+  abilityPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
 --- !u!1 &5546438418605028228
 GameObject:
   m_ObjectHideFlags: 0

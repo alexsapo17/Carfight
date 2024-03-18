@@ -858,7 +858,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f84994eb4ce1a44f9a60f2668533a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   wheelColliders:
   - {fileID: 543653575898198537}
   - {fileID: 8948335521194111183}
@@ -866,9 +865,8 @@ MonoBehaviour:
   - {fileID: 6442214630589386178}
   maxMotorTorque: 500
   maxSteeringAngle: 30
-  raceStarted: 0
   maxSpeed: 20
-  raycastDistance: 50
+  raceStarted: 0
 --- !u!114 &-213360676260277167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -881,10 +879,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
 --- !u!1 &3206722240864396781
 GameObject:
   m_ObjectHideFlags: 0
@@ -6225,10 +6221,10 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6620049869906487866}
-  - {fileID: 543126699253437387}
   - {fileID: 7936796951548829213}
   - {fileID: 1779182266797985277}
+  - {fileID: 6620049869906487866}
+  - {fileID: 543126699253437387}
   m_Father: {fileID: 7058442746403623178}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5187051505826921800

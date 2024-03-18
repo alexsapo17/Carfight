@@ -24,7 +24,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     
       public Transform[] spawnPoints; // Punti di spawn delle macchine
     public Transform[] startLineSpawnPoints;
-    
+    public GameObject finishPlane;
     public GameObject resultsPanel; // Pannello per i risultati
     public Text resultsText;
     public Button returnToLobbyButton; // Pulsante per tornare alla lobby
@@ -58,6 +58,10 @@ public Animator transitionAnimator;
     public GameObject eliminatedTextPrefab;
     public GameObject winTextPrefab;
 public Canvas canvas;
+public GameObject playerEliminatedPrefab;
+public GameObject playerWinPrefab;
+public Transform finishPrefabspawnPoint; // Assicurati di assegnare questo dall'Inspector
+
 
     [System.Serializable]
     public class RewardTier
@@ -308,6 +312,10 @@ countdownText.gameObject.SetActive(false);
             // Assicurati che questo non influisca sul MasterClient in maniera negativa
             // Qui potresti decidere di non fare nulla di specifico per il MasterClient
             // dato che l'AI è controllato dal MasterClient ma non lo rappresenta direttamente
+          if (playerEliminatedPrefab != null && finishPrefabspawnPoint != null)
+{
+    Instantiate(playerEliminatedPrefab, finishPrefabspawnPoint.position, finishPrefabspawnPoint.rotation);
+}
         }
         if (player.tag == "Player")
         {
@@ -317,7 +325,11 @@ countdownText.gameObject.SetActive(false);
         {
                 string playerName = playerPhotonView.Owner.NickName;
                 Debug.Log(playerName + " è stato eliminato. Tempo: " + carFinishTimes[player]);
-            
+            if (playerEliminatedPrefab != null && finishPrefabspawnPoint != null)
+{
+    Instantiate(playerEliminatedPrefab, finishPrefabspawnPoint.position, finishPrefabspawnPoint.rotation);
+}
+
 
     // Disattiva i controlli del giocatore eliminato e gestisci la telecamera
   // Nel contesto del giocatore eliminato
@@ -444,6 +456,8 @@ if (rbRectTransform != null)
 
    void CheckForWinner()
 {
+                    Debug.Log("checkforwinnerchiamato");
+
     // Conta quanti giocatori, inclusi AI, sono rimasti nel gioco.
     int remainingPlayers = instantiatedCars.Count(car => !eliminatedPlayers.Contains(car));
 
@@ -452,15 +466,22 @@ if (rbRectTransform != null)
         // Trova l'ultimo giocatore o AI rimasto.
         GameObject lastStanding = instantiatedCars.Except(eliminatedPlayers).FirstOrDefault();
 
-        // Se l'ultimo rimasto è il giocatore reale, annuncia che ha vinto.
-        if (lastStanding != null && lastStanding.tag == "Player")
+        // Se ce un ultimo rimasto, annuncia che ha vinto.
+        if (lastStanding != null )
         {
             PhotonView pv = lastStanding.GetComponent<PhotonView>();
             if (pv != null && pv.IsMine)
             {
                 // Assicurati che questo annuncio sia visto solo dal giocatore reale e non dagli altri.
                 photonView.RPC("AnnounceWinner", RpcTarget.All, pv.ViewID);
+                mainCamera.gameObject.SetActive(true);
+                finishPlane.SetActive(true);
             }
+                           if (playerWinPrefab != null && finishPrefabspawnPoint != null)
+{
+    Instantiate(playerWinPrefab, finishPrefabspawnPoint.position, finishPrefabspawnPoint.rotation);
+}
+
         }
     }
 
@@ -491,37 +512,50 @@ if (rbRectTransform != null)
             // Mostra il messaggio del vincitore solo al giocatore vincente
             if (PhotonNetwork.LocalPlayer == winner.GetComponent<PhotonView>().Owner)
             {
-                resultsText.text = "Hai vinto!";
-  
-            int totalPlayers = instantiatedCars.Count; // Presumibilmente tutti quelli che hanno partecipato alla gara
-            int position = 1; // La posizione del vincitore
-            int coinsEarned = AssignCoinsToPlayer(totalPlayers, position);
+ 
+            // Assegna le monete al giocatore solo se non è un bot
+            if (!winner.CompareTag("Enemy"))
+            {
+                                resultsText.text = "Hai vinto!";
 
-            // Aggiorna il testo sul pannello dei risultati per mostrare le monete guadagnate
-            if (coinsAwardText != null) {
-                coinsAwardText.text = $"+{coinsEarned}";
-            }
-                resultsPanel.SetActive(true);
-RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
-if (hbRectTransform != null)
-{
-    hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
-}
-RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
-if (tbRectTransform != null)
-{
-    tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
-}
-RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
-if (rbRectTransform != null)
-{
-    rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
-}
-ShowWinText();
+                int totalPlayers = instantiatedCars.Count; // Presumibilmente tutti quelli che hanno partecipato alla gara
+                int position = 1; // La posizione del vincitore
+                int coinsEarned = AssignCoinsToPlayer(totalPlayers, position);
 
+                // Aggiorna il testo sul pannello dei risultati per mostrare le monete guadagnate
+                if (coinsAwardText != null)
+                {
+                    coinsAwardText.text = $"+{coinsEarned}";
+                }
+                ShowWinText();
             }
+                           if (winner.CompareTag("Enemy"))
+            {
+                Text playerNameText = winner.transform.Find("PlayerName").GetComponent<Text>();
+                resultsText.text = playerNameText.text + " ha vinto!";
+            }
+                    resultsPanel.SetActive(true);
+                   RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
+            if (hbRectTransform != null)
+            {
+                      hbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+            }
+                RectTransform tbRectTransform = throttleButton.GetComponent<RectTransform>();
+              if (tbRectTransform != null)
+        {
+             tbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+            }
+                RectTransform rbRectTransform = reverseButton.GetComponent<RectTransform>();
+                    if (rbRectTransform != null)
+                    {
+                          rbRectTransform.anchoredPosition += new Vector2(2000, 0); // Aggiungi un valore grande abbastanza per spostarlo fuori dallo schermo
+                            }
+                        
+
+                         }
             else
             {
+   
                 resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + " ha vinto!";
                 resultsPanel.SetActive(true);
 RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();

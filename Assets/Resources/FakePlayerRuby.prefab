@@ -43,8 +43,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.42
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 4000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
@@ -319,8 +319,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.42
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 4000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
@@ -377,8 +377,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7878718883544129852}
-  - {fileID: 6365522842617446692}
   - {fileID: 2665258131708833184}
+  - {fileID: 6365522842617446692}
   - {fileID: 7774414362759157494}
   m_Father: {fileID: 178887800161225600}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -425,8 +425,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.42
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 4000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0
@@ -5763,7 +5763,7 @@ Rigidbody:
   m_Mass: 600
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_CenterOfMass: {x: 0, y: -0.3, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -5772,7 +5772,7 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -5855,7 +5855,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f84994eb4ce1a44f9a60f2668533a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   wheelColliders:
   - {fileID: 8480276310034970621}
   - {fileID: 6170175155795499214}
@@ -5863,9 +5862,8 @@ MonoBehaviour:
   - {fileID: 6376486286029981393}
   maxMotorTorque: 1000
   maxSteeringAngle: 30
-  raceStarted: 0
   maxSpeed: 20
-  raycastDistance: 50
+  raceStarted: 0
 --- !u!114 &-4905828535132818814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5878,10 +5876,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
 --- !u!1 &6788400304119611513
 GameObject:
   m_ObjectHideFlags: 0
@@ -11129,8 +11125,8 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.42
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 30000
+    damper: 4000
     targetPosition: 0.5
   m_SuspensionDistance: 0.3
   m_ForceAppPointDistance: 0

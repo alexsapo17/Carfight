@@ -490,7 +490,7 @@ PhotonNetwork.Disconnect();
 
             byte maxPlayers;
             byte.TryParse(MaxPlayersInputField.text, out maxPlayers);
-            maxPlayers = (byte)Mathf.Clamp(maxPlayers, 2, 8);
+            maxPlayers = (byte)Mathf.Clamp(maxPlayers, 2, 6);
 
             RoomOptions options = new RoomOptions { MaxPlayers = maxPlayers, PlayerTtl = 10000 };
 
@@ -709,7 +709,7 @@ private System.Collections.IEnumerator AddFakePlayersDynamically()
 
         while (fakePlayersAdded < 5) // Se vuoi aggiungere 5 giocatori finti
         {
-            yield return new WaitForSeconds(Random.Range(1, 10)); // Aspetta un periodo casuale tra 2 e 6 secondi
+            yield return new WaitForSeconds(Random.Range(1, 2)); // Aspetta un periodo casuale tra secondi
             int randIndex = UnityEngine.Random.Range(0, creativeNicknames.Count); // Scegli un indice a caso
             string fakePlayerName = creativeNicknames[randIndex]; // Seleziona un nome casuale dalla lista
 

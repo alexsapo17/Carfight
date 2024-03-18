@@ -676,10 +676,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.1
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 20000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -1112,10 +1112,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.12
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 20000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -1351,6 +1351,7 @@ GameObject:
   - component: {fileID: 169016931737402787}
   - component: {fileID: 8990906439253947107}
   - component: {fileID: -1246109764670849901}
+  - component: {fileID: -1416791426338232736}
   m_Layer: 0
   m_Name: FakePlayerCice
   m_TagString: Enemy
@@ -1503,7 +1504,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f84994eb4ce1a44f9a60f2668533a04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
   wheelColliders:
   - {fileID: 6947899322730157995}
   - {fileID: 3280466360476831475}
@@ -1511,9 +1511,8 @@ MonoBehaviour:
   - {fileID: 2872242500589400826}
   maxMotorTorque: 500
   maxSteeringAngle: 30
-  raceStarted: 0
   maxSpeed: 20
-  raycastDistance: 50
+  raceStarted: 0
 --- !u!114 &-1246109764670849901
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1526,10 +1525,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
+--- !u!114 &-1416791426338232736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7358144311446773926}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc6dcc368ca8c42b7859947e3e7855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  botName: FakePlayerCice
+  playerEffects: {fileID: -1246109764670849901}
+  activationDistance: 8
+  cooldownDuration: 5
+  abilityPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
 --- !u!1 &7403896650811027677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1573,10 +1587,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.1
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 20000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25
@@ -1727,10 +1741,10 @@ WheelCollider:
   m_Center: {x: 0, y: 0, z: 0}
   m_Radius: 0.12
   m_SuspensionSpring:
-    spring: 35000
-    damper: 4500
+    spring: 20000
+    damper: 3000
     targetPosition: 0.5
-  m_SuspensionDistance: 0
+  m_SuspensionDistance: 0.15
   m_ForceAppPointDistance: 0
   m_Mass: 20
   m_WheelDampingRate: 0.25

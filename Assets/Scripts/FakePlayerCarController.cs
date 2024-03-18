@@ -5,21 +5,25 @@ using System.Collections.Generic;
 [RequireComponent(typeof(Rigidbody))]
 public class FakePlayerCarController : MonoBehaviour
 {
-    private Transform target;
     public WheelCollider[] wheelColliders = new WheelCollider[4];
     public float maxMotorTorque = 1000f;
     public float maxSteeringAngle = 30f;
-    public bool raceStarted = false;
+    public float maxSpeed = 50f;
     private Rigidbody rb;
-    public float avoidanceStrength = 30f;
-    public float raycastDistance = 5f;
-public float maxSpeed = 50f;
-    private Coroutine currentRoutine = null;
+    public bool raceStarted = false;
+
+    // Waypoints
+    public List<Transform>[] waypointPaths; // Array di liste di waypoint 
+    private List<Transform> currentPath; // Il percorso attuale scelto
+    private int currentWaypointIndex = 0; // Indice del waypoint corrente nel percorso
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         AssignWheelColliders();
+        rb.centerOfMass += new Vector3(0, -0.5f, 0); // Regola il valore Y per abbassare ulteriormente il baricentro
+
+        ChooseRandomPath(); // Scegli un percorso casuale all'inizio
     }
 
     void AssignWheelColliders()
@@ -31,94 +35,77 @@ public float maxSpeed = 50f;
         }
     }
 
-
-    bool IsGroundAhead()
-    {
-        RaycastHit hit;
-        Vector3 position = transform.position + transform.forward * 2; // Regola questo offset in base alla dimensione della tua macchina
-        bool hasGround = Physics.Raycast(position, -Vector3.up, out hit, 2f);
-        Debug.DrawRay(position, -Vector3.up * 2, hasGround ? Color.green : Color.red);
-        return hasGround;
-    }
-void FixedUpdate()
+void ChooseRandomPath()
 {
-    FindClosestTarget();
-
-    if (target == null || !raceStarted) return;
-
-    if (!CheckForEdgeAndAdjust())
+    if (WaypointManager.Instance.waypointPaths.Count > 0) // Usa .Count qui per le liste
     {
-        FollowTarget();
-    }
-        if (rb.velocity.magnitude > maxSpeed)
-    {
-        // Normalizza il vettore velocità per mantenerne la direzione e moltiplicalo per la velocità massima
-        rb.velocity = rb.velocity.normalized * maxSpeed;
+        int pathIndex = Random.Range(0, WaypointManager.Instance.waypointPaths.Count); // Usa .Count anche qui
+        currentPath = WaypointManager.Instance.waypointPaths[pathIndex].waypoints; // Assicurati che waypoints sia accessibile
+        currentWaypointIndex = 0;
     }
 }
 
-bool CheckForEdgeAndAdjust()
+void FixedUpdate()
 {
-    Vector3[] directions = new Vector3[]{
-        transform.forward,
-        (transform.forward + transform.right).normalized,
-        (transform.forward - transform.right).normalized
-    };
+    if (!raceStarted || currentPath == null) return;
 
-    bool edgeDetected = false;
+    Vector3 targetWaypoint = currentPath[currentWaypointIndex].position;
+    Vector3 directionToTarget = targetWaypoint - transform.position;
+    directionToTarget.y = 0; // Ignora l'asse Y per il calcolo della sterzata
 
-    foreach (var dir in directions)
+    float steering = 0f;
+    if (directionToTarget.magnitude > 1f) // Assicurati che la direzione sia valida
     {
-        if (!IsGroundInDirection(dir))
+        // Calcola l'angolo tra la direzione della macchina e la direzione del waypoint
+        float angleToTarget = Vector3.SignedAngle(transform.forward, directionToTarget, Vector3.up);
+
+        if (angleToTarget > 5f) // Se il waypoint è a destra
         {
-            edgeDetected = true;
-            break;
+            steering = maxSteeringAngle; // Sterza a destra
+        }
+        else if (angleToTarget < -5f) // Se il waypoint è a sinistra
+        {
+            steering = -maxSteeringAngle; // Sterza a sinistra
         }
     }
 
-    if (edgeDetected && currentRoutine == null)
+    ApplySteering(steering);
+
+    // Graduale riduzione della velocità quando ci avviciniamo al waypoint
+    float distanceToTarget = directionToTarget.magnitude;
+    float brakeTorque = 0f;
+    if (distanceToTarget < 10f)
     {
-        currentRoutine = StartCoroutine(AdjustCourse());
-        return true;
+        brakeTorque = maxMotorTorque * (10f - distanceToTarget) / 10f; // Gradualmente aumenta il brakeTorque man mano che ci si avvicina al waypoint
     }
-    else if (!edgeDetected && currentRoutine != null)
+    ApplyBrakeTorque(brakeTorque);
+
+    if (distanceToTarget < 15f) // Se vicini al waypoint, passa al prossimo
     {
-        StopCoroutine(currentRoutine);
-        currentRoutine = null;
-        ApplyMotorTorque(maxMotorTorque);
+        currentWaypointIndex++;
+        if (currentWaypointIndex >= currentPath.Count)
+        {
+            // Se hai raggiunto l'ultimo waypoint, ricomincia il giro dal primo
+            currentWaypointIndex = 0;
+        }
     }
 
-    return edgeDetected;
+    if (rb.velocity.magnitude < maxSpeed)
+    {
+        ApplyMotorTorque(maxMotorTorque); // Applica torque solo se sotto la velocità massima
+    }
+    else
+    {
+        ApplyMotorTorque(0); // Non applicare torque se alla velocità massima
+    }
 }
 
-bool IsGroundInDirection(Vector3 direction)
+
+void ApplyBrakeTorque(float torque)
 {
-    // Calcola un offset in avanti basato sulla velocità attuale della macchina e una costante di tua scelta.
-    float forwardOffset = 10.0f; // Ad esempio, 5 metri davanti alla macchina. Ajusta questo valore come necessario.
-
-    // Calcola la posizione di partenza del raycast
-    Vector3 raycastStart = transform.position + transform.forward * forwardOffset + transform.up * 0.2f; // Alza leggermente il punto di partenza per evitare collisioni con il terreno
-
-    // Direzione del raycast verso il basso per rilevare il terreno
-    Vector3 raycastDirection = -transform.up;
-
-    RaycastHit hit;
-    bool hasGround = Physics.Raycast(raycastStart, raycastDirection, out hit, 4f); // 2f è la distanza del raycast verso il basso
-    Debug.DrawRay(raycastStart, raycastDirection * 2f, hasGround ? Color.green : Color.red); // Visualizza il raycast nell'editor
-
-    return hasGround;
-}
-
-
-IEnumerator AdjustCourse()
-{
-    // Adjust the car's course. This might include steering adjustments, speed reduction, or a combination.
-    while (!IsGroundAhead())
+    foreach (var wheelCollider in wheelColliders)
     {
-        // Example: steer away from the edge
-        ApplySteering(maxSteeringAngle * (Random.Range(0, 2) * 2 - 1)); // Randomly choose left or right
-        ApplyMotorTorque(maxMotorTorque * 0.2f); // Slow down to give time for adjustments
-        yield return new WaitForFixedUpdate();
+        wheelCollider.brakeTorque = torque;
     }
 }
 
@@ -136,55 +123,4 @@ IEnumerator AdjustCourse()
         wheelColliders[0].steerAngle = steeringAngle;
         wheelColliders[1].steerAngle = steeringAngle;
     }
-
-    void FollowTarget()
-    {
-        if (!raceStarted) return;
-
-        Vector3 relativeVector = transform.InverseTransformPoint(target.position.x, transform.position.y, target.position.z);
-        float steering = (relativeVector.x / relativeVector.magnitude) * maxSteeringAngle;
-        float motor = maxMotorTorque;
-
-        wheelColliders[0].steerAngle = steering;
-        wheelColliders[1].steerAngle = steering;
-
-        foreach (var wheelCollider in wheelColliders)
-        {
-            wheelCollider.motorTorque = motor;
-        }
-    }
-
-    void FindClosestTarget()
-    {
-        // Unisci gli array di GameObject con tag "Player" e "Enemy"
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        List<GameObject> allTargets = new List<GameObject>();
-        allTargets.AddRange(players);
-        allTargets.AddRange(enemies);
-
-        // Rimuove sé stesso dalla lista di potenziali target
-        allTargets.Remove(gameObject);
-
-        // Trova il GameObject più vicino
-        float closestDistance = Mathf.Infinity;
-        GameObject closestTarget = null;
-
-        foreach (GameObject potentialTarget in allTargets)
-        {
-            if (potentialTarget == gameObject) continue; // Ignora sé stesso
-
-            float distance = (potentialTarget.transform.position - transform.position).sqrMagnitude;
-            if (distance < closestDistance)
-            {
-                closestDistance = distance;
-                closestTarget = potentialTarget;
-            }
-        }
-
-        // Imposta il target più vicino come bersaglio
-        target = closestTarget?.transform;
-    }
-    
-    
 }
