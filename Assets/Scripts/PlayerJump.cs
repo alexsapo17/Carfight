@@ -25,6 +25,10 @@ public class PlayerJump : MonoBehaviourPun
 
         foreach (var pv in FindObjectsOfType<PhotonView>())
         {
+        // Verifica se il gameobject ha il tag "Player"
+        if (pv.gameObject.CompareTag("Player"))
+        {
+
             if (pv.IsMine && pv.gameObject.GetComponent<PlayerEffects>())
             {
                 var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();
@@ -37,6 +41,8 @@ public class PlayerJump : MonoBehaviourPun
                 StartCoroutine(FadeButton(0f, 1f));
                 break;
             }
+            }
+
         }
     }
 

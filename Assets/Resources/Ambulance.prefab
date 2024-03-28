@@ -226,10 +226,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
 --- !u!65 &362385322006756527
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -908,10 +906,10 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 3055996272150503839, guid: 541bad4fb68f259438c30f943343842c, type: 3}
-  - {fileID: 5029210610703319244, guid: 541bad4fb68f259438c30f943343842c, type: 3}
+  - {fileID: 2100000, guid: b27c0ad2157f7664e83afb76ebdef41d, type: 2}
   - {fileID: 5017629054345748095, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   - {fileID: 8884940142553567970, guid: 541bad4fb68f259438c30f943343842c, type: 3}
-  - {fileID: -535131839395333617, guid: 541bad4fb68f259438c30f943343842c, type: 3}
+  - {fileID: 2100000, guid: cd2cb7c5e3e69484fa6f7415cab0d678, type: 2}
   - {fileID: -492108395051690996, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   - {fileID: 2794336483236889472, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   m_StaticBatchInfo:

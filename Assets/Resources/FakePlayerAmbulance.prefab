@@ -10022,10 +10022,10 @@ MeshRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 3055996272150503839, guid: 541bad4fb68f259438c30f943343842c, type: 3}
-  - {fileID: 5029210610703319244, guid: 541bad4fb68f259438c30f943343842c, type: 3}
+  - {fileID: 2100000, guid: b27c0ad2157f7664e83afb76ebdef41d, type: 2}
   - {fileID: 5017629054345748095, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   - {fileID: 8884940142553567970, guid: 541bad4fb68f259438c30f943343842c, type: 3}
-  - {fileID: -535131839395333617, guid: 541bad4fb68f259438c30f943343842c, type: 3}
+  - {fileID: 2100000, guid: cd2cb7c5e3e69484fa6f7415cab0d678, type: 2}
   - {fileID: -492108395051690996, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   - {fileID: 2794336483236889472, guid: 541bad4fb68f259438c30f943343842c, type: 3}
   m_StaticBatchInfo:
@@ -10299,6 +10299,7 @@ GameObject:
   - component: {fileID: 7462507340172983677}
   - component: {fileID: 6513911538150606225}
   - component: {fileID: -8719358586512832570}
+  - component: {fileID: -6222880252616796662}
   m_Layer: 0
   m_Name: FakePlayerAmbulance
   m_TagString: Enemy
@@ -10430,6 +10431,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
+--- !u!114 &-6222880252616796662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5580098709330923877}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14fc6dcc368ca8c42b7859947e3e7855, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  botName: FakePlayerAmbulance
+  playerEffects: {fileID: -8719358586512832570}
+  activationDistance: 20
+  cooldownDuration: 10
+  shockwavePrefab: {fileID: 0}
 --- !u!1 &5978415736006640610
 GameObject:
   m_ObjectHideFlags: 0

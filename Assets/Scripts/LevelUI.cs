@@ -25,7 +25,7 @@ public class LevelUI : MonoBehaviour
 
     if (levelText != null)
     {
-        levelText.text = "Livello " + levelId; // Imposta il testo del livello
+        levelText.text = "" + levelId; // Imposta il testo del livello
     }
 
     UpdateUI(0, 0); // Inizializza l'UI con valori di default

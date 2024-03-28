@@ -218,11 +218,11 @@ private void UpdateUnlockStatusOnFirebase(int levelId)
     {
         starRequirements = new Dictionary<int, LevelStarRequirements>
         {
-            { 0, new LevelStarRequirements(5f, 8f, 10f) },
-            { 1, new LevelStarRequirements(5f, 8f, 10f) },
-            { 2, new LevelStarRequirements(5f, 8f, 10f) },
-            { 3, new LevelStarRequirements(10f, 15f, 20f) },
-            { 4, new LevelStarRequirements(5f, 10f, 20f) },
+            { 0, new LevelStarRequirements(7f, 9f, 10f) },
+            { 1, new LevelStarRequirements(8.4f, 10f, 15f) },
+            { 2, new LevelStarRequirements(15f, 18f, 26f) },
+            { 3, new LevelStarRequirements(30f, 40f, 60f) },
+            { 4, new LevelStarRequirements(21f, 25f, 30f) },
             { 5, new LevelStarRequirements(10f, 15f, 20f) },
             { 6, new LevelStarRequirements(10f, 20f, 30f) },
             { 7, new LevelStarRequirements(10f, 15f, 20f) },
@@ -320,7 +320,23 @@ private void LoadCoinsAndUpdateUI() {
     {
         if (bestTimeText != null)
         {
+                            string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+ if (language == "it")
+        {
             bestTimeText.text = "Miglior Tempo: " + bestTime.ToString("F2");
+        }
+         if (language == "en")
+        {
+            bestTimeText.text = "Best time: " + bestTime.ToString("F2");
+        }
+         if (language == "es")
+        {
+            bestTimeText.text = "Mejor tiempo: " + bestTime.ToString("F2");
+        }
+         if (language == "fr")
+        {
+            bestTimeText.text = "Meilleur temps: " + bestTime.ToString("F2");
+        }
         }
     }
 

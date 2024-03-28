@@ -21,6 +21,48 @@ public float upwardForce = 5f;
         else
             transform.position += Vector3.forward * offset;
     }
+void Start()
+{
+    // Ottieni tutti i collider presenti nella scena
+    Collider[] allColliders = FindObjectsOfType<Collider>();
+
+    // Ottieni tutti i collider del gameobject a cui è attaccato lo script
+    Collider[] thisColliders = GetComponents<Collider>();
+
+    // Cicla su tutti i collider presenti nella scena
+    foreach (Collider col in allColliders)
+    {
+        // Verifica se il collider non appartiene al gameobject a cui è attaccato lo script
+        if (!IsColliderInArray(col, thisColliders))
+        {
+            // Ignora le collisioni con i collider che non hanno il tag "Player" o "Enemy"
+            if (!col.gameObject.CompareTag("Player") && !col.gameObject.CompareTag("Enemy"))
+            {
+                foreach (Collider thisCol in thisColliders)
+                {
+                    // Ignora la collisione tra il collider del gameobject e il collider dell'oggetto senza il tag desiderato
+                    Physics.IgnoreCollision(thisCol, col, true);
+                }
+            }
+        }
+    }
+}
+
+bool IsColliderInArray(Collider collider, Collider[] array)
+{
+    // Cicla su tutti i collider nell'array
+    foreach (Collider col in array)
+    {
+        // Se il collider è presente nell'array, restituisci true
+        if (col == collider)
+        {
+            return true;
+        }
+    }
+    // Se il collider non è presente nell'array, restituisci false
+    return false;
+}
+
 
     void Update()
     {
@@ -72,10 +114,9 @@ public float upwardForce = 5f;
             }
         }
     }
-
 void OnCollisionStay(Collision collision)
 {
-    if (enableTapisRoulantEffect)
+    if (enableTapisRoulantEffect && (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy")))
     {
         Rigidbody rb = collision.collider.attachedRigidbody;
         if (rb != null)
@@ -90,6 +131,12 @@ void OnCollisionStay(Collision collision)
             rb.AddForce(forceDirection, ForceMode.Impulse);
         }
     }
+    else
+    {
+        // Ignora la collisione con gli oggetti che non hanno il tag "Player" o "Enemy"
+        Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+    }
 }
+
 
 }

@@ -92,12 +92,15 @@ public class BotAbilities : MonoBehaviour
                 break;
 
             case "FakePlayerAmbulance":
-                playerEffects.StartFlashbangEffect(); // Attiva l'abilità dello shockwave
+                playerEffects.StartFlashbangEffectEnemy(); // Attiva l'abilità del flashbang
+                            Debug.Log("flashbangattiavto ");
+
                 break;
 
             case "FakePlayerFiretruck":
-                playerEffects.StartFlashbangEffect(); // Attiva l'abilità dello shockwave
-                break;
+                playerEffects.StartFlashbangEffectEnemy(); // Attiva l'abilità delflashbang
+                                            Debug.Log("flashbangattiavto ");
+break;
 
         }
 

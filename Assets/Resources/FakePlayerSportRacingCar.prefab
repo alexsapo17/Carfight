@@ -11646,9 +11646,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botName: FakePlayerSportRacingCar
   playerEffects: {fileID: -3727131155245062300}
-  activationDistance: 8
+  activationDistance: 7
   cooldownDuration: 5
-  abilityPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
+  shockwavePrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
 --- !u!1 &5546438418605028228
 GameObject:
   m_ObjectHideFlags: 0
@@ -12661,7 +12661,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -4994505263477485343, guid: 4764f71eddbb8fe4c8ebb0aa56af0952, type: 3}
+  - {fileID: 2100000, guid: 54db2b44ee15b5b47a00eed704aa420b, type: 2}
   - {fileID: -8247417321557204785, guid: 4764f71eddbb8fe4c8ebb0aa56af0952, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0

@@ -1,33 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Bounce : MonoBehaviour
 {
-	public float force = 10f; //Force 10000f
-	public float stunTime = 0.5f;
-	private Vector3 hitDir;
+    public float force = 10f; // Forza del rimbalzo
 
-	void OnCollisionEnter(Collision collision)
-	{
-		foreach (ContactPoint contact in collision.contacts)
-		{
-			Debug.DrawRay(contact.point, contact.normal, Color.white);
-			if (collision.gameObject.tag == "Player")
-			{
-				hitDir = contact.normal;
-				collision.gameObject.GetComponent<CharacterControls>().HitPlayer(-hitDir * force, stunTime);
-				return;
-			}
-		}
-		/*if (collision.relativeVelocity.magnitude > 2)
-		{
-			if (collision.gameObject.tag == "Player")
-			{
-				//Debug.Log("Hit");
-				collision.gameObject.GetComponent<CharacterControls>().HitPlayer(-hitDir*force, stunTime);
-			}
-			//audioSource.Play();
-		}*/
-	}
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
+        {
+            // Calcola la direzione del rimbalzo
+            Vector3 hitDir = Vector3.zero;
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                hitDir += contact.normal;
+            }
+            hitDir /= collision.contacts.Length;
+
+            // Applica l'effetto di rimbalzo al GameObject colpito
+            Rigidbody otherRigidbody = collision.gameObject.GetComponent<Rigidbody>();
+            if (otherRigidbody != null)
+            {
+                otherRigidbody.AddForce(hitDir * force, ForceMode.Impulse);
+            }
+        }
+    }
 }

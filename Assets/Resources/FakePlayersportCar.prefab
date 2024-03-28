@@ -11502,6 +11502,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botName: FakePlayersportCar
   playerEffects: {fileID: 6280431254285382166}
-  activationDistance: 8
+  activationDistance: 7
   cooldownDuration: 5
-  abilityPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
+  shockwavePrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}

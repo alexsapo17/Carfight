@@ -83,7 +83,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 6791015765719837024, guid: 65e6dbf0eac59ba48b26a04a71f4035e, type: 3}
+  - {fileID: 2100000, guid: 79aafe37c87b6bf4483ca73de4561a63, type: 2}
   - {fileID: -6796508776286440829, guid: 65e6dbf0eac59ba48b26a04a71f4035e, type: 3}
   - {fileID: 580395628951381386, guid: 65e6dbf0eac59ba48b26a04a71f4035e, type: 3}
   - {fileID: 6699446615349125189, guid: 65e6dbf0eac59ba48b26a04a71f4035e, type: 3}
@@ -1224,7 +1224,6 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 0}
   - {fileID: 2900847065024323727}
   sceneViewId: 0
   InstantiationId: 0
@@ -1293,10 +1292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7182a3f2e0aec424e81755e282723f37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
-  controlDisableEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
-  sizeMassIncreaseEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
   invisibilityEffectPrefab: {fileID: 1280141305896002, guid: e473029e4c70ad543a6879b82a732f4f, type: 3}
+  collisionEffectPrefab: {fileID: 100000, guid: 83cd9cc9f9c88824ba18dc59b05ae328, type: 3}
 --- !u!65 &7913376105863472777
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -5162,6 +5162,7 @@ GameObject:
   - component: {fileID: 6441748780464120804}
   - component: {fileID: 4321004407628927167}
   - component: {fileID: 590106434952321796}
+  - component: {fileID: -7962895252388636289}
   m_Layer: 0
   m_Name: GemPickup
   m_TagString: Untagged
@@ -5220,6 +5221,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.1343109, y: 0.15013194, z: 0.14348009}
   m_Center: {x: -0.0011676798, y: 0.03946345, z: 0.001821033}
+--- !u!114 &-7962895252388636289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5977637005288725046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &6149500994078982396
 GameObject:
   m_ObjectHideFlags: 0

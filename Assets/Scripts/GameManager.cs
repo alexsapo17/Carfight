@@ -73,6 +73,7 @@ public Transform finishPrefabspawnPoint; // Assicurati di assegnare questo dall'
     public RewardTier[] rewardTiers;
 void Start()
 {
+
     string selectedCarName = PlayerPrefs.GetString("SelectedCar", "DefaultCarName");
     GameObject carPrefab = Resources.Load<GameObject>(selectedCarName);  
 
@@ -201,8 +202,24 @@ StartCoroutine(SpawnFakePlayers(count));
     }
    IEnumerator PreRaceCountdown()
     {
-                            countdownText.text = "Attendendo altri giocatori...";
+                        string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
 
+        if (language == "it")
+        {
+                countdownText.text = "Attendendo altri giocatori...";
+        }
+                if (language == "en")
+        {
+                countdownText.text = "Waiting for other players...";
+        }
+                if (language == "es")
+        {
+                countdownText.text = "Esperando a otros jugadores...";
+        }
+                if (language == "fr")
+        {
+                countdownText.text = "En attente d'autres joueurs...";
+        }
          // Attendi che tutte le auto siano istanziate.
         while (PhotonNetwork.CurrentRoom != null && instantiatedCars != null && PhotonNetwork.CurrentRoom.PlayerCount != instantiatedCars.Count)
         {
@@ -216,7 +233,7 @@ countdownText.gameObject.SetActive(false);
             yield break; // Fermati se la stanza non esiste più.
         }
 
-        preRaceCountdownText.text = "Preparati";
+        preRaceCountdownText.text = "";
         float preRaceTimer = this.preRaceTimer;
         while (preRaceTimer > 0)
         {
@@ -242,6 +259,32 @@ countdownText.gameObject.SetActive(false);
         
          startRaceCountdownText.text = ""; // Nascondi il testo del countdown di inizio gara
          photonView.RPC("StartRaceSync", RpcTarget.All);
+                    // Trova il GameObject chiamato "BallSpawnerManager"
+        GameObject ballSpawnerManager = GameObject.Find("BallSpawnerManager");
+
+        // Verifica se il GameObject è stato trovato
+        if (ballSpawnerManager != null)
+        {
+            // Ottieni il componente BallSpawner dal GameObject
+            BallSpawner ballSpawner = ballSpawnerManager.GetComponent<BallSpawner>();
+
+            // Verifica se il componente è stato trovato
+            if (ballSpawner != null)
+            {
+                // Chiamare il metodo StartSpawnProcess su BallSpawner
+                ballSpawner.StartSpawnProcess();
+                                Debug.Log("gamemanager chiama ballspawner.");
+
+            }
+            else
+            {
+                Debug.LogWarning("Componente BallSpawner non trovato su BallSpawnerManager.");
+            }
+        }
+        else
+        {
+            Debug.LogWarning("GameObject BallSpawnerManager non trovato nella scena.");
+        }
     }
     public void SetCarPrefab(string carName)
     {
@@ -288,6 +331,8 @@ countdownText.gameObject.SetActive(false);
             
  
         }
+ 
+    
 
     }
 
@@ -506,6 +551,7 @@ if (rbRectTransform != null)
     void AnnounceWinner(int winnerViewID)
     {
         GameObject winner = PhotonView.Find(winnerViewID).gameObject;
+                string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
 
         if (winner != null)
         {
@@ -516,8 +562,22 @@ if (rbRectTransform != null)
             // Assegna le monete al giocatore solo se non è un bot
             if (!winner.CompareTag("Enemy"))
             {
-                                resultsText.text = "Hai vinto!";
-
+        if (language == "it")
+        {
+                   resultsText.text = "Hai vinto!";
+        }
+           if (language == "en")
+        {
+                   resultsText.text = "You win!";
+        }
+           if (language == "es")
+        {
+                   resultsText.text = "¡Has ganado!";
+        }
+           if (language == "fr")
+        {
+                   resultsText.text = "Tu as gagné!";
+        }
                 int totalPlayers = instantiatedCars.Count; // Presumibilmente tutti quelli che hanno partecipato alla gara
                 int position = 1; // La posizione del vincitore
                 int coinsEarned = AssignCoinsToPlayer(totalPlayers, position);
@@ -532,7 +592,22 @@ if (rbRectTransform != null)
                            if (winner.CompareTag("Enemy"))
             {
                 Text playerNameText = winner.transform.Find("PlayerName").GetComponent<Text>();
-                resultsText.text = playerNameText.text + " ha vinto!";
+                       if (language == "it")
+        {
+                resultsText.text = playerNameText.text + " ha vinto";
+        }
+                           if (language == "en")
+        {
+                resultsText.text = playerNameText.text + "won";
+        }
+                           if (language == "es")
+        {
+                resultsText.text = playerNameText.text + "ganó";
+        }
+                           if (language == "fr")
+        {
+                resultsText.text = playerNameText.text + "a gagné";
+        }
             }
                     resultsPanel.SetActive(true);
                    RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
@@ -555,8 +630,22 @@ if (rbRectTransform != null)
                          }
             else
             {
-   
+                          if (language == "it")
+        {
                 resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + " ha vinto!";
+        }
+                           if (language == "en")
+        {
+                resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + " won!";
+        }
+                           if (language == "es")
+        {
+                resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + "ganò";
+        }
+                           if (language == "fr")
+        {
+                resultsText.text = winner.GetComponent<PhotonView>().Owner.NickName + "a gagnè";
+        }
                 resultsPanel.SetActive(true);
 RectTransform hbRectTransform = handbrakeButton.GetComponent<RectTransform>();
 if (hbRectTransform != null)

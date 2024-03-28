@@ -98,6 +98,7 @@ public void Awake()
 }
 public void Start()
 {
+
         // Controlla se dobbiamo mostrare il pannello speciale
     if (PlayerPrefs.GetInt("ShowTutorial2Panel", 0) == 1)
     {
@@ -114,7 +115,20 @@ public void Start()
 
     UpdateCurrencyUI();
 }
+     public void SetLanguage(string language)
+    {
+        PlayerPrefs.SetString("Language", language);
+        PlayerPrefs.Save();
 
+        // Trova tutti i componenti LocalizedText nella scena, inclusi quelli disattivati
+        LocalizedText[] allLocalizedTextComponents = FindObjectsOfType<LocalizedText>(true);
+
+        // Itera attraverso tutti i componenti LocalizedText e chiama UpdateTextLanguage su ognuno di essi
+        foreach (LocalizedText localizedText in allLocalizedTextComponents)
+        {
+            localizedText.UpdateTextLanguage();
+        }
+    }
  private void UpdateCurrencyUI()
         {
             CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
@@ -252,10 +266,27 @@ public void Start()
             // Nascondi i pulsanti Shop e SinglePlayer
             ShopButton.gameObject.SetActive(false);
             SinglePlayerButton.gameObject.SetActive(false);
+            string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
 
-            // Cambia il testo del pulsante Login in "Procedi"
+            // Cambia il testo del pulsante Login in "Procedi"  
+        if (language == "it")
+        {
             LoginButton.GetComponentInChildren<Text>().text = "Procedi";
         }
+                if (language == "en")
+        {
+            LoginButton.GetComponentInChildren<Text>().text = "Proceed";
+        }
+                if (language == "es")
+        {
+            LoginButton.GetComponentInChildren<Text>().text = "Proceder";
+        }
+                if (language == "fr")
+        {
+            LoginButton.GetComponentInChildren<Text>().text = "Procèder";
+        }
+        
+                }
                 else
                 {
                     // Non è la prima volta, ma l'utente non è autenticato su Firebase
@@ -570,7 +601,7 @@ void StartGame()
                 return;
             }
 
-            int entryCost = 100; // Costo per avviare il gioco
+            int entryCost = 200; // Costo per avviare il gioco
 
             if (currencyManager.TrySpendCoins(entryCost))
             {
@@ -695,21 +726,21 @@ private System.Collections.IEnumerator AddFakePlayersDynamically()
 
         // Lista dei nomi unici e creativi forniti
         List<string> creativeNicknames = new List<string> {
-            "Fire-Bred", "Titanium", "Hurricane", "Ironsides", "Iron-Cut", "Tempest", "Iron Heart", "Steel Forge",
-            "Pursuit", "Steel Foil", "Sick Rebellious Names", "Upsurge", "Uprising", "Overthrow", "Breaker",
-            "Sabotage", "Dissent", "Subversion", "Rebellion", "Insurgent", "Accidental Genius", "Acid Gosling",
-            "Admiral Tot", "AgentHercules", "Airport Hobo", "Alley Frog", "Alpha", "AlphaReturns", "Angel",
-            "AngelsCreed", "Arsenic Coo", "Atomic Blastoid", "Automatic Slicer", "Baby Brown", "Back Bett",
+            "Fire-Bred", "Titanic", "XXHurricaneXX", "AMan", "Iron-Cut3", "Tempest", "IronG4YMan", "Steel11111",
+            "Pursuit99", "SteeFrix13", "Sick Rebellious Names", "Upsurge", "UpCupMud", "Overthrow", "Breaker",
+            "SabotageJake", "Dissentery", "SubvAscular", "Rebell", "Insurgent", "AnAccidentalGenius", "4cidJim",
+            "AdmiralotBBBBOy", "AgentHercules", "HubHobo", "AlleyMan", "Alpha17", "AlphaReturns", "IMYOURANGEL",
+            "AngelsCreed", "ArsenicCoo", "Blastoid", "FreeDWG", "BabyBrownBoy", "BackBett",
             // Aggiungi tutti gli altri nomi qui
             // Nomi italiani aggiunti
-            "Assassino di patate", "Tubo Nube", "Giocatore di scarto", "Rianimami", "Salvami niubbo",
-            "squadra più perdente", "Pistola stupida", "Noob", "Stabby Mcstabface", "Pew Pew LaserBeam"
+            "P0veroDentro", "TuboNudoAHAH", "scartoumano", "FraTex10", "Sniubbo",
+            "StupidaBibbi", "King-C-Cyclette", "Noob", "Stabby Mcstabface", "PewPewBB"
             // Continua ad aggiungere i nomi...
         };
 
         while (fakePlayersAdded < 5) // Se vuoi aggiungere 5 giocatori finti
         {
-            yield return new WaitForSeconds(Random.Range(1, 2)); // Aspetta un periodo casuale tra secondi
+            yield return new WaitForSeconds(Random.Range(1, 10)); // Aspetta un periodo casuale tra secondi
             int randIndex = UnityEngine.Random.Range(0, creativeNicknames.Count); // Scegli un indice a caso
             string fakePlayerName = creativeNicknames[randIndex]; // Seleziona un nome casuale dalla lista
 

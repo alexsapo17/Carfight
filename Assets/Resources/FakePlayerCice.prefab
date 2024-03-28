@@ -96,7 +96,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -749338713933554755, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+  - {fileID: 2100000, guid: eca509bec4a012247b20b1eb2683b36a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -461,7 +461,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -876546973899608171, guid: 50149908522b11f49a538aa8fda766f4, type: 3}
+  - {fileID: 2100000, guid: 87d074712aa16bd44b389c555c1a806b, type: 2}
   - {fileID: -6478536213147159724, guid: 50149908522b11f49a538aa8fda766f4, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
@@ -545,7 +545,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -749338713933554755, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+  - {fileID: 2100000, guid: eca509bec4a012247b20b1eb2683b36a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1047,7 +1047,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -749338713933554755, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+  - {fileID: 2100000, guid: eca509bec4a012247b20b1eb2683b36a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1390,7 +1390,7 @@ Rigidbody:
   m_Mass: 550
   m_Drag: 0
   m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_CenterOfMass: {x: 0, y: -0.2, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
   m_IncludeLayers:
@@ -1399,7 +1399,7 @@ Rigidbody:
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
-  m_ImplicitCom: 1
+  m_ImplicitCom: 0
   m_ImplicitTensor: 1
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -1541,9 +1541,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   botName: FakePlayerCice
   playerEffects: {fileID: -1246109764670849901}
-  activationDistance: 8
+  activationDistance: 7
   cooldownDuration: 5
-  abilityPrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
+  shockwavePrefab: {fileID: 7226888052703040409, guid: 7ec363c8df426644ea85f8d6d570561c, type: 3}
 --- !u!1 &7403896650811027677
 GameObject:
   m_ObjectHideFlags: 0
@@ -1676,7 +1676,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: -749338713933554755, guid: 1a3615fc83b021c42b7dba2200b0b018, type: 3}
+  - {fileID: 2100000, guid: eca509bec4a012247b20b1eb2683b36a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

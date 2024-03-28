@@ -21,17 +21,25 @@ public class LeaderboardUIManager : MonoBehaviour
         backButton.onClick.AddListener(HideLeaderboard); // Aggiungi il listener al pulsante Indietro
     }
 
-    private void InitializeLevelButtons()
+private void InitializeLevelButtons()
+{
+    // Assumiamo che ci siano 10 livelli, ma puoi modificare secondo il tuo gioco
+    for (int i = 0; i < 10; i++)
     {
-        // Assumiamo che ci siano 10 livelli, ma puoi modificare secondo il tuo gioco
-        for (int i = 0; i < 10; i++)
-        {
-            int levelId = i;
-            GameObject buttonObj = Instantiate(levelButtonPrefab, levelButtonsContainer);
-            buttonObj.GetComponentInChildren<Text>().text = $"Livello {levelId}";
-            buttonObj.GetComponent<Button>().onClick.AddListener(() => LoadAndShowLeaderboard(levelId));
-        }
+        int levelId = i;
+        GameObject buttonObj = Instantiate(levelButtonPrefab, levelButtonsContainer);
+        buttonObj.GetComponentInChildren<Text>().text = $"{levelId}";
+        buttonObj.GetComponent<Button>().onClick.AddListener(() => LoadAndShowLeaderboard(levelId));
+
+        // Aggiungi un'operazione di trasformazione per spostare il pulsante più a sinistra
+        RectTransform buttonRect = buttonObj.GetComponent<RectTransform>();
+        buttonRect.anchorMin = new Vector2(0, 0.5f);
+        buttonRect.anchorMax = new Vector2(0, 0.5f);
+        buttonRect.pivot = new Vector2(0, 0.5f);
+        buttonRect.anchoredPosition = new Vector2(0, 0); // Imposta la posizione x a 0 per spostare il pulsante più a sinistra
     }
+}
+
 
   public void LoadAndShowLeaderboard(int levelId)
 {

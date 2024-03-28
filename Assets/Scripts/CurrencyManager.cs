@@ -98,8 +98,9 @@ public void TriggerCoinAnimation()
         {
             slotMachineEffect.AnimateText(playerCoins - amount, playerCoins);
         }
+            TriggerCoinAnimation(); // Attiva l'animazione delle monete
+
     }
-    TriggerCoinAnimation(); // Attiva l'animazione delle monete
 }
 
 public void RefundCoins(int amount, Action onComplete)

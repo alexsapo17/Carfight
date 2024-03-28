@@ -2,20 +2,27 @@ using UnityEngine;
 
 public class EnemyManager : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public GameObject[] enemyPrefabs; // Lista dei prefabs dei nemici normali
+    public GameObject[] specialEnemyPrefabs; // Lista dei prefabs dei nemici speciali
     public float spawnDelay = 5f;
     public float spawnInterval = 3f;
-    public BoxCollider spawnArea; // Assegna questo dall'Editor di Unity
-    public float minSpawnDistanceFromPlayer = 30f; // Distanza minima dal giocatore per lo spawn
-    public int maxSpawnAttempts = 10; // Numero massimo di tentativi per trovare una posizione valida
+    public float specialEnemySpawnChance = 0.2f; // Probabilità di spawn per il nemico speciale
+    public BoxCollider spawnArea;
+    public float minSpawnDistanceFromPlayer = 30f;
+    public int maxSpawnAttempts = 10;
 
     void Start()
     {
-        if(spawnArea == null)
+            if (spawnArea == null)
         {
-            Debug.LogError("Spawn Area BoxCollider non assegnato su EnemyManager."); 
+            Debug.LogError("Spawn Area BoxCollider non assegnato su EnemyManager.");
             return;
         }
+    }
+    
+    public void StartSpawn()
+    {
+
         InvokeRepeating("BeginEnemySpawn", spawnDelay, spawnInterval);
     }
 
@@ -30,9 +37,26 @@ public class EnemyManager : MonoBehaviour
 
             if (Vector3.Distance(playerCar.transform.position, potentialSpawnPosition) >= minSpawnDistanceFromPlayer)
             {
-                Instantiate(enemyPrefab, potentialSpawnPosition, Quaternion.identity);
-                break; // Uscire dal ciclo una volta trovata una posizione valida
+                // Genera un numero casuale tra 0 e 1 per determinare se spawnare il nemico normale o il nemico speciale
+                float spawnRoll = Random.value;
+                GameObject[] prefabsToSpawn = (spawnRoll < specialEnemySpawnChance) ? specialEnemyPrefabs : enemyPrefabs;
+
+                // Scegli casualmente uno dei prefabs nella lista
+                GameObject prefabToSpawn = prefabsToSpawn[Random.Range(0, prefabsToSpawn.Length)];
+
+                Instantiate(prefabToSpawn, potentialSpawnPosition, Quaternion.identity);
+                break;
             }
+        }
+    }
+
+    public void DestroyAllEnemies()
+    {
+        GameObject[] allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
+
+        foreach (GameObject enemy in allEnemies)
+        {
+            Destroy(enemy);
         }
     }
 
@@ -46,9 +70,9 @@ public class EnemyManager : MonoBehaviour
         float spawnPosZ = basePosition.z + Random.Range(-size.z / 2, size.z / 2);
 
         Vector3 spawnPosition = new Vector3(spawnPosX, spawnPosY, spawnPosZ);
-        // Assicurati che la posizione di spawn sia all'interno del collider (al livello del suolo, se necessario)
-        spawnPosition.y = spawnArea.transform.position.y; // Ad esempio, regola questa linea se i nemici devono spawnare a un certo livello del suolo
+        spawnPosition.y = spawnArea.transform.position.y;
 
         return spawnPosition;
     }
+
 }

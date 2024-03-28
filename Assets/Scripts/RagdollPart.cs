@@ -15,7 +15,10 @@ public class RagdollPart : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
+                    if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
+{
         mainController?.CollisionDetected(this, collision);
+    }
     }
 }
 

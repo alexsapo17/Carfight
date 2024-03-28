@@ -110,7 +110,7 @@ MonoBehaviour:
   smoothSpeed: 7
   smoothSpeedY: 5.01
   tiltAngleX: -9.66
-  touchSensitivity: 15
+  touchSensitivity: 14.5
   yTouchSensitivity: 5
   zTouchSensitivity: -8
   maxXOffset: 30

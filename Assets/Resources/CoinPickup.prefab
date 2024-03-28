@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3466201608446060636}
   - component: {fileID: 4805268289287197828}
   - component: {fileID: 6543543089680549000}
+  - component: {fileID: 2123001403654959443}
   m_Layer: 0
   m_Name: CoinPickup
   m_TagString: Untagged
@@ -70,6 +71,28 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 4.7401, y: 4.780657, z: 4.100291}
   m_Center: {x: -0.025202572, y: 1.8903285, z: -0.044020712}
+--- !u!114 &2123001403654959443
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1286494602094124882}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &2929781733402148910
 GameObject:
   m_ObjectHideFlags: 0

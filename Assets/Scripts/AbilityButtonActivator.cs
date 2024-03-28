@@ -7,6 +7,8 @@ public class AbilityButtonActivator : MonoBehaviour
     public GameObject shockwaveButton;
     public GameObject flashbangButton;
     public GameObject duplicateButton;
+    public GameObject punchButton;
+
     private void Start()
     {
         string selectedAbility = PlayerPrefs.GetString("SelectedAbility");
@@ -51,6 +53,15 @@ public class AbilityButtonActivator : MonoBehaviour
                 shockwaveButton.SetActive(false);
                 flashbangButton.SetActive(false);
                 duplicateButton.SetActive(true);
+                break;
+                                            case "Punch":
+                invisibilityButton.SetActive(false);
+                jumpButton.SetActive(false);
+                shockwaveButton.SetActive(false);
+                flashbangButton.SetActive(false);
+                duplicateButton.SetActive(false);
+                punchButton.SetActive(true);
+
                 break;
             default:
                 invisibilityButton.SetActive(true);

@@ -5,7 +5,6 @@ using Photon.Pun;
 
 public class PlayerEffects : MonoBehaviourPun
 {
-    private bool effectActive = false;
     private Material outlineMaterial;
     private Dictionary<Renderer, Material[]> originalMaterials = new Dictionary<Renderer, Material[]>();
     public GameObject invisibilityEffectPrefab;
@@ -191,12 +190,21 @@ void ApplyShockwaveEffect()
 public void StartFlashbangEffect()
 {
     photonView.RPC("ActivateFlashEffect", RpcTarget.Others);
+        Debug.Log("flashbang attivato2");
+
+}
+public void StartFlashbangEffectEnemy()
+{
+    photonView.RPC("ActivateFlashEffect", RpcTarget.All);
+        Debug.Log("flashbang attivato2");
+
 }
 
  [PunRPC]
 void ActivateFlashEffect()
 {
     // Questo metodo verrà eseguito su tutti i client eccetto quello che ha invocato l'effetto.
+        Debug.Log("flashbang attivato3");
 
     FlashbangManager.Instance.TriggerFlashbangEffect(0.2f, 1f); // Durata e tempo di fade out sono esempi
 }

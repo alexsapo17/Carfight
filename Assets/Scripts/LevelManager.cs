@@ -30,6 +30,8 @@ public class LevelManager : MonoBehaviour
         public GameObject firstPanel; 
                 public GameObject quitSurvivalButton; 
                 public GameObject quitButton; 
+    public RectTransform button1RectTransform; // Assicurati di assegnare questi nel Unity Inspector
+    public RectTransform button2RectTransform;
 
 public GameObject gameOverPanel;
 
@@ -76,9 +78,20 @@ private InterstitialAd interstitialAd;
         };
         UpdateGemsUI();
             interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
-
+        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+        if (controlSetup == 1)
+        {
+            // Sposta i pulsanti verso destra, fuori dal canvas
+            MoveButtonOutOfView(button1RectTransform); 
+            MoveButtonOutOfView(button2RectTransform);
+        }
     }
-
+    private void MoveButtonOutOfView(RectTransform buttonRectTransform)
+    {
+        // Questo è solo un esempio, dovrai adattare i valori in base alle dimensioni del tuo canvas e alla posizione desiderata
+        Vector2 newPosition = new Vector2(2000, buttonRectTransform.anchoredPosition.y); // Sposta di 2000 unità a destra
+        buttonRectTransform.anchoredPosition = newPosition;
+    }
 public void RestartLevel()
 {
 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
@@ -178,8 +191,20 @@ public void LoadLevel(int levelIndex)
     quitButton.gameObject.SetActive(true);
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);
     int carIndex = levelCarMap[levelIndex];
-    currentCar = PhotonNetwork.Instantiate(carPrefabs[carIndex].name, new Vector3(0, 1, 0), Quaternion.identity);
 
+
+   GameObject carObject = PhotonNetwork.Instantiate(carPrefabs[carIndex].name, new Vector3(0, 1, 0), Quaternion.identity);
+
+    // Ottieni il riferimento allo script ApplyCarParameters
+    ApplyCarParameters carParametersScript = carObject.GetComponent<ApplyCarParameters>();
+
+    // Se lo script è presente, disabilitalo
+    if (carParametersScript != null)
+    {
+        carParametersScript.enabled = false;
+    }
+
+    currentCar = carObject;
     // Ottieni il componente PrometeoCarController dall'auto appena istanziata
     carController = currentCar.GetComponent<PrometeoCarController>();
 
@@ -309,7 +334,15 @@ void Update()
     // Assicurati che il gioco sia in modalità offline se stai lavorando in singleplayer
     PhotonNetwork.OfflineMode = true;
 
-
+EnemyManager enemyManagerScript = FindObjectOfType<EnemyManager>();
+if (enemyManagerScript != null)
+{
+    enemyManagerScript.StartSpawn();
+}
+else
+{
+    Debug.LogError("EnemyManager non trovato nellla scena.");
+}
         gameOverPanel.SetActive(false);
 
     // Distruggi il livello e la macchina correnti se presenti
@@ -485,8 +518,23 @@ else
     
 
     void UpdateTimerUI(float time)
-    {
+    {            string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+ if (language == "it")
+        {
+        survivalTimerText.text = $"Sopravvivenza: {time.ToString("F2")}";
+        }
+         if (language == "en")
+        {
         survivalTimerText.text = $"Survival Time: {time.ToString("F2")}";
+        }
+         if (language == "es")
+        {
+        survivalTimerText.text = $"Supervivencia: {time.ToString("F2")}";
+        }
+         if (language == "fr")
+        {
+        survivalTimerText.text = $"Survie: {time.ToString("F2")}";
+        }
     }
 
 
@@ -516,7 +564,7 @@ private void UpdateRaceTimer()
     }
     
     raceTimer += Time.deltaTime;
-    raceTimerText.text = "Tempo: " + raceTimer.ToString("F2");
+    raceTimerText.text = "" + raceTimer.ToString("F2");
 }
 
 
@@ -615,7 +663,26 @@ else
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
-    finishTimeText.text = "Tempo Finale: " + raceTimer.ToString("F2") + " secondi";
+
+
+            string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+ if (language == "it")
+        {
+    finishTimeText.text = "Tempo di arrivo: " + raceTimer.ToString("F2") + "";
+        }
+         if (language == "en")
+        {
+    finishTimeText.text = "Finish Time: " + raceTimer.ToString("F2") + "";
+        }
+         if (language == "es")
+        {
+    finishTimeText.text = "Tiempo de finalización: " + raceTimer.ToString("F2") + "";
+        }
+         if (language == "fr")
+        {
+    finishTimeText.text = "Temps de finition: " + raceTimer.ToString("F2") + "";
+        }
+    
     finishPanel.SetActive(true);
     raceTimerText.gameObject.SetActive(false); // Nasconde il testo del timer della gara
     isLevelReady = false;

@@ -30,12 +30,15 @@ public class RagdollController : MonoBehaviourPun
 
     void OnCollisionEnter(Collision collision)
     {
+            if (collision.gameObject.CompareTag("Player") || collision.gameObject.CompareTag("Enemy"))
+{
         // Attiva il ragdoll alla collisione se non è già attivo
         if (!isRagdollActive && photonView.IsMine)
         {
                 Debug.Log("Collision detected with: " + collision.gameObject.name);
 
             photonView.RPC("ActivateRagdoll", RpcTarget.All);
+        }
         }
     }
     public void CollisionDetected(RagdollPart part, Collision collision)

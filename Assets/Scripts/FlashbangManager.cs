@@ -22,12 +22,15 @@ public class FlashbangManager : MonoBehaviour
     public void TriggerFlashbangEffect(float duration, float fadeOutTime)
     {
         StartCoroutine(DoFlashEffect(duration, fadeOutTime));
+                Debug.Log("flashbang attivato4");
+
     }
 
     private IEnumerator DoFlashEffect(float duration, float fadeOutTime)
     {
         flashEffectPanel.gameObject.SetActive(true);
         flashEffectPanel.color = new Color(flashEffectPanel.color.r, flashEffectPanel.color.g, flashEffectPanel.color.b, 1);
+        Debug.Log("flashbang attivato5");
 
         yield return new WaitForSeconds(duration);
 
