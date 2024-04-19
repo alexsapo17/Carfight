@@ -11,7 +11,7 @@ public class CameraFollow : MonoBehaviour
 
     public float tiltAngleX = 20.0f;
 public float touchSensitivity = 0.5f; // Regola questa variabile per controllare la sensibilità del trascinamento
-
+private Vector3 originalOffset;
     public float yTouchSensitivity = 0.1f; // Regola la sensibilità del movimento sull'asse Y
 public float zTouchSensitivity = 0.1f; // Regola la sensibilità del movimento sull'asse Z
 public float maxXOffset = 5f; // Limite massimo di spostamento sull'asse X
@@ -23,19 +23,19 @@ public float maxZOffset = 5f; // Limite massimo di spostamento sull'asse Z
     private bool isDragging = false;
     private Vector2 lastTouchPosition; // Aggiunto per tenere traccia dell'ultima posizione del touch
     private int dragFingerId = -1; // Aggiungi questa variabile per tenere traccia dell'ID del tocco
+ private WheelCollider[] targetWheelColliders;
 
-void Start()
-{
-    initialOffset = offset;
-    // Rimozione del codice relativo a InputPanel
-}
-
+    void Start()
+    {
+        initialOffset = offset;
+    }
 
     public void SetTarget(GameObject target)
     {
         if (target != null)
         {
             this.target = target.transform;
+            targetWheelColliders = target.GetComponentsInChildren<WheelCollider>();
         }
     }
 
@@ -121,9 +121,41 @@ void LateUpdate()
 {
     if (target != null)
     {
+        // Verifica se almeno un WheelCollider è a contatto con qualcosa
+        bool isAnyWheelTouching = false;
+        foreach (WheelCollider wheelCollider in targetWheelColliders)
+        {
+            if (wheelCollider.isGrounded)
+            {
+                isAnyWheelTouching = true;
+                break;
+            }
+        }
+
+           if (!isAnyWheelTouching)
+        {
+
+            // Calcola la posizione desiderata della camera mantenendo l'offset
+            Vector3 desiredPositionNoGround = target.position + originalOffset;
+
+            // Applica la posizione interpolata alla camera senza modificare la rotazione
+            transform.position = Vector3.Lerp(transform.position, desiredPositionNoGround, smoothSpeed * Time.deltaTime);
+
+            // Mantieni la camera rivolta verso il target senza modificare la rotazione
+            transform.LookAt(target);
+
+            // Applica l'inclinazione sull'asse X aggiuntiva, se desiderato
+            Vector3 currentRotationNoGround = transform.eulerAngles;
+            transform.rotation = Quaternion.Euler(currentRotationNoGround.x + tiltAngleX, currentRotationNoGround.y, currentRotationNoGround.z);
+
+            return;
+        }
+    originalOffset = transform.position - target.position;
+
+        // Resto del codice per aggiornare la posizione e la rotazione della camera
         Vector3 offsetRotated = target.TransformDirection(offset);
         Vector3 desiredPosition = target.position + offsetRotated;
-
+        
         // Calcola la posizione interpolata per X e Z usando smoothSpeed
         float smoothedPositionX = Mathf.Lerp(transform.position.x, desiredPosition.x, smoothSpeed * Time.deltaTime);
         float smoothedPositionZ = Mathf.Lerp(transform.position.z, desiredPosition.z, smoothSpeed * Time.deltaTime);
@@ -143,6 +175,7 @@ void LateUpdate()
         transform.rotation = Quaternion.Euler(currentRotation.x + tiltAngleX, currentRotation.y, currentRotation.z);
     }
 }
+
 
 
 private bool IsPointerOverUIObject(Vector2 touchPos)

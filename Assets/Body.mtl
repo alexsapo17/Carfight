@@ -1,0 +1,14 @@
+newmtl Material.015
+Kd 0.6029968 0 0.02951998
+d 1
+
+newmtl PCC_Light_Mat
+map_Kd PCC_TextureAtlas.png
+map_Ke PCC_TextureAtlas.png
+Kd 1 1 1
+d 1
+
+newmtl WhiteUnlit
+Kd 1 1 1
+d 1
+

@@ -11,9 +11,9 @@ scopes = {
 	"last_search.310DEAF1" = "playerlistvi"
 	"OpenInspectorPreview.310DEAF1" = "0"
 	"currentGroup.310DEAF1" = "_group_provider_Files"
-	"last_search.3BE40471" = "playerlistview"
+	"last_search.3BE40471" = "rewardpanel"
 	"OpenInspectorPreview.3BE40471" = "0"
-	"currentGroup.3BE40471" = "all"
+	"currentGroup.3BE40471" = "asset"
 	"last_search.E8DA15E5" = ""
 	"OpenInspectorPreview.E8DA15E5" = "0"
 	"currentGroup.E8DA15E5" = "all"
@@ -68,6 +68,9 @@ providers = {
 objectSelectors = {
 }
 recentSearches = [
+	"rewar"
+	"audio list"
+	""
 	"pl"
 ]
 searchItemFavorites = [

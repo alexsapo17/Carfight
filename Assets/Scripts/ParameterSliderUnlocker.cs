@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Collections;
 public class ParameterSliderUnlocker : MonoBehaviour
 {
     public string parameterName;
@@ -8,7 +8,7 @@ public class ParameterSliderUnlocker : MonoBehaviour
     public int gemsCost;
     public GameObject blockedImage;
     public Button buyButton;
-
+    public GameObject noCoinsPanel;
     private Slider parameterSlider;
     private bool isUnlocked = false;
 
@@ -82,6 +82,12 @@ animatedImageInstance.transform.localScale = new Vector3(1, 1, 1); // Imposta la
     else
     {
         Debug.Log("Non è possibile sbloccare lo slider, controlla se è già sbloccato o se hai abbastanza fondi.");
+
+
+
+    noCoinsPanel.SetActive(true);
+
+
     }
 }
 

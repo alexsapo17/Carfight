@@ -8,8 +8,8 @@ public class RewardPanelController : MonoBehaviour
    
     public static RewardPanelController Instance;
 
-    public GameObject rewardPanelPrefab; // Assegna il prefab del pannello di ricompensa
-
+    public GameObject rewardPanelPrefab; 
+    public GameObject rewardPanelPrefab2; 
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -33,7 +33,25 @@ public void ShowRewardPanel(int coins, int gems)
         return;
     }
 
-    GameObject rewardPanelInstance = Instantiate(rewardPanelPrefab);
+   GameObject rewardPanelInstance;
+
+        // Controllo se la scena attuale è GameScene per decidere quale prefab utilizzare
+        if (UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "GameScene")
+        {
+            if (rewardPanelPrefab2 != null)
+            {
+                rewardPanelInstance = Instantiate(rewardPanelPrefab2);
+            }
+            else
+            {
+                Debug.LogError("RewardPanelPrefab2 is not assigned!");
+                return;
+            }
+        }
+        else
+        {
+            rewardPanelInstance = Instantiate(rewardPanelPrefab);
+        }
 
     // Utilizza GameObject.Find per trovare specificamente il Canvas desiderato per nome
     Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();

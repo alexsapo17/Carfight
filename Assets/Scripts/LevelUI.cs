@@ -47,13 +47,41 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
     yield return new WaitForSeconds(delay);
     panel.SetActive(false);
 }
-    public void UpdateUI(float bestTime, int stars)
-    {
-        bestTimeText.text = "Miglior Tempo: " + bestTime.ToString("F2");
 
-        // Aggiorna le stelle
-        UpdateStars(stars);
+ public void UpdateUI(float bestTime, int stars)
+{
+    string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+    
+    // Imposta il testo del tempo migliore solo se è stato salvato un tempo valido e se il tempo è minore o uguale a 1000 secondi
+    if (bestTime > 0 && bestTime <= 1000)
+    {
+        if (language == "it")
+        {
+            bestTimeText.text = "Miglior Tempo: " + bestTime.ToString("F2");
+        }
+        else if (language == "en")
+        {
+            bestTimeText.text = "Best time: " + bestTime.ToString("F2");
+        }
+        else if (language == "es")
+        {
+            bestTimeText.text = "Mejor tiempo: " + bestTime.ToString("F2");
+        }
+        else if (language == "fr")
+        {
+            bestTimeText.text = "Meilleur temps: " + bestTime.ToString("F2");
+        }
     }
+    else
+    {
+        // Se il tempo migliore è maggiore di 1000 secondi o se non è stato salvato, imposta il testo vuoto
+        bestTimeText.text = "";
+    }
+
+    // Aggiorna le stelle
+    UpdateStars(stars);
+}
+
 
     private void UpdateStars(int stars)
     {

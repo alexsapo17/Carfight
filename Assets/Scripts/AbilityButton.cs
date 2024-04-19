@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using System.Collections;
 public class AbilityButton : MonoBehaviour
 {
     public string abilityName;
@@ -8,6 +8,7 @@ public class AbilityButton : MonoBehaviour
     public int gemsCost;
     public GameObject blockedImage;
     public Button buyButton;
+    public GameObject noCoinsPanel;
 
     private bool isUnlocked = false;
 
@@ -80,6 +81,10 @@ animatedImageInstance.transform.localScale = new Vector3(1, 1, 1); // Imposta la
         else
         {
             Debug.Log("Fondi insufficienti per l'acquisto del pulsante abilità!");
+                noCoinsPanel.SetActive(true);
+
+
+    
         }
     }
     else
@@ -87,6 +92,9 @@ animatedImageInstance.transform.localScale = new Vector3(1, 1, 1); // Imposta la
         Debug.Log("Il pulsante abilità è già stato sbloccato!");
     }
 }
+
+
+
 
 
     private bool IsButtonUnlocked()

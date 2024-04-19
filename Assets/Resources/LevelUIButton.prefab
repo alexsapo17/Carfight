@@ -69,7 +69,7 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: d7cffddcbc0cc8f4ebe6e28eb9804082, type: 3}
     m_FontSize: 19
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 8
     m_MaxSize: 40
     m_Alignment: 3
@@ -78,7 +78,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: miglior tempo 3213211
+  m_Text: 
 --- !u!1 &1262005637712358964
 GameObject:
   m_ObjectHideFlags: 0
@@ -470,6 +470,7 @@ GameObject:
   - component: {fileID: 5560384477214794638}
   - component: {fileID: 2651986511774481189}
   - component: {fileID: 6643983363781283836}
+  - component: {fileID: 5657072813394807947}
   m_Layer: 5
   m_Name: Text (TMP) (3)
   m_TagString: Untagged
@@ -541,6 +542,34 @@ MonoBehaviour:
 
     Ottieni 1 stella nel livello precedente per sbloccare
     questo livello!'
+--- !u!114 &5657072813394807947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8517166035577478949}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eafb407d6b20df84282a025a40ab29ad, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  englishText: 'Level Locked!
+
+    Earn 1 star in the previous level
+
+    to unlock
+    this level!'
+  italianText: ' Livello bloccato!
+
+    Guadagna 1 stella nel livello precedente
+
+    per
+    sbloccare questo livello!'
+  spanishText: "\xA1Nivel bloqueado!\r\n\xA1Gana 1 estrella en el nivel anterior\r\npara
+    desbloquear este nivel!"
+  frenchText: "Niveau verrouill\xE9 !\r\nGagnez 1 \xE9toile dans le niveau pr\xE9c\xE9dent\r\npour
+    d\xE9bloquer ce niveau !"
 --- !u!1 &8964909726353128983
 GameObject:
   m_ObjectHideFlags: 0
@@ -659,8 +688,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -244.1, y: 0}
-  m_SizeDelta: {x: 160, y: 30}
+  m_AnchoredPosition: {x: -241.8206, y: 0.8445}
+  m_SizeDelta: {x: 114.8445, y: 29.783}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &4579431368278885370
 CanvasRenderer:

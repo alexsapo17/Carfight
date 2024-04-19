@@ -27,7 +27,8 @@ public float destructionDelay = 2f; // Tempo dopo il quale il prefab verrà dist
 public LootBox[] lootBoxes;
 public GameObject tutorial3Panel;
 public GameObject tutorial4Panel;
-
+public AudioSource AudioNormaleBaule;
+public GameObject noCoinsPanel;
 [SerializeField]
 private List<GameObject> objectsToToggle = new List<GameObject>();
 
@@ -41,8 +42,9 @@ public class LootBox
     public CarProbability[] carProbabilities; 
     public int experienceGain;
     public ParticleSystem particleSystemToStop;
+    public AudioSource openSound;
 }
-
+ 
 
 
 [System.Serializable]
@@ -82,6 +84,8 @@ public void OpenLootBox(int lootBoxIndex)
             {
                 CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCostCoins);
                 canOpen = true;
+selectedBox.openSound.Play();
+AudioNormaleBaule.Play();
             }
             break;
         case CurrencyType.Gems:
@@ -89,6 +93,9 @@ public void OpenLootBox(int lootBoxIndex)
             {
                 CurrencyManager.Instance.TrySpendGems(selectedBox.boxCostGems);
                 canOpen = true;
+selectedBox.openSound.Play();
+AudioNormaleBaule.Play();
+
             }
             break;
         case CurrencyType.Both:
@@ -97,12 +104,16 @@ public void OpenLootBox(int lootBoxIndex)
                 CurrencyManager.Instance.TrySpendCoins(selectedBox.boxCostCoins);
                 CurrencyManager.Instance.TrySpendGems(selectedBox.boxCostGems);
                 canOpen = true;
+selectedBox.openSound.Play();
+AudioNormaleBaule.Play();
+
             }
             break;
     }
     
     if (!canOpen)
     {
+        StartCoroutine(NoCoinsPanel(3));
         Debug.Log("Non hai abbastanza risorse per aprire questa cassa.");
         return;
     }
@@ -146,7 +157,18 @@ private IEnumerator WaitAndReactivateCanvas(Animator animator, LootBox lootBox)
     animator.SetTrigger("ResetChest");
 }
 
+private IEnumerator NoCoinsPanel(float delay) 
+{
+            noCoinsPanel.SetActive(true);
 
+    // Attendi la fine dell'animazione 
+    yield return new WaitForSeconds(delay);
+    
+
+        noCoinsPanel.SetActive(false);
+    
+  
+}
 
     private string SelectRandomCar(CarProbability[] carProbabilities)
     {

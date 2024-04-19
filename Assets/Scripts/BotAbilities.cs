@@ -98,8 +98,8 @@ public class BotAbilities : MonoBehaviour
                 break;
 
             case "FakePlayerFiretruck":
-                playerEffects.StartFlashbangEffectEnemy(); // Attiva l'abilità delflashbang
-                                            Debug.Log("flashbangattiavto ");
+                playerEffects.StartShockwaveEffect(); // Attiva l'abilità dello shockwave
+                                            Debug.Log("shockwave attivaato ");
 break;
 
         }

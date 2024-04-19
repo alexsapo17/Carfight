@@ -4,6 +4,7 @@ public class ActivateCarImages : MonoBehaviour
 {
     public float aspectRatioThreshold = 1.77f; // Imposta la soglia per l'aspect ratio (es. 16:9 aspect ratio = 1.77)
     public GameObject[] buttons;
+    public GameObject panel;
 
     void Start()
     {
@@ -25,8 +26,11 @@ public class ActivateCarImages : MonoBehaviour
         // Controlla se l'aspect ratio è minore della soglia
         if (currentAspectRatio < aspectRatioThreshold)
         {
+            panel.SetActive(true);
             ActivateImages();
         } else {
+                        panel.SetActive(false);
+
             foreach (GameObject button in buttons)
         {
             // Cerca un figlio chiamato "carImage"

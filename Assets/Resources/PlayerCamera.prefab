@@ -105,14 +105,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6acfd1fc99545a4989b6e27bb3aec23, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: -1e-45, y: 13, z: -29.199999}
+  offset: {x: 0, y: 13, z: -29.199999}
   fixedYPosition: 13.88
   smoothSpeed: 7
   smoothSpeedY: 5.01
   tiltAngleX: -9.66
-  touchSensitivity: 14.5
-  yTouchSensitivity: 5
-  zTouchSensitivity: -8
+  touchSensitivity: 13.6
+  yTouchSensitivity: 0.1
+  zTouchSensitivity: 0.1
   maxXOffset: 30
-  maxYOffset: 10
-  maxZOffset: 70
+  maxYOffset: 5
+  maxZOffset: 5

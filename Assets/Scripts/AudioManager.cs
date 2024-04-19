@@ -69,9 +69,29 @@ void LoadVolumeSettings()
     float musicVolume = PlayerPrefs.GetFloat("MusicVolume");
     float sfxVolume = PlayerPrefs.GetFloat("SFXVolume");
 
-    // Applica i valori all'AudioMixer
-    SetMusicVolume(musicVolume);
-    SetSFXVolume(sfxVolume);
+    // Verifica se i valori sono già stati impostati, altrimenti imposta i valori predefiniti
+    if (musicVolume == 0 && sfxVolume == 0 && !PlayerPrefs.HasKey("VolumeInitialized"))
+    {
+        musicVolume = 0.3f; // Imposta il volume della musica al 30%
+        sfxVolume = 0.5f;   // Imposta il volume degli effetti sonori al 50%
+
+        // Applica i valori predefiniti all'AudioMixer
+        SetMusicVolume(musicVolume);
+        SetSFXVolume(sfxVolume);
+
+        // Salva i nuovi valori
+        PlayerPrefs.SetFloat("MusicVolume", musicVolume);
+        PlayerPrefs.SetFloat("SFXVolume", sfxVolume);
+
+        // Imposta una chiave per indicare che i valori predefiniti sono stati inizializzati
+        PlayerPrefs.SetInt("VolumeInitialized", 1);
+    }
+    else
+    {
+        // Applica i valori salvati all'AudioMixer
+        SetMusicVolume(musicVolume);
+        SetSFXVolume(sfxVolume);
+    }
 
     // Assicurati anche di aggiornare gli slider, se non sono già stati aggiornati
     if (musicVolumeSlider != null)
@@ -83,6 +103,7 @@ void LoadVolumeSettings()
         sfxVolumeSlider.value = sfxVolume;
     }
 }
+
 
 public void SetMusicVolume(float volume)
 {

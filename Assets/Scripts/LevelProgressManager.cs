@@ -120,7 +120,10 @@ private void SavePlayerCoins() {
                 levelProgress.coinsAwardedForStars[i] = coinsForStars[i]; // Segna come assegnate
             }
         }
+ if (coinsToAward == 0) {
+    coinsToAwardText.text = "0";
 
+    }
         if (coinsToAward > 0) {
             int startValue = playerCoins;
             playerCoins += coinsToAward;
@@ -157,7 +160,7 @@ void InitializeLevels()
     LoadBestTime(0);
 
     // Inizializza gli altri livelli
-    for (int i = 1; i < 10; i++)
+    for (int i = 1; i < 11; i++)
     {
         if (!levelsProgress.ContainsKey(i))
         {
@@ -221,13 +224,14 @@ private void UpdateUnlockStatusOnFirebase(int levelId)
             { 0, new LevelStarRequirements(7f, 9f, 10f) },
             { 1, new LevelStarRequirements(8.4f, 10f, 15f) },
             { 2, new LevelStarRequirements(15f, 18f, 26f) },
-            { 3, new LevelStarRequirements(30f, 40f, 60f) },
+            { 3, new LevelStarRequirements(55f, 65f, 90f) },
             { 4, new LevelStarRequirements(21f, 25f, 30f) },
-            { 5, new LevelStarRequirements(10f, 15f, 20f) },
-            { 6, new LevelStarRequirements(10f, 20f, 30f) },
-            { 7, new LevelStarRequirements(10f, 15f, 20f) },
-            { 8, new LevelStarRequirements(10f, 15f, 20f) },
-            { 9, new LevelStarRequirements(10f, 15f, 20f) },
+            { 5, new LevelStarRequirements(60f, 80f, 100f) },
+            { 6, new LevelStarRequirements(20f, 25f, 40f) },
+            { 7, new LevelStarRequirements(13f, 17f, 20f) },
+            { 8, new LevelStarRequirements(45f, 55f, 70f) },
+            { 9, new LevelStarRequirements(85f, 95f, 120f) },
+            { 10, new LevelStarRequirements(65f, 75f, 120f) },
 
         };
     }
@@ -251,19 +255,7 @@ private void CreateLevelUI(int levelId)
     });
 }
 
-public void UpdateLevelUI(int levelId)
-{
-    foreach (Transform child in levelsContainer)
-    {
-        LevelUI levelUI = child.GetComponent<LevelUI>();
-        if (levelUI != null && levelUI.LevelId == levelId)
-        {
-            LevelProgress levelProgress = levelsProgress[levelId];
-            levelUI.UpdateUI(levelProgress.bestTime, levelProgress.stars);
-            break;
-        }
-    }
-}
+
 private void LoadCoinsAndUpdateUI() {
     string userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
     databaseReference.Child("users").Child(userId).Child("coins").GetValueAsync().ContinueWithOnMainThread(task => {
@@ -315,7 +307,19 @@ private void LoadCoinsAndUpdateUI() {
             }
         });
 }
-
+public void UpdateLevelUI(int levelId)
+{
+    foreach (Transform child in levelsContainer)
+    {
+        LevelUI levelUI = child.GetComponent<LevelUI>();
+        if (levelUI != null && levelUI.LevelId == levelId)
+        {
+            LevelProgress levelProgress = levelsProgress[levelId];
+            levelUI.UpdateUI(levelProgress.bestTime, levelProgress.stars);
+            break;
+        }
+    }
+}
     private void UpdateBestTimeUI(float bestTime)
     {
         if (bestTimeText != null)

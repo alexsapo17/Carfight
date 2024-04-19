@@ -5,6 +5,7 @@ public class EnemyCollision : MonoBehaviour
 {
     // Cambia questa variabile per utilizzare un GameObject direttamente dall'Inspector
     public GameObject prefab; // Ora puoi trascinare il tuo prefab direttamente qui dall'Editor di Unity
+    public AudioSource audioSource;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -20,6 +21,19 @@ public class EnemyCollision : MonoBehaviour
             {
                 Debug.LogError("Prefab non assegnato nell'Inspector.");
             }
+               // Ottieni il componente AudioSource
+        audioSource = GetComponent<AudioSource>();
+
+        // Se l'AudioSource non è stato trovato, stampa un messaggio di avviso
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource non trovato sull'oggetto " + gameObject.name);
+        }
+        // Attiva l'AudioSource se presente
+        if (audioSource != null)
+        {
+            audioSource.Play();
+        }
 
             StartCoroutine(SlowMotionEffect());
         }

@@ -27,7 +27,7 @@ public class PlayerDuplicator : MonoBehaviour
         foreach (var pv in FindObjectsOfType<PhotonView>())
         {
             // Controlla se il PhotonView appartiene al giocatore locale e ha un componente PlayerEffects
-            if (pv.IsMine && pv.gameObject.GetComponent<PlayerEffects>())
+            if (pv.IsMine && pv.gameObject.CompareTag("Player"))
             {
                 // Ottieni il componente PlayerEffects e attiva l'effetto del cubo
                 var playerEffects = pv.gameObject.GetComponent<PlayerEffects>();

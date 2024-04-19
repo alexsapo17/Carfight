@@ -12,6 +12,9 @@ TagManager:
   - MAST_Holder
   - Enemy
   - Terrain
+  - AbilityButton
+  - FreezeBall
+  - ExplosionBall
   layers:
   - Default
   - TransparentFX

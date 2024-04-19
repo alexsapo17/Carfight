@@ -26,6 +26,7 @@ public class RagdollController : MonoBehaviourPun
             rb.useGravity = true;
         }
         isRagdollActive = true;
+
     }
 
     void OnCollisionEnter(Collision collision)
@@ -39,7 +40,14 @@ public class RagdollController : MonoBehaviourPun
 
             photonView.RPC("ActivateRagdoll", RpcTarget.All);
         }
+                                    // Accedi all'AudioSource e riproduci il suono
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
         }
+
     }
     public void CollisionDetected(RagdollPart part, Collision collision)
 {

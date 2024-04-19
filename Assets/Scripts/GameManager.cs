@@ -21,7 +21,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float startRaceTimer = 5.0f; // Timer per l'inizio della gara
        public Text preRaceCountdownText; 
     public Text startRaceCountdownText;
-    
+        public AudioSource audioSource;
+
       public Transform[] spawnPoints; // Punti di spawn delle macchine
     public Transform[] startLineSpawnPoints;
     public GameObject finishPlane;
@@ -61,6 +62,8 @@ public Canvas canvas;
 public GameObject playerEliminatedPrefab;
 public GameObject playerWinPrefab;
 public Transform finishPrefabspawnPoint; // Assicurati di assegnare questo dall'Inspector
+            public int experienceWinnerGain;
+            public int experienceEliminatedGain;
 
 
     [System.Serializable]
@@ -115,7 +118,7 @@ if (arrowScript != null)
     {
         PhotonNetwork.Instantiate(brickWallPrefab.name, spawnPoint.position, spawnPoint.rotation);
     }
-        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 2);
         if (controlSetup == 1)
         {
             // Sposta i pulsanti verso destra, fuori dal canvas
@@ -248,15 +251,28 @@ countdownText.gameObject.SetActive(false);
 
         startRaceCountdownText.gameObject.SetActive(true);
 
-            float startTimer = startRaceTimer;
+        // Se l'AudioSource non è stato trovato, stampa un messaggio di avviso
+        if (audioSource == null)
+        {
+            Debug.LogWarning("AudioSource non trovato sull'oggetto " + gameObject.name);
+        }
 
+// Avvia la riproduzione dell'AudioSource
+            float startTimer = startRaceTimer;
+            StartCoroutine(TimerSound(2)); // Ritardo di 2 secondi
          while (startTimer > 0)
         {
             startRaceCountdownText.text = Mathf.RoundToInt(startTimer).ToString();
             startTimer -= Time.deltaTime;
+
+
+
+
+
+    
             yield return null;
         }
-        
+
          startRaceCountdownText.text = ""; // Nascondi il testo del countdown di inizio gara
          photonView.RPC("StartRaceSync", RpcTarget.All);
                     // Trova il GameObject chiamato "BallSpawnerManager"
@@ -364,6 +380,8 @@ countdownText.gameObject.SetActive(false);
         }
         if (player.tag == "Player")
         {
+                ExperienceManager.Instance.AddExperience(experienceEliminatedGain);
+
             PhotonView playerPhotonView = player.GetComponent<PhotonView>();
        // Se l'oggetto ha un PhotonView e l'owner è il giocatore locale, procedi con l'eliminazione
         if (playerPhotonView != null && playerPhotonView.IsMine)
@@ -578,6 +596,8 @@ if (rbRectTransform != null)
         {
                    resultsText.text = "Tu as gagné!";
         }
+                        ExperienceManager.Instance.AddExperience(experienceWinnerGain);
+
                 int totalPlayers = instantiatedCars.Count; // Presumibilmente tutti quelli che hanno partecipato alla gara
                 int position = 1; // La posizione del vincitore
                 int coinsEarned = AssignCoinsToPlayer(totalPlayers, position);
@@ -598,15 +618,15 @@ if (rbRectTransform != null)
         }
                            if (language == "en")
         {
-                resultsText.text = playerNameText.text + "won";
+                resultsText.text = playerNameText.text + " won";
         }
                            if (language == "es")
         {
-                resultsText.text = playerNameText.text + "ganó";
+                resultsText.text = playerNameText.text + " ganó";
         }
                            if (language == "fr")
         {
-                resultsText.text = playerNameText.text + "a gagné";
+                resultsText.text = playerNameText.text + " a gagné";
         }
             }
                     resultsPanel.SetActive(true);
@@ -720,6 +740,11 @@ if (abilityRectTransform != null)
 }
     }
 
+    IEnumerator TimerSound(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        audioSource.Play();
+    }
 
     IEnumerator ReturnToLobbyAfterDelay(float delay)
     {

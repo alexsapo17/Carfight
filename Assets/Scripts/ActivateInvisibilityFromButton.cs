@@ -21,7 +21,7 @@ public class ActivateInvisibilityFromButton : MonoBehaviour
 
         foreach (var view in photonViews)
         {
-            if (view.IsMine)
+        if (view.IsMine && view.gameObject.CompareTag("Player"))
             {
                 PlayerEffects playerEffects = view.gameObject.GetComponent<PlayerEffects>();
 

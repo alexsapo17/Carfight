@@ -22,15 +22,18 @@ public class FlashbangManager : MonoBehaviour
     public void TriggerFlashbangEffect(float duration, float fadeOutTime)
     {
         StartCoroutine(DoFlashEffect(duration, fadeOutTime));
-                Debug.Log("flashbang attivato4");
-
+            // Accedi all'AudioSource e riproduci il suono
+            AudioSource audioSource = GetComponent<AudioSource>();
+            if (audioSource != null)
+            {
+                audioSource.Play();
+            }
     }
 
     private IEnumerator DoFlashEffect(float duration, float fadeOutTime)
     {
         flashEffectPanel.gameObject.SetActive(true);
         flashEffectPanel.color = new Color(flashEffectPanel.color.r, flashEffectPanel.color.g, flashEffectPanel.color.b, 1);
-        Debug.Log("flashbang attivato5");
 
         yield return new WaitForSeconds(duration);
 

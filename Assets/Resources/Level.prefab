@@ -165,8 +165,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0, g: 0.5338814, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Intensity: 4.63
+  m_Range: 26.98
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -1857,7 +1857,7 @@ Light:
   m_Lightmapping: 4
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
-  m_BounceIntensity: 1
+  m_BounceIntensity: 0
   m_ColorTemperature: 6570
   m_UseColorTemperature: 0
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
@@ -1892,15 +1892,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6974529153259844484}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.3513902, z: -0, w: 0.93622917}
-  m_LocalPosition: {x: -0.68, y: 0.05302853, z: 1.4439138}
-  m_LocalScale: {x: 0.6844086, y: 0.67168635, z: 0.12853721}
+  m_LocalRotation: {x: -0, y: 0.22923815, z: -0, w: 0.97337043}
+  m_LocalPosition: {x: 0.555, y: 0.05302853, z: 1.744}
+  m_LocalScale: {x: 0.8356629, y: 0.820129, z: 0.15694393}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7758741773510221526}
   - {fileID: 8343154737922825092}
   m_Father: {fileID: 3312553232648855851}
-  m_LocalEulerAnglesHint: {x: 0, y: -401.145, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -333.496, z: 0}
 --- !u!33 &8694072919501382978
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -2000,8 +2000,8 @@ Transform:
   m_GameObject: {fileID: 7305076984670263042}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.02, y: 0.057, z: -0.53}
-  m_LocalScale: {x: 0.01738111, y: 0.021737255, z: 0.021737255}
+  m_LocalPosition: {x: 0.02, y: 0.133, z: -0.53}
+  m_LocalScale: {x: 0.014154827, y: 0.017702386, z: 0.017702386}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6911382868452420973}
@@ -2056,13 +2056,8 @@ TextMesh:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7305076984670263042}
-  m_Text: 'Reach the finish line
-
-    in the shortest
-
-    time possible!
-
-'
+  m_Text: "Atteignez la ligne\nd'arriv\xE9e dans le temps \nle plus court possible
+    !"
   m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
@@ -2093,9 +2088,9 @@ MonoBehaviour:
     in the shortest
 
     time possible!'
-  italianText: "rriva al traguardo\r\nnel pi\xF9 breve\ntempo possibile!"
+  italianText: "arriva al traguardo\r\nnel pi\xF9 breve\ntempo possibile!"
   spanishText: " \xA1Llega a la meta\r\nen el menor \ntiempo posible!"
-  frenchText: "Atteignez la ligne d'arriv\xE9e\ndans le temps \nle plus court possible
+  frenchText: "Atteignez la ligne\nd'arriv\xE9e dans le temps \nle plus court possible
     !"
 --- !u!1 &8083463262570886197
 GameObject:
@@ -2141,8 +2136,8 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 0, g: 0.5338814, b: 1, a: 1}
-  m_Intensity: 1
-  m_Range: 10
+  m_Intensity: 4.63
+  m_Range: 26.98
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10

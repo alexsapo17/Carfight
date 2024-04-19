@@ -57,6 +57,10 @@ public Animator transitionAnimator;
 public GameObject NoCoinsPanel;
 public GameObject NoCarSelectedPanel;
 public GameObject tutorial2Panel;
+public GameObject creditsPanel;
+public GameObject eliminateAccountPanel;
+public GameObject eliminateAccountPanel2;
+
  public GameObject[] objectsToDisable;
         private Dictionary<string, RoomInfo> cachedRoomList;
         private Dictionary<string, GameObject> roomListEntries;
@@ -332,7 +336,29 @@ public void OnLogoutButtonClicked()
     }
 }
 
+public void OnCreditsButtonClicked()
+{
+creditsPanel.SetActive(true);
+}
+public void OnBackCreditsButtonClicked()
+{
+creditsPanel.SetActive(false);
+}
 
+public void OnEliminateAccountButtonClicked()
+{
+eliminateAccountPanel.SetActive(true);
+}
+public void OnBackEliminateAccountButtonClicked()
+{
+eliminateAccountPanel.SetActive(false);
+}
+public void OnEliminateAccountButtonClicked2()
+{
+eliminateAccountPanel2.SetActive(true);
+}
+
+   
         private void RetrieveNickname()
         {
             string userId = auth.CurrentUser.UserId;

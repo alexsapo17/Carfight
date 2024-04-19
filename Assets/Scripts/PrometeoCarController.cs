@@ -107,7 +107,6 @@ public GameObject cameraPrefab;
       public AudioSource carEngineSound; // This variable stores the sound of the car engine.
       public AudioSource tireScreechSound; // This variable stores the sound of the tire screech (when the car is drifting).
       float initialCarEngineSoundPitch; // Used to store the initial pitch of the car engine sound.
-
     //CONTROLS
 
       [Space(20)]
@@ -130,10 +129,11 @@ private HorizontalJoystick horizontalJoystick;
 
     private Vector3 targetPosition;
     private Quaternion targetRotation;
-
+public float decreaseRate = 0.0001f;
 public float positionLerpRate = 15;
 public float rotationLerpRate = 10;
 public bool applyVelocityPrediction = true;
+    private bool soundCanStop = true;
 
  public bool controlsEnabled = true; // Variabile per controllare se i controlli sono abilitati
 
@@ -338,7 +338,7 @@ public void DestroyCameraInstance() {
 
     if (photonView.IsMine)
     {
-          int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+          int controlSetup = PlayerPrefs.GetInt("ControlSetup", 2);
       //CAR DATA
 
       // We determine the speed of the car.
@@ -366,7 +366,6 @@ public void DestroyCameraInstance() {
 
 float turnValue = horizontalJoystick.GetHorizontal();
   
- float moveValue = horizontalJoystick.GetVertical();
 
             
 
@@ -387,6 +386,8 @@ else
             // Se è stato selezionato il Setup 1, disattiva certi controlli
             if (controlSetup == 1)
             {
+               float moveValue = horizontalJoystick.GetVertical();
+
                 throttlePTI.buttonPressed = moveValue > 0.3f;
                 reversePTI.buttonPressed = moveValue < -0.3f;
             }
@@ -602,34 +603,67 @@ private void StopCar()
     // pitch of the sound will be at its lowest point. On the other hand, it will sound fast when the car speed is high because
     // the pitch of the sound will be the sum of the initial pitch + the car speed divided by 100f.
     // Apart from that, the tireScreechSound will play whenever the car starts drifting or losing traction.
-    public void CarSounds(){
+    public void CarSounds()
+{
+    if (useSounds)
+    {
+        try
+        {
+if (carEngineSound != null)
+{
+    // Calcola il pitch del suono del motore basato sull'accelerazione solo se l'acceleratore è premuto
+    float engineSoundPitch = initialCarEngineSoundPitch;
+    if (throttlePTI != null && throttlePTI.buttonPressed)
+    {
+        engineSoundPitch += (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
+    } 
+    else if (reversePTI != null && reversePTI.buttonPressed)
+    {
+        engineSoundPitch += (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
+    } 
+    else
+    {
+        engineSoundPitch += (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
 
-      if(useSounds){
-        try{
-          if(carEngineSound != null){
-            float engineSoundPitch = initialCarEngineSoundPitch + (Mathf.Abs(carRigidbody.velocity.magnitude) / 25f);
-            carEngineSound.pitch = engineSoundPitch;
-          }
-          if((isDrifting) || (isTractionLocked && Mathf.Abs(carSpeed) > 12f)){
-            if(!tireScreechSound.isPlaying){
-              tireScreechSound.Play();
-            }
-          }else if((!isDrifting) && (!isTractionLocked || Mathf.Abs(carSpeed) < 12f)){
-            tireScreechSound.Stop();
-          }
-        }catch(Exception ex){
-          Debug.LogWarning(ex);
-        }
-      }else if(!useSounds){
-        if(carEngineSound != null && carEngineSound.isPlaying){
-          carEngineSound.Stop();
-        }
-        if(tireScreechSound != null && tireScreechSound.isPlaying){
-          tireScreechSound.Stop();
-        }
-      }
-
+        // Se né l'acceleratore né il pulsante di retromarcia sono premuti, diminuisci gradualmente il pitch del suono del motore
+        engineSoundPitch -= Time.deltaTime * decreaseRate; // decreaseRate è una costante che regola la velocità di diminuzione del pitch
+        // Assicurati che il pitch non scenda al di sotto del valore iniziale
+        engineSoundPitch = Mathf.Max(initialCarEngineSoundPitch, engineSoundPitch);
     }
+    carEngineSound.pitch = engineSoundPitch;
+}
+
+
+            if ((isDrifting || isTractionLocked) && !tireScreechSound.isPlaying)
+            {
+                // Avvia il suono dello pneumatico strisciante se la macchina sta derapando o la trazione è bloccata
+                //tireScreechSound.Play();
+            }
+            else if (!isDrifting && !isTractionLocked && tireScreechSound.isPlaying)
+            {
+                // Interrompi il suono dello pneumatico strisciante se la macchina non sta derapando e la trazione non è bloccata
+               // tireScreechSound.Stop();
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogWarning(ex);
+        }
+    }
+    else if (!useSounds)
+    {
+        // Interrompi tutti i suoni se l'audio è disabilitato
+        if (carEngineSound != null && carEngineSound.isPlaying)
+        {
+            carEngineSound.Stop();
+        }
+
+        if (tireScreechSound != null && tireScreechSound.isPlaying)
+        {
+            tireScreechSound.Stop();
+        }
+    }
+}
 
     //
     //STEERING METHODS
@@ -1007,13 +1041,31 @@ public void GoReverseJoystick(float joystickValue){
 
       if(useEffects){
         try{
-          if(isDrifting){
-            RLWParticleSystem.Play();
-            RRWParticleSystem.Play();
-          }else if(!isDrifting){
-            RLWParticleSystem.Stop();
-            RRWParticleSystem.Stop();
-          }
+                         if (isDrifting)
+                {
+                    RLWParticleSystem.Play();
+                    RRWParticleSystem.Play();
+
+                    if (!tireScreechSound.isPlaying && soundCanStop)
+                    {
+                        // Avvia il suono solo se non è già in riproduzione
+                        tireScreechSound.Play();
+                        // Imposta la variabile a false per impedire l'interruzione del suono
+                        soundCanStop = false;
+                        // Avvia il timer per permettere l'interruzione dopo mezzo secondo
+                        StartCoroutine(AllowSoundStop());
+                    }
+                }
+                else if (!isDrifting)
+                {
+                    RLWParticleSystem.Stop();
+                    RRWParticleSystem.Stop();
+                    // Interrompi il suono solo se è in riproduzione e se è passato almeno mezzo secondo
+                    if (tireScreechSound.isPlaying && soundCanStop)
+                    {
+                        tireScreechSound.Stop();
+                    }
+                }
         }catch(Exception ex){
           Debug.LogWarning(ex);
         }
@@ -1045,7 +1097,11 @@ public void GoReverseJoystick(float joystickValue){
       }
 
     }
-
+    private System.Collections.IEnumerator AllowSoundStop()
+    {
+        yield return new WaitForSeconds(0.5f);
+        soundCanStop = true;
+    } 
     // This function is used to recover the traction of the car when the user has stopped using the car's handbrake.
     public void RecoverTraction(){
 

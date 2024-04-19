@@ -26,7 +26,7 @@ public class SettingsManager : MonoBehaviour
         Color unselectedColor = Color.white; // Bianco per il pulsante non selezionato
 
         // Ottieni l'attuale setup selezionato
-        int selectedSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+        int selectedSetup = PlayerPrefs.GetInt("ControlSetup", 2);
 
         // Imposta i colori dei pulsanti in base alla selezione
         setup1Button.image.color = (selectedSetup == 1) ? selectedColor : unselectedColor;

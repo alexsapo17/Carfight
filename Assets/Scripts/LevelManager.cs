@@ -27,28 +27,33 @@ public class LevelManager : MonoBehaviour
     public LevelProgressManager progressManager;
     public GameObject gameControlsUI;
     public GameObject levelLockedPanel; 
-        public GameObject firstPanel; 
-                public GameObject quitSurvivalButton; 
-                public GameObject quitButton; 
+    public GameObject firstPanel; 
+    public GameObject quitSurvivalButton; 
+    public GameObject quitButton; 
     public RectTransform button1RectTransform; // Assicurati di assegnare questi nel Unity Inspector
     public RectTransform button2RectTransform;
-
-public GameObject gameOverPanel;
-
+    public GameObject gameOverPanel;
     public Canvas canvas;
     public Image imageOnCanvas; // Aggiungi questa per l'immagine nel canvas
-public Image[] childCanvasImages; // Array di immagini nel canvas
+    public Image[] childCanvasImages; // Array di immagini nel canvas
     public Image[] starImages; // Array di immagini delle stelle
     public Sprite fullStarSprite; // Sprite per la stella piena
-public Sprite emptyStarSprite; // Sprite per la stella vuota
-public Text gemsText;
-public Animator transitionAnimator;
-        public GameObject TutorialSingleplayer2Panel;
+    public Sprite emptyStarSprite; // Sprite per la stella vuota
+    public Text gemsText;
+    public Animator transitionAnimator;
+    public GameObject TutorialSingleplayer2Panel;
+    public AudioSource TimerAudio;
+    public GameObject TutorialSingleplayer3Panel;
+    public Transform survivalSpawnPoint;
+    public GameObject retryButton;
+    public GameObject abilityButtons;
+    private Vector3 originalPosition;
 
-        public GameObject TutorialSingleplayer3Panel;
-        public Transform survivalSpawnPoint;
-        public GameObject retryButton;
-private InterstitialAd interstitialAd;
+    public int experienceGainFinishLevel;
+    public int experienceGainEliminatedLevel;
+    private int experienceGainFinishSurvival;
+
+    private InterstitialAd interstitialAd;
     private float survivalTime = 0f;
     private bool gameIsOver = false;
 
@@ -56,6 +61,7 @@ private InterstitialAd interstitialAd;
     void Start()
     {
          PhotonNetwork.OfflineMode = true;
+        originalPosition = abilityButtons.transform.position;
 
              // Crea una stanza offline
     PhotonNetwork.CreateRoom("OfflineRoom");
@@ -64,21 +70,23 @@ private InterstitialAd interstitialAd;
         // Esempio di come impostare la mappa
         levelCarMap = new Dictionary<int, int>
         {
-            { 0, 0 }, // Livello 0 usa la macchina 0
-            { 1, 1 }, // livello 1 usa la macchina 1
+            { 0, 0 }, 
+            { 1, 1 }, 
             { 2, 0 },
             { 3, 0 },
-            { 4, 1 },
-            { 5, 1 },
+            { 4, 0 },
+            { 5, 0 },
             { 6, 0 }, 
             { 7, 0 },
             { 8, 0 },
-            { 9, 1 },
+            { 9, 0 },
+            { 10, 0 }
+
     
         };
         UpdateGemsUI();
             interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
-        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 1);
+        int controlSetup = PlayerPrefs.GetInt("ControlSetup", 2);
         if (controlSetup == 1)
         {
             // Sposta i pulsanti verso destra, fuori dal canvas
@@ -165,7 +173,18 @@ private IEnumerator DisablePanelAfterDelay(GameObject panel, float delay)
             currencyManager.UpdateGemsUI();
         }
     }
+   public void MoveButtons()
+    {
+        // Sposta gli abilityButtons di una certa distanza verso destra
+        Vector3 newPosition = originalPosition + Vector3.right * 2000f;
+        abilityButtons.transform.position = newPosition;
+    }
 
+    public void ResetButtons()
+    {
+        // Riporta gli abilityButtons alla loro posizione originale
+        abilityButtons.transform.position = originalPosition;
+    }
 public void LoadLevel(int levelIndex)
 {
                  if (PlayerPrefs.GetInt("ShowTutorialSingleplayerPanel", 0) == 1)
@@ -192,7 +211,7 @@ public void LoadLevel(int levelIndex)
     currentLevel = PhotonNetwork.Instantiate(levelPrefabs[levelIndex].name, new Vector3(0, 0, 0), Quaternion.identity);
     int carIndex = levelCarMap[levelIndex];
 
-
+TimerAudio.Play();
    GameObject carObject = PhotonNetwork.Instantiate(carPrefabs[carIndex].name, new Vector3(0, 1, 0), Quaternion.identity);
 
     // Ottieni il riferimento allo script ApplyCarParameters
@@ -224,9 +243,11 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     {
         interstitialAd.LoadAd();
     }
+    MoveButtons();
 }
     public void EliminatedPlayer()
     {
+        raceTimer = 0;
                     // Verifica se il pannello TutorialSingleplayer3Panel è attivo
         if (TutorialSingleplayer3Panel.activeSelf)
         {
@@ -237,6 +258,9 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
     {
         carController.SetKinematic(true);
     } 
+            countdownText.gameObject.SetActive(false);
+            ExperienceManager.Instance.AddExperience(experienceGainEliminatedLevel);
+
  // Trova i canvas nella scena
 Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 Canvas canvas2 = GameObject.Find("Canvas2").GetComponent<Canvas>();
@@ -290,7 +314,20 @@ else
 }
 
 
+        // Trova il CannonManager nell scena
+        CannonManager cannonManager = FindObjectOfType<CannonManager>();
 
+        // Se il CannonManager è stato trovato, chiama il metodo StopCannonFire
+        if (cannonManager != null)
+        {
+            cannonManager.StopCannonFire();
+                                    Debug.Log("fermati i cannoni");
+
+        }
+        else
+        {
+            Debug.LogWarning("CannonManager non trovato nella scena!");
+        }
   gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
@@ -303,7 +340,13 @@ isLevelReady = false;
         img.gameObject.SetActive(true);
     }
     UpdateStarDisplay(0);
+    ResetButtons();
+    progressManager.coinsToAwardText.text = "0";
     }
+
+
+
+
 void Update()
 {
     if (isLevelReady && !raceStarted)
@@ -407,36 +450,51 @@ else
     }
     // Qui potresti voler avviare logiche specifiche per il livello di sopravvivenza,
     // come timer, spawn di nemici, ecc.
-    StartCoroutine(EnableControlsAfterDelay(5f));
+    StartCoroutine(EnableControlsAfterDelay(3f));
 }
 
 
-    IEnumerator EnableControlsAfterDelay(float delay)
+IEnumerator EnableControlsAfterDelay(float delay)
+{
+           // Avvia la riproduzione dell'AudioSource
+        TimerAudio.Play(); 
+    // Mostra il countdown all'utente
+    while (delay > 0)
     {
-        // Mostra il countdown all'utente
-        while (delay > 0)
-        {
-                countdownText.gameObject.SetActive(true);
+        countdownText.gameObject.SetActive(true);
+        countdownText.text = "" + delay;
 
-            countdownText.text = "" + delay;
-            yield return new WaitForSeconds(1);
-            delay--;
-        }
+ 
 
-        // Azioni finali prima di abilitare i controlli
-        countdownText.text = "";
-
-        yield return new WaitForSeconds(0); // Opzionale: attendi un altro secondo prima di nascondere il testo
         
-        countdownText.gameObject.SetActive(false); // Nasconde il testo del countdown
 
-        carController.EnableControls(); // Abilita i controlli
+        yield return new WaitForSeconds(1);
+        delay--;
     }
+
+    // Azioni finali prima di abilitare i controlli
+    countdownText.text = "";
+    yield return new WaitForSeconds(0); // Opzionale: attendi un altro secondo prima di nascondere il testo
+    countdownText.gameObject.SetActive(false); // Nasconde il testo del countdown
+    carController.EnableControls(); // Abilita i controlli
+}
+
 
 
      public void FinishSurvivalGame()
     {
-    
+            if (interstitialAd != null)
+    {
+        interstitialAd.LoadAd();
+    }
+        if (interstitialAd != null)
+    {
+        interstitialAd.ShowAd();
+    }
+            countdownText.text = "";
+
+        countdownText.gameObject.SetActive(false);
+
         gameIsOver = true;
         gameOverPanel.SetActive(true);
         gameControlsUI.SetActive(false);
@@ -514,6 +572,9 @@ else
                 pickupsManager.EndRace(); // Termina lo spawn e pulisce i pickup
 
     }
+experienceGainFinishSurvival = Mathf.FloorToInt(survivalTime);
+        ExperienceManager.Instance.AddExperience(experienceGainFinishSurvival);
+
     }
     
 
@@ -607,6 +668,8 @@ public void FinishRace()
     {
         carController.SetKinematic(true);
     }
+            ExperienceManager.Instance.AddExperience(experienceGainFinishLevel);
+
  // Trova i canvas nella scena
 Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
 Canvas canvas2 = GameObject.Find("Canvas2").GetComponent<Canvas>();
@@ -659,7 +722,20 @@ else
     Debug.LogError("Canvas not found in the scene.");
 }
 
+        // Trova il CannonManager nell scena
+        CannonManager cannonManager = FindObjectOfType<CannonManager>();
 
+        // Se il CannonManager è stato trovato, chiama il metodo StopCannonFire
+        if (cannonManager != null)
+        {
+            cannonManager.StopCannonFire();
+                        Debug.Log("fermati i cannoni");
+
+        }
+        else
+        {
+            Debug.LogWarning("CannonManager non trovato nella scena!");
+        }
 gameControlsUI.SetActive(false);
     raceStarted = false;
     carController.controlsEnabled = false;
@@ -690,6 +766,7 @@ gameControlsUI.SetActive(false);
     UpdateStarDisplay(starsEarned);
     
     progressManager.UpdateLevelProgress(currentLevelIndex, raceTimer);
+    
     progressManager.FinishLevel(currentLevelIndex, raceTimer);
     SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
    foreach (Image img in childCanvasImages)
@@ -701,6 +778,9 @@ gameControlsUI.SetActive(false);
         interstitialAd.ShowAd();
     }
 
+            PhotonNetwork.Destroy(currentCar);
+
+ResetButtons();
 }
 
 
@@ -719,4 +799,5 @@ public void ReturnToLobby()
         PhotonNetwork.Disconnect();
         // Carica la scena della lobby
         SceneManager.LoadScene("DemoAsteroids-LobbyScene");
-    }}
+    }
+    }

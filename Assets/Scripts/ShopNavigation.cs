@@ -368,13 +368,44 @@ private void UpdateCarButtons()
             Text carText = textTransform.GetComponent<Text>();
             if (carName == selectedCar)
             {
+                 string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+ if (language == "it")
+        {
                 carText.text = "SELEZIONATA";
-                carText.color = Color.green; // Cambia con il colore desiderato
+        }
+         if (language == "en")
+        {
+                carText.text = "SELECTED";
+        }
+         if (language == "es")
+        {
+                carText.text = "SELECCIONADA";
+        }
+         if (language == "fr")
+        {
+                carText.text = "SÉLECTIONNÉE";
+        }                carText.color = Color.green; // Cambia con il colore desiderato
                 // Aggiungi qui ulteriori modifiche visive se necessario
             }
             else
             {
+                 string language = PlayerPrefs.GetString("Language", "en"); // Ottieni la lingua corrente
+ if (language == "it")
+        {
                 carText.text = "SELEZIONA";
+        }
+         if (language == "en")
+        {
+                carText.text = "SELECT";
+        }
+         if (language == "es")
+        {
+                carText.text = "SELECCIONA";
+        }
+         if (language == "fr")
+        {
+                carText.text = "SÉLECTIONNE";
+        }
                 carText.color = Color.white;
                 // Resetta altre modifiche visive se necessario
             }

@@ -144,14 +144,14 @@ private int CalcolaMonetePerLivello(int level)
 {
     // Logica per calcolare le monete in base al livello
     // Qui un esempio semplice, puoi modificare secondo le tue esigenze
-    return 100 * level;
+    return 10 * level;
 }
 
 private int CalcolaGemmePerLivello(int level)
 {
     // Logica per calcolare le gemme in base al livello
     // Qui un esempio semplice, puoi modificare secondo le tue esigenze
-    return 10 * level;
+    return 1 * level;
 }
 
 }
