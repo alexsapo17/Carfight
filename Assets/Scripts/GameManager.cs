@@ -125,18 +125,18 @@ if (arrowScript != null)
             MoveButtonOutOfView(button1RectTransform); 
             MoveButtonOutOfView(button2RectTransform);
         }
-int fakePlayerCount = GlobalGameManager.Instance.FakePlayerCount;
+/*int fakePlayerCount = GlobalGameManager.Instance.FakePlayerCount;
 int count= fakePlayerCount;
 
 Debug.Log($"Fake player count before coroutine: {fakePlayerCount}");
-StartCoroutine(SpawnFakePlayers(count));
+StartCoroutine(SpawnFakePlayers(count));*/
 
     StartCoroutine(PreRaceCountdown());
     resultsPanel.SetActive(false);
     
 }
 
-    private IEnumerator SpawnFakePlayers(int count)
+   /* private IEnumerator SpawnFakePlayers(int count)
     {
         Debug.Log($"[GameManager] Starting to spawn {count} fake players.");
         yield return new WaitForSeconds(1); // Un lieve ritardo per sicurezza.
@@ -179,7 +179,7 @@ StartCoroutine(SpawnFakePlayers(count));
         GlobalGameManager.Instance.ResetFakePlayerCountAndNames();
     }
 
-
+*/
 
 
 
@@ -829,7 +829,7 @@ void SyncStartPosition()
                 Debug.Log("Controlli abilitati per: " + car.name);
             }
         }
-           // Trova tutti i GameObject con il tag "Enemy" nella scena
+       /*         // Trova tutti i GameObject con il tag "Enemy" nella scena
     GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
 
     // Per ogni "Enemy", cerca il componente FakePlayerCarController e attiva la variabile
@@ -840,7 +840,7 @@ void SyncStartPosition()
         {
             controller.raceStarted = true; 
         }
-    }
+    }*/
     }
 
 

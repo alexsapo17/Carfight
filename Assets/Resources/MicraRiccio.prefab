@@ -1347,9 +1347,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0fefceefe666bb4682b272ec8c5bdd0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxSpeed: 127
+  maxSpeed: 120
   maxReverseSpeed: 95
-  accelerationMultiplier: 16
+  accelerationMultiplier: 12
   maxSteeringAngle: 32
   steeringSpeed: 0.676
   TurnLeftXEditor: 1
@@ -1716,6 +1716,7 @@ GameObject:
   - component: {fileID: 9058504610779016316}
   - component: {fileID: 7060065281711057283}
   - component: {fileID: 622329368197034855}
+  - component: {fileID: 915260033205840131}
   m_Layer: 0
   m_Name: LeftTireSmoke_PS
   m_TagString: Untagged
@@ -6495,6 +6496,28 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &915260033205840131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3965673748058457765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &4269917260489363003
 GameObject:
   m_ObjectHideFlags: 0
@@ -7337,6 +7360,7 @@ GameObject:
   - component: {fileID: 1384617231143819587}
   - component: {fileID: 1785157928739495884}
   - component: {fileID: 4093812625882390268}
+  - component: {fileID: 3080287375258684594}
   m_Layer: 0
   m_Name: RightTireSmoke_PS
   m_TagString: Untagged
@@ -12116,6 +12140,28 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &3080287375258684594
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7996782010005770803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa584fbee541324448dd18d8409c7a41, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObservedComponentsFoldoutOpen: 1
+  Group: 0
+  prefixField: -1
+  Synchronization: 3
+  OwnershipTransfer: 0
+  observableSearch: 2
+  ObservedComponents: []
+  sceneViewId: 0
+  InstantiationId: 0
+  isRuntimeInstantiated: 0
 --- !u!1 &8149248065942168259
 GameObject:
   m_ObjectHideFlags: 0

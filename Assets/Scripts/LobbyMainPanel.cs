@@ -68,6 +68,7 @@ public GameObject eliminateAccountPanel2;
         private FirebaseAuth auth;
         private DatabaseReference databaseReference;
         private bool isRandomRoom = false;
+        private bool isDuelRoom = false;
     private Coroutine startGameCoroutine;
 
         #region UNITY
@@ -219,10 +220,22 @@ public void Start()
         public override void OnJoinRandomFailed(short returnCode, string message)
         {
             string roomName = "Room " + Random.Range(1000, 10000);
+if (isDuelRoom == true)
+{
+    RoomOptions options = new RoomOptions { MaxPlayers = 2 };
+    options.CustomRoomPropertiesForLobby = new string[] { "IsDuelRoom" };
+    options.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "IsDuelRoom", true } };
+    PhotonNetwork.CreateRoom(roomName, options, null);
+} 
+else
+{
+    RoomOptions options = new RoomOptions { MaxPlayers = 6 };
+    options.CustomRoomPropertiesForLobby = new string[] { "IsDuelRoom" };
+    options.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable() { { "IsDuelRoom", false } };
+    PhotonNetwork.CreateRoom(roomName, options, null);
+}
 
-            RoomOptions options = new RoomOptions { MaxPlayers = 8 };
 
-            PhotonNetwork.CreateRoom(roomName, options, null);
         }
         private void InitializeFirebase()
         {
@@ -563,7 +576,7 @@ PhotonNetwork.Disconnect();
 NoCarSelectedPanel.SetActive(true);
        return;
     }
-
+isDuelRoom= false;
     // Aggiorna il nickname di Photon prima di unirsi alla stanza
     if (auth.CurrentUser != null)
     {
@@ -586,11 +599,59 @@ NoCarSelectedPanel.SetActive(true);
         return;
     }
 
-    int entryCost = 200; // Costo per unirsi alla stanza
+    int entryCost = 2000; // Costo per unirsi alla stanza
     if (currencyManager.HasEnoughCoins(entryCost))
     {
         SetActivePanel(JoinRandomRoomPanel.name);
-        PhotonNetwork.JoinRandomRoom();
+        PhotonNetwork.JoinRandomRoom(new Hashtable() { { "IsDuelRoom", false } }, 0);
+        isRandomRoom = true;
+    }
+    else
+    {
+NoCoinsPanel.SetActive(true);
+            // Disattiva il pannello delle monete dopo 3 secondi
+        Invoke("DisableNoCoinsPanel", 3f);
+        
+    }
+}
+
+   public void RandomRoomButtonClickedDuel()
+{ 
+    // Verifica se c'è una macchina selezionata nelle PlayerPrefs
+    if (!PlayerPrefs.HasKey("SelectedCar"))
+    {
+        // Mostra un pannello o gestisci il caso in cui non ci sia una macchina selezionata
+NoCarSelectedPanel.SetActive(true);
+       return;
+    }
+isDuelRoom= true;
+    // Aggiorna il nickname di Photon prima di unirsi alla stanza
+    if (auth.CurrentUser != null)
+    {
+        string userId = auth.CurrentUser.UserId;
+        databaseReference.Child("users").Child(userId).Child("nickname").GetValueAsync().ContinueWithOnMainThread(task =>
+        {
+            if (task.IsCompleted && task.Result.Exists)
+            {
+                string nickname = task.Result.Value.ToString();
+                PhotonNetwork.NickName = nickname;
+            }
+        });
+    }
+
+    // Trova il CurrencyManager nella scena
+    CurrencyManager currencyManager = FindObjectOfType<CurrencyManager>();
+    if (currencyManager == null)
+    {
+        Debug.LogError("CurrencyManager non trovato.");
+        return;
+    }
+
+    int entryCost = 1000; // Costo per unirsi alla stanza
+    if (currencyManager.HasEnoughCoins(entryCost))
+    {
+        SetActivePanel(JoinRandomRoomPanel.name);
+        PhotonNetwork.JoinRandomRoom(new Hashtable() { { "IsDuelRoom", true } }, 0);
         isRandomRoom = true;
     }
     else
@@ -626,10 +687,10 @@ void StartGame()
                 Debug.LogError("CurrencyManager non trovato.");
                 return;
             }
-
-            int entryCost = 200; // Costo per avviare il gioco
-
-            if (currencyManager.TrySpendCoins(entryCost))
+if (isDuelRoom==false)
+{
+            int entryCost = 2000; // Costo per avviare il gioco
+              if (currencyManager.TrySpendCoins(entryCost))
             {
                     // Assicurati che solo il Master Client avvii la partita per evitare avvii multipli
   if (PhotonNetwork.IsMasterClient)
@@ -651,6 +712,34 @@ void StartGame()
                 Debug.LogError("Non hai abbastanza monete per avviare il gioco.");
                 // Gestisci il caso in cui il giocatore non ha abbastanza monete
             }
+} 
+else
+{
+            int entryCost = 1000; // Costo per avviare il gioco
+              if (currencyManager.TrySpendCoins(entryCost))
+            {
+                    // Assicurati che solo il Master Client avvii la partita per evitare avvii multipli
+  if (PhotonNetwork.IsMasterClient)
+    {
+
+    if (PhotonNetwork.IsMasterClient)
+    {
+  
+        PhotonNetwork.CurrentRoom.IsOpen = false;
+        PhotonNetwork.CurrentRoom.IsVisible = false;
+        PhotonNetwork.LoadLevel("GameScene");
+    }
+            
+        }
+ 
+            }
+            else
+            {
+                Debug.LogError("Non hai abbastanza monete per avviare il gioco.");
+                // Gestisci il caso in cui il giocatore non ha abbastanza monete
+            }
+}
+          
             }
 
         public void OnLeaveGameButtonClicked()
@@ -726,6 +815,7 @@ entry.transform.localScale = Vector3.one;
         // Mostra il pulsante "Start Game" nelle stanze private
         StartGameButton.gameObject.SetActive(CheckPlayersReady());
     }
+    /*
       // Controlla se ci sono giocatori finti salvati nelle proprietà della stanza e aggiungili
     object fakePlayersObject;
     if (PhotonNetwork.CurrentRoom.CustomProperties.TryGetValue("fakePlayers", out fakePlayersObject) && PhotonNetwork.IsMasterClient)
@@ -741,8 +831,9 @@ entry.transform.localScale = Vector3.one;
                 {AsteroidsGame.PLAYER_LOADED_LEVEL, false}
             };
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
-            StartCoroutine(AddFakePlayersDynamically());
+            StartCoroutine(AddFakePlayersDynamically());*/
         }
+        /*
 private System.Collections.IEnumerator AddFakePlayersDynamically()
 {
     if (PhotonNetwork.IsMasterClient)
@@ -827,7 +918,7 @@ private void AddFakePlayerToList(string fakePlayerName)
 
 
 }
-
+*/
 
 
 
@@ -891,7 +982,14 @@ private void UpdateGameStartCondition()
 {
     // Conta tutti i giocatori nella stanza, inclusi i finti
     int totalPlayerCount = playerListEntries.Count;
-
+if(isDuelRoom==true)
+{
+    if (totalPlayerCount == 2)
+    {
+        // Avvia la partita immediatamente senza aspettare ulteriori giocatori o usare un timer
+        StartGame();
+    }
+}
     // avviare la partita a 6
     if (totalPlayerCount == 6)
     {
@@ -1023,45 +1121,55 @@ private void UpdateGameStartCondition()
             ConnectingPanel.SetActive(activePanel.Equals(ConnectingPanel.name));
         }
 
-        private void UpdateCachedRoomList(List<RoomInfo> roomList)
+      private void UpdateCachedRoomList(List<RoomInfo> roomList)
+{
+    foreach (RoomInfo info in roomList)
+    {
+        // Remove room from cached room list if it got closed, became invisible or was marked as removed
+        if (!info.IsOpen || !info.IsVisible || info.RemovedFromList)
         {
-            foreach (RoomInfo info in roomList)
+            if (cachedRoomList.ContainsKey(info.Name))
             {
-                // Remove room from cached room list if it got closed, became invisible or was marked as removed
-                if (!info.IsOpen || !info.IsVisible || info.RemovedFromList)
-                {
-                    if (cachedRoomList.ContainsKey(info.Name))
-                    {
-                        cachedRoomList.Remove(info.Name);
-                    }
-
-                    continue;
-                }
-
-                // Update cached room info
-                if (cachedRoomList.ContainsKey(info.Name))
-                {
-                    cachedRoomList[info.Name] = info;
-                }
-                // Add new room info to cache
-                else
-                {
-                    cachedRoomList.Add(info.Name, info);
-                }
+                cachedRoomList.Remove(info.Name);
             }
+
+            continue;
         }
 
-        private void UpdateRoomListView()
+        // Check if the room has the IsDuelRoom property
+        if (info.CustomProperties.ContainsKey("IsDuelRoom"))
         {
-            foreach (RoomInfo info in cachedRoomList.Values)
-            {
-                GameObject entry = Instantiate(RoomListEntryPrefab);
-                entry.transform.SetParent(RoomListContent.transform);
-                entry.transform.localScale = Vector3.one;
-                entry.GetComponent<RoomListEntry>().Initialize(info.Name, (byte)info.PlayerCount, (byte)info.MaxPlayers);
-
-                roomListEntries.Add(info.Name, entry);
-            }
+            continue;
         }
+
+        // Update cached room info
+        if (cachedRoomList.ContainsKey(info.Name))
+        {
+            cachedRoomList[info.Name] = info;
+        }
+        // Add new room info to cache
+        else
+        {
+            cachedRoomList.Add(info.Name, info);
+        }
+    }
+}
+
+private void UpdateRoomListView()
+{
+    foreach (RoomInfo info in cachedRoomList.Values)
+    {
+        GameObject entry = Instantiate(RoomListEntryPrefab);
+        entry.transform.SetParent(RoomListContent.transform);
+        entry.transform.localPosition = Vector3.zero; // Imposta la posizione a zero rispetto al parent
+        entry.transform.localRotation = Quaternion.identity; // Imposta la rotazione a zero
+        entry.transform.localScale = Vector3.one;
+        entry.GetComponent<RoomListEntry>().Initialize(info.Name, (byte)info.PlayerCount, (byte)info.MaxPlayers);
+
+        roomListEntries.Add(info.Name, entry);
+    }
+}
+
+
     }
 }

@@ -480,14 +480,14 @@ void Update()
         HandleHandbrakeInput();
     }
 
-        if (!photonView.IsMine)
+   /*     if (!photonView.IsMine)
     {
         Debug.DrawLine(transform.position, targetPosition, Color.blue); // Disegna una linea blu
                 if (Time.frameCount % 60 == 0) 
         {
             Debug.Log("Target Position: " + targetPosition + ", Current Position: " + transform.position);
         }
-    }
+    }*/
 }
 
     // Se vuoi, puoi anche aggiungere un metodo per verificare lo stato dei controlli
@@ -505,7 +505,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         stream.SendNext(rb.angularVelocity);
     } else {
         // Log per mostrare la targetPosition e la current position prima di ricevere l'aggiornamento
-        Debug.Log($"[Ricezione] Prima dell'aggiornamento - Target Position: {targetPosition}, Current Position: {rb.position}");
+        //Debug.Log($"[Ricezione] Prima dell'aggiornamento - Target Position: {targetPosition}, Current Position: {rb.position}");
 
         // Riceve i dati dagli altri giocatori
         Vector3 receivedTargetPosition = (Vector3)stream.ReceiveNext();
@@ -518,7 +518,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         Vector3 adjustedPosition = receivedTargetPosition + (receivedVelocity * lag);
 
         // Log per mostrare la targetPosition ricevuta e dopo l'aggiustamento per la latenza
-        Debug.Log($"[Ricezione] Dati ricevuti - Received Target Position: {receivedTargetPosition}, Adjusted Position with lag: {adjustedPosition}");
+        //Debug.Log($"[Ricezione] Dati ricevuti - Received Target Position: {receivedTargetPosition}, Adjusted Position with lag: {adjustedPosition}");
 
         // Aggiorna targetPosition e targetRotation con i nuovi valori ricevuti e aggiustati
         targetPosition = adjustedPosition;
@@ -531,7 +531,7 @@ public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info) {
         }
 
         // Log finale per confermare l'aggiornamento della targetPosition
-        Debug.Log($"[Ricezione] Dopo l'aggiornamento - Target Position aggiornata: {targetPosition}, Current Position: {rb.position}");
+       // Debug.Log($"[Ricezione] Dopo l'aggiornamento - Target Position aggiornata: {targetPosition}, Current Position: {rb.position}");
     }
 }
 
@@ -560,7 +560,7 @@ void HandleHandbrakeInput()
 public void EnableControls()
 {
     controlsEnabled = true;
-            Debug.Log("Controlli abilitati nel PrometeoCarController.");
+           // Debug.Log("Controlli abilitati nel PrometeoCarController.");
 
 }
 
@@ -569,7 +569,7 @@ public void DisableControls()
 {
     controlsEnabled = false;
     StopCar();
-            Debug.Log("Controlli disabilitati nel PrometeoCarController."); 
+         //   Debug.Log("Controlli disabilitati nel PrometeoCarController."); 
 
 }
 

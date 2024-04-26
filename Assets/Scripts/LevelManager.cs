@@ -480,9 +480,20 @@ IEnumerator EnableControlsAfterDelay(float delay)
 }
 
 
+     public void DestroyLevelAndCar()
+    {
+        
+    if (currentLevel != null)
+        PhotonNetwork.Destroy(currentLevel);
+    if (currentCar != null)
+        PhotonNetwork.Destroy(currentCar);
+        }
 
      public void FinishSurvivalGame()
     {
+        if (survivalTime >= 30f )
+    {
+ 
             if (interstitialAd != null)
     {
         interstitialAd.LoadAd();
@@ -491,6 +502,8 @@ IEnumerator EnableControlsAfterDelay(float delay)
     {
         interstitialAd.ShowAd();
     }
+
+        }
             countdownText.text = "";
 
         countdownText.gameObject.SetActive(false);
@@ -498,20 +511,48 @@ IEnumerator EnableControlsAfterDelay(float delay)
         gameIsOver = true;
         gameOverPanel.SetActive(true);
         gameControlsUI.SetActive(false);
+
     if (currentCar != null)
         PhotonNetwork.Destroy(currentCar);
  
-    SetImageTransparency(imageOnCanvas, 1); // Rendi trasparente l'immagine
+    SetImageTransparency(imageOnCanvas, 1); 
     foreach (Image img in childCanvasImages)
     {
         img.gameObject.SetActive(true);
     }
-        // Distruggi tutti i nemici
-        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
-        foreach (GameObject enemy in enemies)
-        {
-            Destroy(enemy);
-        }
+
+
+EnemyManager enemyManagerScript = FindObjectOfType<EnemyManager>();
+if (enemyManagerScript != null)
+{
+    enemyManagerScript.StopSpawn();
+}
+else
+{
+    Debug.LogError("EnemyManager non trovato nellla scena.");
+}
+
+
+  // Distruggi tutti i nemici, FreezeBall e ExplosionBall
+GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+GameObject[] freezeBalls = GameObject.FindGameObjectsWithTag("FreezeBall");
+GameObject[] explosionBalls = GameObject.FindGameObjectsWithTag("ExplosionBall");
+
+foreach (GameObject enemy in enemies)
+{
+    Destroy(enemy);
+}
+
+foreach (GameObject freezeBall in freezeBalls)
+{
+    Destroy(freezeBall);
+}
+
+foreach (GameObject explosionBall in explosionBalls)
+{
+    Destroy(explosionBall);
+}
+
 
         // Trova i canvas nella scena
 Canvas canvas = GameObject.Find("Canvas").GetComponent<Canvas>();

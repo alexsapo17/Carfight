@@ -11,23 +11,34 @@ public class EnemyManager : MonoBehaviour
     public float minSpawnDistanceFromPlayer = 30f;
     public int maxSpawnAttempts = 10;
 
+    private bool isSpawning = false;
+
     void Start()
     {
-            if (spawnArea == null)
+        if (spawnArea == null)
         {
             Debug.LogError("Spawn Area BoxCollider non assegnato su EnemyManager.");
             return;
         }
     }
-    
+
     public void StartSpawn()
     {
-
+        isSpawning = true;
         InvokeRepeating("BeginEnemySpawn", spawnDelay, spawnInterval);
+    }
+
+    public void StopSpawn()
+    {
+        isSpawning = false;
+        CancelInvoke("BeginEnemySpawn");
     }
 
     public void BeginEnemySpawn()
     {
+        if (!isSpawning)
+            return;
+
         GameObject playerCar = GameObject.FindGameObjectWithTag("Player");
         if (playerCar == null) return;
 
@@ -50,16 +61,6 @@ public class EnemyManager : MonoBehaviour
         }
     }
 
-    public void DestroyAllEnemies()
-    {
-        GameObject[] allEnemies = GameObject.FindGameObjectsWithTag("Enemy");
-
-        foreach (GameObject enemy in allEnemies)
-        {
-            Destroy(enemy);
-        }
-    }
-
     Vector3 GetRandomPositionInSpawnArea()
     {
         Vector3 basePosition = spawnArea.bounds.center;
@@ -74,5 +75,4 @@ public class EnemyManager : MonoBehaviour
 
         return spawnPosition;
     }
-
 }

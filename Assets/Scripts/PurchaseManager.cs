@@ -3,7 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 public class PurchaseManager : MonoBehaviour
 {
- public Text purchaseFailedText;
+ public GameObject purchaseFailedText;
+  public GameObject purchasedText;
+
     public float displayDuration = 5.0f;
 
     public void Add2000CoinsOnPurchase()
@@ -12,6 +14,14 @@ public class PurchaseManager : MonoBehaviour
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.ModifyCoins(2000);
+                    if (purchasedText != null)
+        {
+            StartCoroutine(ShowMessageTemporarilyOK());
+        }
+        else
+        {
+            Debug.LogError("PurchasedText non è stato assegnato nel PurchaseManager.");
+        }
         }
     }
         public void Add5000CoinsOnPurchase()
@@ -20,6 +30,14 @@ public class PurchaseManager : MonoBehaviour
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.ModifyCoins(5000);
+                               if (purchasedText != null)
+        {
+            StartCoroutine(ShowMessageTemporarilyOK());
+        }
+        else
+        {
+            Debug.LogError("PurchasedText non è stato assegnato nel PurchaseManager.");
+        }
         }
     }
             public void Add50GemsOnPurchase()
@@ -28,6 +46,14 @@ public class PurchaseManager : MonoBehaviour
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.ModifyGems(50);
+                               if (purchasedText != null)
+        {
+            StartCoroutine(ShowMessageTemporarilyOK());
+        }
+        else
+        {
+            Debug.LogError("PurchasedText non è stato assegnato nel PurchaseManager.");
+        }
         }
     }
             public void Add200GemsOnPurchase()
@@ -36,6 +62,14 @@ public class PurchaseManager : MonoBehaviour
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.ModifyGems(200);
+                               if (purchasedText != null)
+        {
+            StartCoroutine(ShowMessageTemporarilyOK());
+        }
+        else
+        {
+            Debug.LogError("PurchasedText non è stato assegnato nel PurchaseManager.");
+        }
         }
     }
             public void Add500GemsOnPurchase()
@@ -44,6 +78,14 @@ public class PurchaseManager : MonoBehaviour
         if (CurrencyManager.Instance != null)
         {
             CurrencyManager.Instance.ModifyGems(500);
+                               if (purchasedText != null)
+        {
+            StartCoroutine(ShowMessageTemporarilyOK());
+        }
+        else
+        {
+            Debug.LogError("PurchasedText non è stato assegnato nel PurchaseManager.");
+        }
         }
     }
         public void ShowPurchaseFailed()
@@ -64,5 +106,10 @@ public class PurchaseManager : MonoBehaviour
         yield return new WaitForSeconds(displayDuration);
         purchaseFailedText.gameObject.SetActive(false);
     }
-
+    private IEnumerator ShowMessageTemporarilyOK()
+    {
+        purchasedText.gameObject.SetActive(true);
+        yield return new WaitForSeconds(displayDuration);
+        purchasedText.gameObject.SetActive(false);
+    }
 }
