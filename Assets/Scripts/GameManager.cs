@@ -17,8 +17,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public static GameObject selectedCarPrefab;
 
     public Text countdownText;
-    public float preRaceTimer = 7.0f; // Tempo prima dell'inizio della gara
-    public float startRaceTimer = 5.0f; // Timer per l'inizio della gara
+    public float preRaceTimer = 5.0f; // Tempo prima dell'inizio della gara
+    public float startRaceTimer = 3.0f; // Timer per l'inizio della gara
        public Text preRaceCountdownText; 
     public Text startRaceCountdownText;
         public AudioSource audioSource;

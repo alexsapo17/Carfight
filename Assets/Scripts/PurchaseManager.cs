@@ -24,12 +24,12 @@ public class PurchaseManager : MonoBehaviour
         }
         }
     }
-        public void Add5000CoinsOnPurchase()
+        public void Add15000CoinsOnPurchase()
     {
         // Qui chiami CurrencyManager per aggiungere le monete
         if (CurrencyManager.Instance != null)
         {
-            CurrencyManager.Instance.ModifyCoins(5000);
+            CurrencyManager.Instance.ModifyCoins(15000);
                                if (purchasedText != null)
         {
             StartCoroutine(ShowMessageTemporarilyOK());

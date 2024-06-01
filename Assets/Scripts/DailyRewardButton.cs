@@ -4,37 +4,39 @@ using Firebase.Database;
 using System;
 using System.Threading.Tasks;
 using Firebase.Auth;
+
 public class DailyRewardButton : MonoBehaviour
 {
     public Button dailyRewardButton;
-    private Text countdownText; // Modifica per trovare automaticamente il componente
-    private CurrencyManager currencyManager; // Modifica per trovare automaticamente il componente
+    private Text countdownText;
+    private CurrencyManager currencyManager;
     private DatabaseReference databaseReference;
     private const int RewardAmount = 500;
-        private const int GemsRewardAmount = 5;
-
+    private const int GemsRewardAmount = 5;
     private string userId;
     private DateTime? nextClaimTime;
- private Animator buttonAnimator;
-    void Start()
+    private Animator buttonAnimator;
+
+    async void Start() // Modifica Start in async
     {
         userId = FirebaseAuth.DefaultInstance.CurrentUser.UserId;
         databaseReference = FirebaseDatabase.DefaultInstance.RootReference;
-        countdownText = transform.Find("TimerText").GetComponent<Text>(); // Trova il componente Text automaticamente
-        currencyManager = FindObjectOfType<CurrencyManager>(); // Trova il CurrencyManager nella scena
-         buttonAnimator = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
+        countdownText = transform.Find("TimerText").GetComponent<Text>();
+        currencyManager = FindObjectOfType<CurrencyManager>();
+        buttonAnimator = GetComponent<Animator>() ?? GetComponentInChildren<Animator>();
 
-        UpdateButtonStateAsync();
+        await UpdateButtonStateAsync(); // Utilizza await per attendere il completamento
     }
 
-    public async void ClaimReward()
+    public async void ClaimReward() // Modifica ClaimReward in async
     {
         if (currencyManager == null) return;
+        dailyRewardButton.interactable = false;
 
         currencyManager.ModifyCoins(RewardAmount);
         currencyManager.ModifyGems(GemsRewardAmount);
-        await SaveLastClaimedTimeAsync(DateTime.UtcNow);
-        await UpdateButtonStateAsync();
+        await SaveLastClaimedTimeAsync(DateTime.UtcNow); // Utilizza await per attendere il completamento
+        await UpdateButtonStateAsync(); // Utilizza await per attendere il completamento
     }
 
     private async Task SaveLastClaimedTimeAsync(DateTime time)
@@ -57,14 +59,14 @@ public class DailyRewardButton : MonoBehaviour
                 dailyRewardButton.interactable = false;
                 dailyRewardButton.GetComponent<Image>().color = Color.gray;
                 countdownText.text = FormatTimeSpan(timeUntilNextClaim);
-                buttonAnimator.SetBool("IsAvailable", false); // Disattiva l'animazione
+                buttonAnimator.SetBool("IsAvailable", false);
             }
             else
             {
                 dailyRewardButton.interactable = true;
                 dailyRewardButton.GetComponent<Image>().color = Color.yellow;
                 countdownText.text = "Claim Now!";
-                buttonAnimator.SetBool("IsAvailable", true); // Attiva l'animazione
+                buttonAnimator.SetBool("IsAvailable", true);
             }
         }
         else
@@ -72,7 +74,7 @@ public class DailyRewardButton : MonoBehaviour
             dailyRewardButton.interactable = true;
             dailyRewardButton.GetComponent<Image>().color = Color.yellow;
             countdownText.text = "Claim Now!";
-            buttonAnimator.SetBool("IsAvailable", true); // Assicura che l'animazione sia attiva
+            buttonAnimator.SetBool("IsAvailable", true);
         }
     }
 
@@ -86,7 +88,7 @@ public class DailyRewardButton : MonoBehaviour
                 dailyRewardButton.interactable = true;
                 dailyRewardButton.GetComponent<Image>().color = Color.yellow;
                 countdownText.text = "Claim Now!";
-                UpdateButtonStateAsync(); // Aggiorna lo stato del pulsante
+                _ = UpdateButtonStateAsync(); // Utilizza await per attendere il completamento, ma ignora il Task restituito
             }
             else
             {

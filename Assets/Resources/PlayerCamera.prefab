@@ -116,3 +116,5 @@ MonoBehaviour:
   maxXOffset: 30
   maxYOffset: 5
   maxZOffset: 5
+  rotationSpeed: 1
+  rotationMultiplier: 0.0002

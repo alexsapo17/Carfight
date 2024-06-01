@@ -1,5 +1,5 @@
 using UnityEngine;
-using System.Collections.Generic; // Aggiungi questo per utilizzare i dizionari
+using System.Collections.Generic; // Aggiungi questo per utilizzare i dizionari e le liste
 using Photon.Pun;
 using UnityEngine.UI;
 using System.Collections;
@@ -48,7 +48,12 @@ public class LevelManager : MonoBehaviour
     public GameObject retryButton;
     public GameObject abilityButtons;
     private Vector3 originalPosition;
+    public GameObject stickmanPrefab;
+    public GameObject[] stickmans; // Stickmans iniziali nella scena
 
+    private Vector3[] initialPositions;
+    private Quaternion[] initialRotations;
+    private Vector3[] initialScales;
     public int experienceGainFinishLevel;
     public int experienceGainEliminatedLevel;
     private int experienceGainFinishSurvival;
@@ -57,16 +62,14 @@ public class LevelManager : MonoBehaviour
     private float survivalTime = 0f;
     private bool gameIsOver = false;
 
-
     void Start()
     {
-         PhotonNetwork.OfflineMode = true;
+        PhotonNetwork.OfflineMode = true;
         originalPosition = abilityButtons.transform.position;
 
-             // Crea una stanza offline
-    PhotonNetwork.CreateRoom("OfflineRoom");
-
-
+        // Crea una stanza offline
+        PhotonNetwork.CreateRoom("OfflineRoom");
+        SaveInitialTransforms();
         // Esempio di come impostare la mappa
         levelCarMap = new Dictionary<int, int>
         {
@@ -81,11 +84,9 @@ public class LevelManager : MonoBehaviour
             { 8, 0 },
             { 9, 0 },
             { 10, 0 }
-
-    
         };
         UpdateGemsUI();
-            interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
+        interstitialAd = GameObject.Find("AdsManager").GetComponent<InterstitialAd>();
         int controlSetup = PlayerPrefs.GetInt("ControlSetup", 2);
         if (controlSetup == 1)
         {
@@ -94,15 +95,58 @@ public class LevelManager : MonoBehaviour
             MoveButtonOutOfView(button2RectTransform);
         }
     }
+
     private void MoveButtonOutOfView(RectTransform buttonRectTransform)
     {
         // Questo è solo un esempio, dovrai adattare i valori in base alle dimensioni del tuo canvas e alla posizione desiderata
         Vector2 newPosition = new Vector2(2000, buttonRectTransform.anchoredPosition.y); // Sposta di 2000 unità a destra
         buttonRectTransform.anchoredPosition = newPosition;
     }
+
+    public void ResetStickmans()
+    {
+        // Distruggi i vecchi stickmans
+        DestroyStickmans();
+
+        // Ricrea i nuovi stickmans alle posizioni e rotazioni iniziali
+        RecreateStickmans();
+    }
+
+    private void SaveInitialTransforms()
+    {
+        initialPositions = new Vector3[stickmans.Length];
+        initialRotations = new Quaternion[stickmans.Length];
+        initialScales = new Vector3[stickmans.Length];
+        for (int i = 0; i < stickmans.Length; i++)
+        {
+            initialPositions[i] = stickmans[i].transform.position;
+            initialRotations[i] = stickmans[i].transform.rotation;
+            initialScales[i] = stickmans[i].transform.localScale;
+        }
+    }
+
+    private void DestroyStickmans()
+    {
+        foreach (GameObject stickman in stickmans)
+        {
+            Destroy(stickman);
+        }
+    }
+
+    private void RecreateStickmans()
+    {
+        for (int i = 0; i < initialPositions.Length; i++)
+        {
+            byte group = 0;
+            GameObject newStickman = PhotonNetwork.Instantiate(stickmanPrefab.name, initialPositions[i], initialRotations[i], group);
+            stickmans[i] = newStickman; // Sostituisci il vecchio stickman con il nuovo
+        }
+    }
+
 public void RestartLevel()
 {
 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+
     LoadLevel(currentLevelIndex); // Ricarica il livello corrente
     finishPanel.SetActive(false); // Nasconde il pannello di fine livello
     gameControlsUI.SetActive(true);
@@ -116,10 +160,10 @@ canvas.renderMode = RenderMode.ScreenSpaceOverlay;
         img.gameObject.SetActive(false);
     }
 
-    if (interstitialAd != null)
+   /* if (interstitialAd != null)
     {
         interstitialAd.LoadAd();
-    }
+    } */
 }
 
 
@@ -204,6 +248,7 @@ public void LoadLevel(int levelIndex)
         PhotonNetwork.Destroy(currentLevel);
     if (currentCar != null)
         PhotonNetwork.Destroy(currentCar);
+
     gameControlsUI.SetActive(true);
                 retryButton.gameObject.SetActive(true);
    quitSurvivalButton.gameObject.SetActive(false);
@@ -228,6 +273,16 @@ TimerAudio.Play();
     carController = currentCar.GetComponent<PrometeoCarController>();
 
     Camera.main.gameObject.SetActive(false);
+                // Trova tutte le camere nella scena, comprese quelle disattivate
+    Camera[] cameras = FindObjectsOfType<Camera>(true); // true per includere oggetti disattivati
+foreach (Camera cam in cameras)
+{
+    if (cam.gameObject.name == "PlayerCamera(Clone)")
+    {
+        Destroy(cam.gameObject);
+        break; // Interrompe il ciclo una volta trovata e distrutta la PlayerCamera(Clone)
+    }
+}
     isLevelReady = true;
     countdownTime = 3f;
     countdownText.gameObject.SetActive(true);
@@ -491,7 +546,7 @@ IEnumerator EnableControlsAfterDelay(float delay)
 
      public void FinishSurvivalGame()
     {
-        if (survivalTime >= 30f )
+        if (survivalTime >= 150f )
     {
  
             if (interstitialAd != null)
@@ -504,6 +559,7 @@ IEnumerator EnableControlsAfterDelay(float delay)
     }
 
         }
+        ResetStickmans();
             countdownText.text = "";
 
         countdownText.gameObject.SetActive(false);
@@ -814,10 +870,10 @@ gameControlsUI.SetActive(false);
     {
         img.gameObject.SetActive(true);
     }        // Mostra l'annuncio interstiziale quando finisci il livello
-    if (interstitialAd != null)
+    if (interstitialAd != null && currentLevelIndex > 4)
     {
         interstitialAd.ShowAd();
-    }
+    } 
 
             PhotonNetwork.Destroy(currentCar);
 

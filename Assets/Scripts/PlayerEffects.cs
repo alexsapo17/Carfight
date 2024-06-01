@@ -127,7 +127,7 @@ public void StartJump(float jumpForce)
     }
 }
 
-  bool IsGrounded()
+  public bool IsGrounded()
 {
     WheelCollider[] wheelColliders = GetComponentsInChildren<WheelCollider>();
     float groundCheckDistance = 2f; // Distanza di controllo dal suolo, regolabile a seconda delle esigenze
@@ -140,12 +140,10 @@ public void StartJump(float jumpForce)
         // Esegue un raycast per verificare la distanza effettiva dal suolo
         if (Physics.Raycast(wheel.transform.position, -Vector3.up, out hit, currentDistance + groundCheckDistance))
         {
-            Debug.Log("IsGrounded: true, wheel: " + wheel.name);
             return true; // La ruota è considerata a terra se il raycast colpisce il suolo entro la distanza specificata
         }
     }
 
-    Debug.Log("IsGrounded: false");
     return false; // Nessuna ruota è abbastanza vicina al suolo
 }
 

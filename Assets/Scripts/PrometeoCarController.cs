@@ -151,6 +151,8 @@ public bool applyVelocityPrediction = true;
       /*
       IMPORTANT: The following variables should not be modified manually since their values are automatically given via script.
       */
+          private PlayerEffects playerEffects;
+
       Rigidbody carRigidbody; // Stores the car's rigidbody.
       float steeringAxis; // Used to know whether the steering wheel has reached the maximum value. It goes from -1 to 1.
       float throttleAxis; // Used to know whether the throttle has reached the maximum value. It goes from -1 to 1.
@@ -183,6 +185,7 @@ public bool applyVelocityPrediction = true;
     void Start()
     {
  controlsEnabled = false;
+        playerEffects = GetComponent<PlayerEffects>();
 
 
 horizontalJoystick = FindObjectOfType<HorizontalJoystick>();
@@ -342,7 +345,7 @@ public void DestroyCameraInstance() {
       //CAR DATA
 
       // We determine the speed of the car.
-      carSpeed = (2 * Mathf.PI * frontLeftCollider.radius * frontLeftCollider.rpm * 60) / 1000;
+carSpeed = carRigidbody.velocity.magnitude * 2.8f; // Converti da m/s a km/h
    
       // Save the local velocity of the car in the z axis. Used to know if the car is going forward or backwards.
       localVelocityZ = transform.InverseTransformDirection(carRigidbody.velocity).z;
@@ -741,7 +744,8 @@ private void ApplySteering() {
     public void GoForward(){
       //If the forces aplied to the rigidbody in the 'x' asis are greater than
       //3f, it means that the car is losing traction, then the car will start emitting particle systems.
-      if(Mathf.Abs(localVelocityX) > 2.5f){
+      if(Mathf.Abs(localVelocityX) > 2.5f && playerEffects.IsGrounded())
+      {
         isDrifting = true;
         DriftCarPS();
       }else{
@@ -785,7 +789,7 @@ private void ApplySteering() {
     public void GoReverse(){
       //If the forces aplied to the rigidbody in the 'x' asis are greater than
       //3f, it means that the car is losing traction, then the car will start emitting particle systems.
-      if(Mathf.Abs(localVelocityX) > 2.5f){
+      if(Mathf.Abs(localVelocityX) > 2.5f&& playerEffects.IsGrounded()){
         isDrifting = true;
         DriftCarPS();
       }else{
@@ -1071,7 +1075,7 @@ public void GoReverseJoystick(float joystickValue){
         }
 
         try{
-          if((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f){
+          if((isTractionLocked || Mathf.Abs(localVelocityX) > 5f) && Mathf.Abs(carSpeed) > 12f && playerEffects.IsGrounded()){
             RLWTireSkid.emitting = true;
             RRWTireSkid.emitting = true;
           }else {

@@ -222,7 +222,7 @@ private void UpdateUnlockStatusOnFirebase(int levelId)
         starRequirements = new Dictionary<int, LevelStarRequirements>
         {
             { 0, new LevelStarRequirements(7f, 9f, 10f) },
-            { 1, new LevelStarRequirements(8.4f, 10f, 15f) },
+            { 1, new LevelStarRequirements(9f, 11f, 15f) },
             { 2, new LevelStarRequirements(15f, 18f, 26f) },
             { 3, new LevelStarRequirements(55f, 65f, 90f) },
             { 4, new LevelStarRequirements(21f, 25f, 30f) },

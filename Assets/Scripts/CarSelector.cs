@@ -8,13 +8,15 @@ public class CarPrefabMapping
 {
     public string carName;
     public GameObject carPrefab;
+    public TextMesh carNameText; // Aggiungi TextMesh per il nome della macchina
 }
 public class CarSelector : MonoBehaviour
 {
     public CarPrefabMapping[] carMappings;
     private GameObject currentCarInstance;
-private float angularVelocity; // Velocità di rotazione
-private float rotationDecay = 0.95f;
+    private float angularVelocity; // Velocità di rotazione
+    private float rotationDecay = 0.95f;
+
     void Start()
     {
         string selectedCarName = PlayerPrefs.GetString("SelectedCar", "");
@@ -67,6 +69,7 @@ private float rotationDecay = 0.95f;
             {
                 bool isSelected = mapping.carName == carName;
                 mapping.carPrefab.SetActive(isSelected);
+                mapping.carNameText.gameObject.SetActive(isSelected); // Attiva il TextMesh della macchina attuale
                 if (isSelected)
                 {
                     currentCarInstance = mapping.carPrefab;
@@ -75,41 +78,41 @@ private float rotationDecay = 0.95f;
         }
     }
 
-void Update()
-{
-    if (currentCarInstance != null)
+    void Update()
     {
-        if (Input.touchCount > 0)
+        if (currentCarInstance != null)
         {
-            Touch touch = Input.GetTouch(0);
-
-            // Considera di utilizzare Screen.dpi per adattare la velocità di rotazione alla densità di pixel del dispositivo
-            float dpiFactor = (Screen.dpi > 0) ? Screen.dpi / 160f : 1f; // 160 è il dpi base per un dispositivo Android
-            float rotationSensitivity = 0.3f; // Regola questo valore per aumentare o diminuire la sensibilità
-
-            if (touch.phase == TouchPhase.Moved)
+            if (Input.touchCount > 0)
             {
-                // Usa dpiFactor per normalizzare la velocità di rotazione
-                float touchDeltaX = touch.deltaPosition.x / dpiFactor * rotationSensitivity;
-                angularVelocity = -touchDeltaX;
-            }
-        }
-        else if (angularVelocity != 0)
-        {
-            // Rallenta gradualmente la velocità di rotazione
-            angularVelocity *= rotationDecay;
-            // Se la velocità di rotazione è molto piccola, fermati per evitare un'inerzia infinita
-            if (Mathf.Abs(angularVelocity) < 0.01f)
-            {
-                angularVelocity = 0;
-            }
-        }
+                Touch touch = Input.GetTouch(0);
 
-        // Applica la rotazione
-        if (angularVelocity != 0)
-        {
-            currentCarInstance.transform.Rotate(Vector3.up, angularVelocity, Space.World);
+                // Considera di utilizzare Screen.dpi per adattare la velocità di rotazione alla densità di pixel del dispositivo
+                float dpiFactor = (Screen.dpi > 0) ? Screen.dpi / 160f : 1f; // 160 è il dpi base per un dispositivo Android
+                float rotationSensitivity = 0.3f; // Regola questo valore per aumentare o diminuire la sensibilità
+
+                if (touch.phase == TouchPhase.Moved)
+                {
+                    // Usa dpiFactor per normalizzare la velocità di rotazione
+                    float touchDeltaX = touch.deltaPosition.x / dpiFactor * rotationSensitivity;
+                    angularVelocity = -touchDeltaX;
+                }
+            }
+            else if (angularVelocity != 0)
+            {
+                // Rallenta gradualmente la velocità di rotazione
+                angularVelocity *= rotationDecay;
+                // Se la velocità di rotazione è molto piccola, fermati per evitare un'inerzia infinita
+                if (Mathf.Abs(angularVelocity) < 0.01f)
+                {
+                    angularVelocity = 0;
+                }
+            }
+
+            // Applica la rotazione
+            if (angularVelocity != 0)
+            {
+                currentCarInstance.transform.Rotate(Vector3.up, angularVelocity, Space.World);
+            }
         }
     }
-}
 }

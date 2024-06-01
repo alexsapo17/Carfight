@@ -1244,6 +1244,7 @@ GameObject:
   - component: {fileID: -4164265863628894262}
   - component: {fileID: 7941840931945920863}
   - component: {fileID: 8785188022886735372}
+  - component: {fileID: 7588790596699397959}
   m_Layer: 0
   m_Name: MicraRiccio
   m_TagString: Player
@@ -1569,6 +1570,20 @@ MonoBehaviour:
   maxVolume: 0.4
   maxSpeed: 30
   maxPitchMultiplier: 1.6
+--- !u!114 &7588790596699397959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3650815947992404517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a15a024e36b43c43b2f1e93d5042fff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidbodyToTrack: {fileID: 0}
+  speedText: {fileID: 0}
 --- !u!1 &3772605523786633231
 GameObject:
   m_ObjectHideFlags: 0

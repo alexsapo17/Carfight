@@ -94,13 +94,7 @@ public class BugReportPanel : MonoBehaviour
     {
         string bugDescription = bugDescriptionInputField.text;
 
-        // Controlla se l'utente ha superato il limite giornaliero
-        if (reportsSentToday >= dailyReportLimit)
-        {
-            // Mostra un messaggio all'utente per informarlo che ha superato il limite giornaliero
-            reportLimitText.SetActive(true);
-            return;
-        }
+
 
         // Controlla se l'utente ha già inviato un report oggi
         if (DateTime.Today.ToString("dd/MM/yyyy") != lastReportDate)
@@ -109,7 +103,13 @@ public class BugReportPanel : MonoBehaviour
             reportsSentToday = 0;
             lastReportDate = DateTime.Today.ToString("dd/MM/yyyy");
         }
-
+        // Controlla se l'utente ha superato il limite giornaliero
+        if (reportsSentToday >= dailyReportLimit)
+        {
+            // Mostra un messaggio all'utente per informarlo che ha superato il limite giornaliero
+            reportLimitText.SetActive(true);
+            return;
+        }
         // Invia il report
         if (auth.CurrentUser != null)
         {

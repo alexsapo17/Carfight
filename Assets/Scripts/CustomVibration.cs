@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 public class CustomVibration : MonoBehaviour
@@ -37,8 +38,33 @@ void Awake()
     {
         Vibrate();
     }
-}
 
+        if (vibrateOnClick)
+        {
+            AddButtonClickHandler();
+        }
+    }
+
+    void AddButtonClickHandler()
+    {
+        // Cerca il componente Button nell'oggetto corrente
+        Button button = GetComponent<Button>();
+
+        // Se è presente un componente Button, aggiungi il listener per l'evento onClick
+        if (button != null)
+        {
+            button.onClick.AddListener(OnButtonClick);
+        }
+        else
+        {
+            Debug.LogWarning("Il gameobject " + gameObject.name + " non ha un componente Button.");
+        }
+    }
+
+    public void OnButtonClick()
+    {
+        Vibrate();
+    }
 void OnCollisionEnter(Collision collision)
 {
     if (vibrateOnCollision)
@@ -47,13 +73,7 @@ void OnCollisionEnter(Collision collision)
     }
 }
 
-public void OnButtonClick()
-{
-    if (vibrateOnClick)
-    {
-        Vibrate();
-    }
-}
+
 
 private void Vibrate()
 {

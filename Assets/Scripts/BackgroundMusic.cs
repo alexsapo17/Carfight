@@ -4,11 +4,12 @@ using UnityEngine.SceneManagement;
 public class BackgroundMusic : MonoBehaviour
 {
     private static BackgroundMusic instance = null;
+    public static BackgroundMusic Instance => instance;
 
-    public static BackgroundMusic Instance
-    {
-        get { return instance; }
-    }
+    public AudioSource[] gameSceneAudioSources;
+    public AudioSource[] otherSceneAudioSources;
+
+    private AudioSource currentAudioSource;
 
     void Awake()
     {
@@ -21,6 +22,7 @@ public class BackgroundMusic : MonoBehaviour
         {
             instance = this;
         }
+
         DontDestroyOnLoad(this.gameObject);
 
         // Aggiungi un listener per quando la scena cambia
@@ -30,20 +32,20 @@ public class BackgroundMusic : MonoBehaviour
     // Metodo per gestire il cambio della scena
     private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name == "GameScene")
+        // Interrompi la riproduzione del vecchio AudioSource, se presente
+        if (currentAudioSource != null && currentAudioSource.isPlaying)
         {
-            // Qui puoi fermare la musica, cambiarla o abbassarne il volume
-            GetComponent<AudioSource>().Stop(); // Per fermare la musica
-            // GetComponent<AudioSource>().Play(); // Se vuoi cambiare la traccia, imposta prima l'AudioClip
+            currentAudioSource.Stop();
         }
-        else
-        {
-            // Assicurati che la musica di sottofondo sia in riproduzione nelle altre scene
-            if (!GetComponent<AudioSource>().isPlaying)
-            {
-                GetComponent<AudioSource>().Play();
-            }
-        }
+
+        // Scegli l'array di AudioSource corretto in base alla scena
+        AudioSource[] audioSources = scene.name == "GameScene" ? gameSceneAudioSources : otherSceneAudioSources;
+
+        // Scegli casualmente un AudioSource dall'array
+        currentAudioSource = audioSources[Random.Range(0, audioSources.Length)];
+
+        // Riproduci l'AudioSource scelto
+        currentAudioSource.Play();
     }
 
     void OnDestroy()
